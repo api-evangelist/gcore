@@ -1,0 +1,239 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Gcore
+providerId: gcore
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Edge Cloud
+- CDN
+- Streaming
+- Edge AI
+- Infrastructure
+- Plans
+description: >-
+  Gcore prices each platform service on its own usage-based model rather than
+  a single token rate. CDN and Streaming are billed primarily on delivered
+  traffic (per GB) with regional tiers; Cloud compute is billed per instance
+  hour (with GPU and bare-metal billed per second / per minute of compute);
+  Object Storage is billed per GB-hour stored; DNS is billed per zone / query
+  volume; Everywhere Inference is billed per second of GPU compute used. Many
+  services also expose flat monthly or committed plans alongside pay-as-you-go,
+  and enterprise/volume terms are available via sales. Specific per-unit prices
+  vary by region and are not reconciled in this artifact.
+notes: >-
+  Per-service unit prices change by region and over time; verify against the
+  relevant Gcore pricing page during reconciliation. The model (what each
+  service meters on) is captured below; exact rates are marked as published on
+  the pricing pages.
+sources:
+- https://gcore.com/pricing/cdn
+- https://gcore.com/pricing/cloud
+- https://gcore.com/pricing/streaming-platform
+- https://gcore.com/pricing/ai
+- https://gcore.com/pricing
+plans:
+- id: gcore-cdn
+  name: CDN
+  type: usage
+  description: >-
+    Content delivery billed primarily on delivered traffic per GB with
+    regional pricing tiers; cached egress has no separate per-GB origin
+    egress charge. Free and paid tiers exist with included traffic.
+  entries:
+  - label: CDN Delivered Traffic
+    name: cdn_traffic
+    type: usage
+    metric: gigabytes
+    limit: -1
+    timeFrame: month
+    geo: regional
+    unit: 1
+    price: per GB delivered, regional tier (see pricing page)
+    userMultiplied: false
+  - label: CDN Requests
+    name: cdn_requests
+    type: usage
+    metric: requests
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 10000
+    price: per 10,000 requests where applicable (see pricing page)
+    userMultiplied: false
+  elements:
+  - name: CDN Resources
+  - name: Rules
+  - name: Origin Groups
+  - name: Cache Purge
+- id: gcore-cloud
+  name: Cloud Compute
+  type: usage
+  description: >-
+    Virtual machines, GPU cloud, and bare-metal billed per compute time.
+    Standard instances are billed per hour; GPU and AI compute are billed
+    per second / per minute of usage.
+  entries:
+  - label: Virtual Machine Instance
+    name: cloud_instance_hour
+    type: usage
+    metric: hours
+    limit: -1
+    timeFrame: month
+    geo: regional
+    unit: 1
+    price: per instance hour by flavor (see pricing page)
+    userMultiplied: false
+  - label: GPU Compute
+    name: cloud_gpu
+    type: usage
+    metric: seconds
+    limit: -1
+    timeFrame: month
+    geo: regional
+    unit: 1
+    price: per-second GPU billing (see pricing page)
+    userMultiplied: false
+  - label: Block Storage Volume
+    name: cloud_volume
+    type: usage
+    metric: gigabytes
+    limit: -1
+    timeFrame: month
+    geo: regional
+    unit: 1
+    price: per GB-month by volume type (see pricing page)
+    userMultiplied: false
+  elements:
+  - name: Instances
+  - name: Volumes
+  - name: Networks
+  - name: Floating IPs
+- id: gcore-storage
+  name: Object Storage
+  type: usage
+  description: >-
+    S3-compatible and SFTP object storage billed monthly on the amount of
+    data stored, measured per GB-hour over the month, plus delivery traffic.
+  entries:
+  - label: Stored Data
+    name: storage_gb_hour
+    type: usage
+    metric: gb_hours
+    limit: -1
+    timeFrame: month
+    geo: regional
+    unit: 1
+    price: per GB-hour stored (see pricing page)
+    userMultiplied: false
+  elements:
+  - name: S3 Storage
+  - name: SFTP Storage
+- id: gcore-dns
+  name: Managed DNS
+  type: usage
+  description: >-
+    Authoritative managed DNS with a free tier; paid plans add query volume,
+    dynamic GeoDNS, failover, and healthchecks. Billed by plan / query volume.
+  entries:
+  - label: DNS Queries
+    name: dns_queries
+    type: usage
+    metric: queries
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000000
+    price: per million queries by plan (see pricing page)
+    userMultiplied: false
+  elements:
+  - name: Zones
+  - name: RRSets
+  - name: GeoDNS
+- id: gcore-streaming
+  name: Streaming Platform
+  type: usage
+  description: >-
+    Video hosting (VOD) and live streaming billed in GB of delivered traffic,
+    with free multi-bitrate encoding/transcoding and storage components.
+  entries:
+  - label: Streaming Delivered Traffic
+    name: streaming_traffic
+    type: usage
+    metric: gigabytes
+    limit: -1
+    timeFrame: month
+    geo: regional
+    unit: 1
+    price: per GB delivered (see pricing page)
+    userMultiplied: false
+  elements:
+  - name: Video Hosting (VOD)
+  - name: Live Streaming
+  - name: Recording
+- id: gcore-inference
+  name: Everywhere Inference
+  type: usage
+  description: >-
+    Edge AI model serving billed per second of GPU/compute time used by the
+    deployment, across 180+ inference locations with smart routing.
+  entries:
+  - label: Inference Compute
+    name: inference_compute
+    type: usage
+    metric: seconds
+    limit: -1
+    timeFrame: month
+    geo: regional
+    unit: 1
+    price: per-second compute by flavor (see pricing page)
+    userMultiplied: false
+  elements:
+  - name: Model Deployments
+  - name: Container Registries
+- id: gcore-fastedge
+  name: FastEdge
+  type: usage
+  description: >-
+    Serverless edge functions billed on invocations / compute consumed by
+    WebAssembly apps running on CDN edge nodes.
+  entries:
+  - label: FastEdge Invocations
+    name: fastedge_invocations
+    type: usage
+    metric: invocations
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000000
+    price: per million invocations (see pricing page)
+    userMultiplied: false
+  elements:
+  - name: Apps
+  - name: WASM Binaries
+- id: gcore-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Volume commitments, custom regions, private/hybrid deployments, dedicated
+    support, and negotiated terms across all Gcore services. Contact sales.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Custom Volume Pricing
+  - name: Dedicated Support
+  - name: Hybrid / On-Premise
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

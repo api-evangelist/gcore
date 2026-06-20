@@ -1,0 +1,88 @@
+aid: gcore
+name: Gcore
+review:
+  question: Does Gcore expose a documented public WebSocket API?
+  answer: false
+  date: '2026-06-20'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was created. Gcore's control plane is entirely REST
+    over HTTPS at https://api.gcore.com. The Streaming platform's real-time
+    surface uses WebRTC ingest/playback via the WHIP and WHEP specifications
+    (HTTP-based signaling for media transport) plus RTMP/SRT push and
+    HLS/DASH playback - these are media-plane transports, not an application
+    messaging stream, and Gcore does not document a public WebSocket (ws://
+    or wss://) management API. Event delivery for streaming is via HTTP
+    webhooks (callbacks), which are not in scope for AsyncAPI WebSocket/SSE
+    modeling here.
+findings:
+  summary: |
+    Gcore does not publish a documented public WebSocket management API. The
+    platform exposes a single REST host, https://api.gcore.com, with
+    product-specific base paths (/cdn, /cloud, /storage, /dns, /streaming,
+    /waap, /security/iaas, /fastedge, /iam) and authenticates with a permanent
+    token sent as "Authorization: APIKey <token>". The Streaming product
+    offers low-latency real-time video via WebRTC using the WHIP (ingest) and
+    WHEP (playback) HTTP signaling specifications, alongside RTMP and SRT push
+    ingest and HLS/MPEG-DASH playback; a JavaScript WebRTC SDK is provided.
+    Asynchronous notifications are delivered via HTTP webhooks. None of these
+    constitute a documented public WebSocket application API.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.gcore.com
+      documented: true
+    - protocol: WebRTC (WHIP/WHEP)
+      scheme: https
+      note: Real-time video ingest (WHIP) and playback (WHEP) use HTTP-based signaling; media plane, not a control-plane messaging API.
+      documented: true
+    - protocol: Webhooks
+      scheme: https
+      note: Streaming and other events delivered as outbound HTTP callbacks.
+      documented: true
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No public WebSocket management API is documented across CDN, Cloud, DNS, Storage, Streaming, Inference, WAAP, or FastEdge as of the review date.
+  endpointsConfirmedRest:
+    - GET    https://api.gcore.com/cdn/resources
+    - POST   https://api.gcore.com/cdn/resources
+    - GET    https://api.gcore.com/cdn/resources/{resource_id}
+    - POST   https://api.gcore.com/cdn/resources/{resource_id}/rules
+    - GET    https://api.gcore.com/cdn/public-ip-list
+    - GET    https://api.gcore.com/cloud/v1/instances/{project_id}/{region_id}
+    - POST   https://api.gcore.com/cloud/v1/instances/{project_id}/{region_id}
+    - GET    https://api.gcore.com/cloud/v1/volumes/{project_id}/{region_id}
+    - GET    https://api.gcore.com/cloud/v1/networks/{project_id}/{region_id}
+    - POST   https://api.gcore.com/cloud/v3/inference/{project_id}/deployments
+    - GET    https://api.gcore.com/storage/provisioning/v1/storage
+    - GET    https://api.gcore.com/dns/v2/zones
+    - POST   https://api.gcore.com/dns/v2/zones
+    - POST   https://api.gcore.com/dns/v2/zones/{zoneName}/{rrsetName}/{rrsetType}
+    - GET    https://api.gcore.com/streaming/videos
+    - GET    https://api.gcore.com/streaming/streams
+    - GET    https://api.gcore.com/waap/v1/domains
+    - GET    https://api.gcore.com/fastedge/v1/apps
+sources:
+  - url: https://gcore.com/docs/api-reference/overview
+    type: Documentation
+    note: 'Confirms single REST host api.gcore.com and "Authorization: APIKey <token>" auth; lists per-product base paths.'
+  - url: https://gcore.com/docs/api-reference/dns/rrsets/create-rrset
+    type: APIReference
+    note: Confirms REST RRSet path POST /dns/v2/zones/{zoneName}/{rrsetName}/{rrsetType}.
+  - url: https://gcore.com/docs/streaming-platform/api/real-time-video-api-tutorial
+    type: Documentation
+    note: Real-time video uses WebRTC WHIP/WHEP signaling and RTMP/SRT ingest; REST API plus JS WebRTC SDK; no WebSocket management API.
+  - url: https://gcore.com/docs/edge-ai/everywhere-inference
+    type: Documentation
+    note: Everywhere Inference deployments managed via REST; per-deployment auth uses X-API-Key header on the inference endpoint.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No documented public WebSocket surface exists, and the real-time video
+    transports (WHIP/WHEP, RTMP/SRT) are media-plane rather than an
+    AsyncAPI-modelable application messaging stream, so no AsyncAPI document
+    was authored. The apis.yml catalogs the eight documented REST product
+    APIs under the single api.gcore.com host.

@@ -1,0 +1,225 @@
+aid: gcore
+url: https://raw.githubusercontent.com/api-evangelist/gcore/refs/heads/main/apis.yml
+name: Gcore
+kind: company
+description: Gcore is a global edge cloud, CDN, streaming, and AI infrastructure
+  provider operating 210+ points of presence. A single REST platform at
+  https://api.gcore.com (APIKey auth) spans content delivery, GPU cloud and
+  bare-metal compute, S3-compatible object storage, managed DNS, video
+  streaming and live, Everywhere Inference (edge AI), WAAP/DDoS security, and
+  FastEdge serverless functions.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Edge Cloud
+- CDN
+- Streaming
+- Edge AI
+- Infrastructure
+created: '2026-06-20'
+modified: '2026-06-20'
+specificationVersion: '0.19'
+apis:
+- aid: gcore:cdn
+  name: Gcore CDN API
+  tags:
+  - CDN
+  - Content Delivery
+  - Caching
+  - Purge
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  properties:
+  - url: https://gcore.com/docs/cdn
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/cdn
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: Manage CDN resources, origin groups, caching and delivery rules,
+    SSL certificates, and cache purge across 210+ points of presence.
+- aid: gcore:cloud
+  name: Gcore Cloud API
+  tags:
+  - Cloud
+  - Compute
+  - GPU
+  - Instances
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/api-reference/cloud
+  baseURL: https://api.gcore.com/cloud
+  properties:
+  - url: https://gcore.com/docs/cloud
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/cloud
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: Provision and manage virtual machine instances, GPU and bare-metal
+    compute, networks, volumes, floating IPs, and SSH keys scoped by project and
+    region under /cloud/v1.
+- aid: gcore:storage
+  name: Gcore Object Storage API
+  tags:
+  - Storage
+  - Object Storage
+  - S3
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/api-reference/storage
+  baseURL: https://api.gcore.com/storage
+  properties:
+  - url: https://gcore.com/docs/storage
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/storage
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: Provision and manage S3-compatible and SFTP object storage buckets,
+    locations, and access credentials; billed per GB-hour of stored data.
+- aid: gcore:dns
+  name: Gcore DNS API
+  tags:
+  - DNS
+  - Zones
+  - RRSets
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/api-reference/dns
+  baseURL: https://api.gcore.com/dns/v2
+  properties:
+  - url: https://gcore.com/docs/dns
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/dns
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: Managed authoritative DNS - create and manage zones and RRSets
+    (A, AAAA, CNAME, MX, TXT and more), including dynamic GeoDNS and failover
+    records under /dns/v2.
+- aid: gcore:streaming
+  name: Gcore Streaming API
+  tags:
+  - Streaming
+  - Video
+  - Live
+  - VOD
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/api-reference/streaming
+  baseURL: https://api.gcore.com/streaming
+  properties:
+  - url: https://gcore.com/docs/streaming-platform
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/streaming
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: Video hosting (VOD) and low-latency live streaming - upload and
+    manage videos, create live streams, restreams, and recordings with adaptive
+    multi-bitrate transcoding.
+- aid: gcore:inference
+  name: Gcore Everywhere Inference API
+  tags:
+  - Edge AI
+  - Inference
+  - AI Models
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/edge-ai/everywhere-inference
+  baseURL: https://api.gcore.com/cloud
+  properties:
+  - url: https://gcore.com/docs/edge-ai/everywhere-inference
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/cloud
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: Everywhere Inference (Inference at the Edge) - deploy trained AI
+    models to edge nodes across 180+ locations with smart routing, container
+    registries, and optional per-deployment API-key auth (X-API-Key).
+- aid: gcore:security-waap
+  name: Gcore Security & WAAP API
+  tags:
+  - Security
+  - WAAP
+  - WAF
+  - DDoS
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/api-reference/waap
+  baseURL: https://api.gcore.com/waap
+  properties:
+  - url: https://gcore.com/docs/waap
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/waap
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: Web Application and API Protection (WAAP), API discovery, custom
+    and policy rules, plus DDoS Protection for infrastructure under /waap and
+    /security/iaas.
+- aid: gcore:fastedge
+  name: Gcore FastEdge API
+  tags:
+  - FastEdge
+  - Edge Functions
+  - Serverless
+  - WASM
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://gcore.com/docs/api-reference/fastedge
+  baseURL: https://api.gcore.com/fastedge
+  properties:
+  - url: https://gcore.com/docs/fastedge
+    type: Documentation
+  - url: https://gcore.com/docs/api-reference/fastedge
+    type: APIReference
+  - url: openapi/gcore-openapi.yml
+    type: OpenAPI
+  - url: collections/gcore.postman_collection.json
+    type: PostmanCollection
+  - url: collections/gcore.opencollection.json
+    type: OpenCollection
+  description: FastEdge serverless edge computing - deploy WebAssembly apps and
+    functions that run on Gcore CDN edge nodes close to end users.
+common:
+- type: GitHubOrganization
+  url: https://github.com/G-Core
+- type: LinkedIn
+  url: https://www.linkedin.com/company/gcore
+- type: Website
+  url: https://gcore.com/
+- type: Documentation
+  url: https://gcore.com/docs/api-reference/overview
+- type: Plans
+  url: plans/gcore-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/gcore-rate-limits.yml
+- type: FinOps
+  url: finops/gcore-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

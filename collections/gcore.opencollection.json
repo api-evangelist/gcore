@@ -1,0 +1,474 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gcore API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "name": "Authorization",
+      "value": "APIKey {{apiToken}}",
+      "in": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CDN",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List CDN resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/resources"
+          },
+          "docs": "Returns the list of CDN resources for the account."
+        },
+        {
+          "info": {
+            "name": "Create CDN resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cdn/resources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new CDN resource bound to a primary delivery domain (cname)."
+        },
+        {
+          "info": {
+            "name": "Get CDN resource details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/resources/{resource_id}"
+          },
+          "docs": "Get CDN resource details"
+        },
+        {
+          "info": {
+            "name": "Update CDN resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.gcore.com/cdn/resources/{resource_id}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update CDN resource"
+        },
+        {
+          "info": {
+            "name": "Delete CDN resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.gcore.com/cdn/resources/{resource_id}"
+          },
+          "docs": "Delete CDN resource"
+        },
+        {
+          "info": {
+            "name": "List CDN resource rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/resources/{resource_id}/rules"
+          },
+          "docs": "List CDN resource rules"
+        },
+        {
+          "info": {
+            "name": "Create CDN resource rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cdn/resources/{resource_id}/rules",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a rule that applies custom caching, delivery, and security options to a path pattern within the CDN resource."
+        },
+        {
+          "info": {
+            "name": "Purge CDN cache",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cdn/resources/{resource_id}/purge",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Purges content from CDN edge caches for the resource. Supply specific URLs, path patterns, or omit both to purge all cache."
+        },
+        {
+          "info": {
+            "name": "Get CDN edge server IP list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/public-ip-list"
+          },
+          "docs": "Returns IP addresses of CDN servers used to pull content from origins."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Cloud",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/instances/{project_id}/{region_id}"
+          },
+          "docs": "Returns all virtual machine instances in a project and region."
+        },
+        {
+          "info": {
+            "name": "Create instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cloud/v1/instances/{project_id}/{region_id}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new virtual machine instance from a flavor and image or volume."
+        },
+        {
+          "info": {
+            "name": "Get instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/instances/{project_id}/{region_id}/{instance_id}"
+          },
+          "docs": "Get instance"
+        },
+        {
+          "info": {
+            "name": "Delete instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.gcore.com/cloud/v1/instances/{project_id}/{region_id}/{instance_id}"
+          },
+          "docs": "Delete instance"
+        },
+        {
+          "info": {
+            "name": "List volumes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/volumes/{project_id}/{region_id}"
+          },
+          "docs": "List volumes"
+        },
+        {
+          "info": {
+            "name": "Create volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cloud/v1/volumes/{project_id}/{region_id}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create volume"
+        },
+        {
+          "info": {
+            "name": "List networks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/networks/{project_id}/{region_id}"
+          },
+          "docs": "List networks"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Inference",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List inference deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v3/inference/{project_id}/deployments"
+          },
+          "docs": "Returns Everywhere Inference deployments for the project."
+        },
+        {
+          "info": {
+            "name": "Create inference deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cloud/v3/inference/{project_id}/deployments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys a containerized AI model to edge inference nodes. Set auth_enabled to true to generate an API key required as X-API-Key on the deployment endpoint."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Storage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List storages",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/storage/provisioning/v1/storage"
+          },
+          "docs": "Returns S3 and SFTP object storage buckets for the account."
+        },
+        {
+          "info": {
+            "name": "Create storage",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/storage/provisioning/v1/storage",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create storage"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "DNS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List DNS zones",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/dns/v2/zones"
+          },
+          "docs": "List DNS zones"
+        },
+        {
+          "info": {
+            "name": "Create DNS zone",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/dns/v2/zones",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create DNS zone"
+        },
+        {
+          "info": {
+            "name": "Create RRSet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/dns/v2/zones/{zoneName}/{rrsetName}/{rrsetType}",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds an RRSet (resource record set) to the named zone. RRSets can be static or dynamic (GeoDNS, failover, weighted)."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Streaming",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List videos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/streaming/videos"
+          },
+          "docs": "Returns the list of VOD videos."
+        },
+        {
+          "info": {
+            "name": "Create video",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/streaming/videos",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a video entry; the response includes an upload server for direct VOD upload."
+        },
+        {
+          "info": {
+            "name": "Get video",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/streaming/videos/{video_id}"
+          },
+          "docs": "Get video"
+        },
+        {
+          "info": {
+            "name": "List live streams",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/streaming/streams"
+          },
+          "docs": "List live streams"
+        },
+        {
+          "info": {
+            "name": "Create live stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/streaming/streams",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create live stream"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "WAAP",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List WAAP domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/waap/v1/domains"
+          },
+          "docs": "Returns domains protected by Web Application and API Protection."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "FastEdge",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List FastEdge apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/fastedge/v1/apps"
+          },
+          "docs": "Returns the WebAssembly edge applications for the account."
+        },
+        {
+          "info": {
+            "name": "Create FastEdge app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/fastedge/v1/apps",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create FastEdge app"
+        }
+      ]
+    }
+  ]
+}

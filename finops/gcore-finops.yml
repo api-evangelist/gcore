@@ -1,0 +1,134 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Gcore
+providerId: gcore
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Edge Cloud
+- CDN
+- Streaming
+- Edge AI
+- Infrastructure
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Gcore platform spend. Gcore bills each service on its own
+  usage model: CDN and Streaming on delivered traffic (per GB, regional);
+  Cloud compute per instance hour with GPU billed per second; Object Storage
+  per GB-hour stored; DNS per query volume / plan; Everywhere Inference per
+  second of compute; FastEdge per invocation/compute. Spend is best managed by
+  tagging API keys and projects per workload and mapping each metered service
+  to an internal cost center.
+notes: >-
+  Per-unit rates vary by region and service and are subject to change; verify
+  against the relevant Gcore pricing pages during reconciliation.
+sources:
+- https://gcore.com/pricing
+- https://gcore.com/pricing/cloud
+- https://gcore.com/pricing/cdn
+- https://gcore.com/docs/api-reference/overview
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Gcore
+serviceCategory: Compute and Networking
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Gcore Edge Cloud
+  ServiceCategory: Compute and Networking
+  ProviderName: Gcore
+  PublisherName: Gcore
+  InvoiceIssuerName: Gcore
+  BillingCurrency: USD
+  ChargeCategory: Usage
+  PricingCategory: Usage-Based
+meters:
+- name: cdn_traffic_gb
+  description: CDN delivered traffic billed per GB by regional tier.
+  unit: gigabytes
+  aggregation: sum
+  dimensions:
+  - account
+  - resource
+  - region
+- name: streaming_traffic_gb
+  description: Streaming (VOD/live) delivered traffic billed per GB.
+  unit: gigabytes
+  aggregation: sum
+  dimensions:
+  - account
+  - region
+- name: cloud_instance_hours
+  description: Virtual machine instance hours billed by flavor and region.
+  unit: hours
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+  - region
+  - flavor
+- name: cloud_gpu_seconds
+  description: GPU compute billed per second of usage.
+  unit: seconds
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+  - region
+  - flavor
+- name: storage_gb_hours
+  description: Object storage billed per GB-hour of data stored over the month.
+  unit: gb_hours
+  aggregation: sum
+  dimensions:
+  - account
+  - location
+- name: dns_queries
+  description: Managed DNS queries billed per million by plan.
+  unit: queries
+  aggregation: sum
+  dimensions:
+  - account
+  - zone
+- name: inference_compute_seconds
+  description: Everywhere Inference compute billed per second by flavor.
+  unit: seconds
+  aggregation: sum
+  dimensions:
+  - account
+  - project
+  - deployment
+- name: fastedge_invocations
+  description: FastEdge serverless invocations billed per million.
+  unit: invocations
+  aggregation: sum
+  dimensions:
+  - account
+  - app
+principles:
+- name: Visibility
+  description: Pull Gcore usage/billing per service; inspect traffic GB, instance hours, GPU seconds, and stored GB-hours by region.
+- name: Allocation
+  description: Tag API keys and projects per workload/team; map each metered service to internal cost centers.
+- name: Optimization
+  description: Lean on cached CDN egress (no extra origin egress charge); right-size instances and volume types; use per-second GPU/inference billing to avoid idle GPU spend; pick the cheapest viable region tier.
+- name: Accountability
+  description: Assign owners per project/key; review per-service spend monthly against budget.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

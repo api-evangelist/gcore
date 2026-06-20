@@ -1,0 +1,1197 @@
+{
+  "item": [
+    {
+      "id": "a7ee298f-2c22-4362-9658-08c496e1a790",
+      "name": "CDN",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3ee8a05d-780d-480c-a1e4-55d89c73cc63",
+          "name": "List CDN resources",
+          "request": {
+            "name": "List CDN resources",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "bc55b502-16fa-4e34-a7f9-0f3e4fef3f46",
+          "name": "Create CDN resource",
+          "request": {
+            "name": "Create CDN resource",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "64f9c367-4962-4afa-8a75-fbfd4855b7a3",
+          "name": "Get CDN resource details",
+          "request": {
+            "name": "Get CDN resource details",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                "{resource_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "resource_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "11b54056-9c23-495e-b782-5b0ced53b75a",
+          "name": "Update CDN resource",
+          "request": {
+            "name": "Update CDN resource",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                "{resource_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "resource_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "37f02a5d-de31-47b7-a35f-bfda47b91e0f",
+          "name": "Delete CDN resource",
+          "request": {
+            "name": "Delete CDN resource",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                "{resource_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "resource_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "da50f739-45d7-4b90-a55a-f3a042429e8e",
+          "name": "List CDN resource rules",
+          "request": {
+            "name": "List CDN resource rules",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                "{resource_id}",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "resource_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "e5999ce8-cc82-44aa-ba9a-82a76bacfb2c",
+          "name": "Create CDN resource rule",
+          "request": {
+            "name": "Create CDN resource rule",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                "{resource_id}",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "resource_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "4e35928a-78dd-45e4-8979-0ef3a6d4b206",
+          "name": "Purge CDN cache",
+          "request": {
+            "name": "Purge CDN cache",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                "{resource_id}",
+                "purge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "resource_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "620d62d1-d4fb-4f47-98cd-106ec12b390b",
+          "name": "Get CDN edge server IP list",
+          "request": {
+            "name": "Get CDN edge server IP list",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "public-ip-list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "dcf9685a-63a0-4d9c-a54b-83cea30f9cfd",
+      "name": "Cloud",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "23150f94-24d8-4595-86ce-10b1e7787a9b",
+          "name": "List instances",
+          "request": {
+            "name": "List instances",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                "{project_id}",
+                "{region_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                },
+                {
+                  "key": "region_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "ff13f2f4-0f99-4501-ba8b-0d784afc8708",
+          "name": "Create instance",
+          "request": {
+            "name": "Create instance",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                "{project_id}",
+                "{region_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                },
+                {
+                  "key": "region_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "03a7c9f9-5ab6-4456-948b-fb78db6b48d0",
+          "name": "Get instance",
+          "request": {
+            "name": "Get instance",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                "{project_id}",
+                "{region_id}",
+                "{instance_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                },
+                {
+                  "key": "region_id",
+                  "value": ""
+                },
+                {
+                  "key": "instance_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "a81a36fe-29db-4004-bbef-d88676b030a1",
+          "name": "Delete instance",
+          "request": {
+            "name": "Delete instance",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                "{project_id}",
+                "{region_id}",
+                "{instance_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                },
+                {
+                  "key": "region_id",
+                  "value": ""
+                },
+                {
+                  "key": "instance_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "8ff97723-ee75-449d-af1a-e7cd676cfc2f",
+          "name": "List volumes",
+          "request": {
+            "name": "List volumes",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "volumes",
+                "{project_id}",
+                "{region_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                },
+                {
+                  "key": "region_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "b9f200e0-d2f4-4416-977a-72e4fb5b9b24",
+          "name": "Create volume",
+          "request": {
+            "name": "Create volume",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "volumes",
+                "{project_id}",
+                "{region_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                },
+                {
+                  "key": "region_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "f55dbf14-f7cb-4213-aeea-34b5e8230f61",
+          "name": "List networks",
+          "request": {
+            "name": "List networks",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "networks",
+                "{project_id}",
+                "{region_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                },
+                {
+                  "key": "region_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "edf2943b-a0e4-4e4d-8024-0c2bd9cdfed9",
+      "name": "Inference",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "46157060-fe77-4b77-a39e-a2fa3942a8f5",
+          "name": "List inference deployments",
+          "request": {
+            "name": "List inference deployments",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v3",
+                "inference",
+                "{project_id}",
+                "deployments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "e609de3b-5462-4bbd-8a9e-46b4ba0958fe",
+          "name": "Create inference deployment",
+          "request": {
+            "name": "Create inference deployment",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v3",
+                "inference",
+                "{project_id}",
+                "deployments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "project_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "565c873d-69ca-4f6d-bd34-6cb88af465fc",
+      "name": "Storage",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "aff21ac9-49f1-4710-b6b5-80661ff2a075",
+          "name": "List storages",
+          "request": {
+            "name": "List storages",
+            "description": {},
+            "url": {
+              "path": [
+                "storage",
+                "provisioning",
+                "v1",
+                "storage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "4e889498-4647-4e21-aee6-2c494bb09929",
+          "name": "Create storage",
+          "request": {
+            "name": "Create storage",
+            "description": {},
+            "url": {
+              "path": [
+                "storage",
+                "provisioning",
+                "v1",
+                "storage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "c66eb8d5-0cd7-4c82-9252-83cc5898ddb8",
+      "name": "DNS",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "05d6755b-6f0f-4024-9d53-5aeb9ff1b8a8",
+          "name": "List DNS zones",
+          "request": {
+            "name": "List DNS zones",
+            "description": {},
+            "url": {
+              "path": [
+                "dns",
+                "v2",
+                "zones"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "eb14f1cb-cc94-4c71-bea7-293602858cde",
+          "name": "Create DNS zone",
+          "request": {
+            "name": "Create DNS zone",
+            "description": {},
+            "url": {
+              "path": [
+                "dns",
+                "v2",
+                "zones"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "2c1f5a43-baaf-434f-aee3-93c6158a2928",
+          "name": "Create RRSet",
+          "request": {
+            "name": "Create RRSet",
+            "description": {},
+            "url": {
+              "path": [
+                "dns",
+                "v2",
+                "zones",
+                "{zoneName}",
+                "{rrsetName}",
+                "{rrsetType}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "zoneName",
+                  "value": ""
+                },
+                {
+                  "key": "rrsetName",
+                  "value": ""
+                },
+                {
+                  "key": "rrsetType",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "ba290c3f-f2f9-46f2-b83c-46886d1f8e97",
+      "name": "Streaming",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7a50827f-eb4b-405e-b45d-dfd19b008da4",
+          "name": "List videos",
+          "request": {
+            "name": "List videos",
+            "description": {},
+            "url": {
+              "path": [
+                "streaming",
+                "videos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "4629b4f2-7dde-4c08-b50b-49f71449fe3a",
+          "name": "Create video",
+          "request": {
+            "name": "Create video",
+            "description": {},
+            "url": {
+              "path": [
+                "streaming",
+                "videos"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "id": "8afff77b-947a-4209-bcee-610462b44132",
+          "name": "Get video",
+          "request": {
+            "name": "Get video",
+            "description": {},
+            "url": {
+              "path": [
+                "streaming",
+                "videos",
+                "{video_id}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "video_id",
+                  "value": ""
+                }
+              ]
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "3af964bb-c367-4dc5-95d8-e53456259166",
+          "name": "List live streams",
+          "request": {
+            "name": "List live streams",
+            "description": {},
+            "url": {
+              "path": [
+                "streaming",
+                "streams"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "2623a581-7fdc-4370-bc4a-53fa233f8773",
+          "name": "Create live stream",
+          "request": {
+            "name": "Create live stream",
+            "description": {},
+            "url": {
+              "path": [
+                "streaming",
+                "streams"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "5a23d5b0-8924-453d-bf9f-d116e12be7c8",
+      "name": "WAAP",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3d1d3914-c0c0-43f4-ad9f-db11a78539e8",
+          "name": "List WAAP domains",
+          "request": {
+            "name": "List WAAP domains",
+            "description": {},
+            "url": {
+              "path": [
+                "waap",
+                "v1",
+                "domains"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "id": "a3f7a6fd-d3c6-4e0c-b9ca-f2d4c81fa1a7",
+      "name": "FastEdge",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a8a780d7-29b5-43f1-a985-3851e3b2d480",
+          "name": "List FastEdge apps",
+          "request": {
+            "name": "List FastEdge apps",
+            "description": {},
+            "url": {
+              "path": [
+                "fastedge",
+                "v1",
+                "apps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [],
+            "method": "GET",
+            "auth": null
+          },
+          "response": []
+        },
+        {
+          "id": "e28b0a0f-3755-467a-b77d-4a729a858958",
+          "name": "Create FastEdge app",
+          "request": {
+            "name": "Create FastEdge app",
+            "description": {},
+            "url": {
+              "path": [
+                "fastedge",
+                "v1",
+                "apps"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.gcore.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "APIKey {{apiToken}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "803c7165-4e70-447b-bbf0-414409481110",
+    "name": "Gcore API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Partial OpenAPI description of the Gcore edge cloud platform REST API.\n\nContact Support:\n Name: Gcore Support\n Email: support@gcore.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Gcore
+providerId: gcore
+created: '2026-06-20'
+modified: '2026-06-20'
+reconciled: false
+tags:
+- Edge Cloud
+- CDN
+- Streaming
+- Edge AI
+- Infrastructure
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Gcore applies per-service rate limits on its unified REST API at
+  api.gcore.com. The Streaming API documents a general limit of about four
+  requests per second; the CDN purge operation is constrained to one
+  "purge all" request per CDN resource per minute and two "purge by URL"
+  requests per resource per minute, with a single URL purge limited to 100
+  URLs and a single pattern purge limited to 10 patterns. Cloud, DNS, Storage,
+  WAAP, Inference, and FastEdge enforce their own per-account quotas and
+  request limits that are not fully enumerated in public docs. Specific values
+  beyond the ones noted here are not reconciled in this artifact.
+notes: >-
+  Verify per-service limits in the relevant Gcore API reference during
+  reconciliation. Cloud resource quotas (instances, volumes, networks, floating
+  IPs) are project/region scoped and adjustable via support.
+sources:
+- https://gcore.com/docs/api-reference/overview
+- https://gcore.com/docs/streaming-platform/api/streaming-platform-api-tutorial
+- https://gcore.com/docs/cdn
+responseCodes:
+  throttled: 429
+limits:
+- name: Streaming API Requests
+  scope: account
+  metric: requests
+  limit: ~4 requests per second
+  notes: Documented general limit on the Streaming API.
+- name: CDN Purge All
+  scope: resource
+  metric: requests
+  limit: 1 per minute per CDN resource
+  notes: One "purge all cache" request per CDN resource per minute.
+- name: CDN Purge by URL
+  scope: resource
+  metric: requests
+  limit: 2 per minute per CDN resource
+  notes: Up to 100 URLs per request; pattern purge limited to 10 patterns per request.
+- name: Cloud API Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-account request limits; resource quotas are project/region scoped.
+- name: DNS API Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-account limits vary by plan.
+- name: WAAP / Inference / FastEdge Requests
+  scope: account
+  metric: requests
+  limit: see provider documentation
+  notes: Per-service quotas; not fully enumerated publicly.
+policies:
+- name: Per-Service Limits
+  description: Limits are enforced per product (CDN, Cloud, DNS, Streaming, etc.) rather than as a single global token bucket.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor Retry-After on 429 responses.
+- name: Quota Increases
+  description: Cloud resource quotas can be raised by contacting Gcore support.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
