@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/gcore-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+schemes:
+- name: APIKey
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: 'Permanent API token sent as "Authorization: APIKey <token>". The header name
+    is case-insensitive.'
+  sources:
+  - openapi/gcore-openapi.yml

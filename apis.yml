@@ -206,6 +206,10 @@ apis:
   description: FastEdge serverless edge computing - deploy WebAssembly apps and
     functions that run on Gcore CDN edge nodes close to end users.
 common:
+- type: DomainSecurity
+  url: security/gcore-domain-security.yml
+- type: Authentication
+  url: authentication/gcore-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/G-Core
 - type: LinkedIn
