@@ -206,6 +206,8 @@ apis:
   description: FastEdge serverless edge computing - deploy WebAssembly apps and
     functions that run on Gcore CDN edge nodes close to end users.
 common:
+- type: AgenticAccess
+  url: agentic-access/gcore-agentic-access.yml
 - type: DomainSecurity
   url: security/gcore-domain-security.yml
 - type: Authentication
