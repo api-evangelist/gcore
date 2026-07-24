@@ -1,0 +1,313 @@
+openapi: 3.0.1
+info:
+  title: Gcore CDN Cloud API
+  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey <token>".'
+  termsOfService: https://gcore.com/legal/lsa
+  contact:
+    name: Gcore Support
+    url: https://gcore.com/support
+    email: support@gcore.com
+  version: '1.0'
+servers:
+- url: https://api.gcore.com
+  description: Gcore unified API host
+security:
+- APIKey: []
+tags:
+- name: Cloud
+  description: Virtual machine instances, networks, and volumes.
+paths:
+  /cloud/v1/instances/{project_id}/{region_id}:
+    get:
+      operationId: listInstances
+      tags:
+      - Cloud
+      summary: List instances
+      description: Returns all virtual machine instances in a project and region.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: A paginated list of instances.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceList'
+    post:
+      operationId: createInstance
+      tags:
+      - Cloud
+      summary: Create instance
+      description: Creates a new virtual machine instance from a flavor and image or volume.
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/RegionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceCreate'
+      responses:
+        '200':
+          description: Task created to provision the instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+  /cloud/v1/instances/{project_id}/{region_id}/{instance_id}:
+    get:
+      operationId: getInstance
+      tags:
+      - Cloud
+      summary: Get instance
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/RegionId'
+      - $ref: '#/components/parameters/InstanceId'
+      responses:
+        '200':
+          description: Instance details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instance'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteInstance
+      tags:
+      - Cloud
+      summary: Delete instance
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/RegionId'
+      - $ref: '#/components/parameters/InstanceId'
+      responses:
+        '200':
+          description: Task created to delete the instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+  /cloud/v1/volumes/{project_id}/{region_id}:
+    get:
+      operationId: listVolumes
+      tags:
+      - Cloud
+      summary: List volumes
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: A list of block storage volumes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Volume'
+    post:
+      operationId: createVolume
+      tags:
+      - Cloud
+      summary: Create volume
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/RegionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VolumeCreate'
+      responses:
+        '200':
+          description: Task created to provision the volume.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+  /cloud/v1/networks/{project_id}/{region_id}:
+    get:
+      operationId: listNetworks
+      tags:
+      - Cloud
+      summary: List networks
+      parameters:
+      - $ref: '#/components/parameters/ProjectId'
+      - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: A list of virtual networks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Network'
+components:
+  parameters:
+    RegionId:
+      name: region_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud region identifier.
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Instance identifier (UUID).
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud project identifier.
+  schemas:
+    InstanceList:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instance'
+    InstanceCreate:
+      type: object
+      required:
+      - flavor
+      - names
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+        flavor:
+          type: string
+          description: Flavor (compute shape) identifier, e.g. g1-standard-2-4.
+        volumes:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        interfaces:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        keypair_name:
+          type: string
+    Instance:
+      type: object
+      properties:
+        instance_id:
+          type: string
+        instance_name:
+          type: string
+        status:
+          type: string
+        flavor:
+          type: object
+          additionalProperties: true
+        region:
+          type: string
+        addresses:
+          type: object
+          additionalProperties: true
+    TaskResponse:
+      type: object
+      description: Asynchronous task acknowledgement returned by Cloud operations.
+      properties:
+        tasks:
+          type: array
+          items:
+            type: string
+    VolumeCreate:
+      type: object
+      required:
+      - size
+      - source
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        source:
+          type: string
+          enum:
+          - new-volume
+          - image
+          - snapshot
+        type_name:
+          type: string
+          enum:
+          - standard
+          - ssd_hiiops
+          - cold
+          - ultra
+    Volume:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+          description: Size in GiB.
+        volume_type:
+          type: string
+        status:
+          type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    Network:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        mtu:
+          type: integer
+        external:
+          type: boolean
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Permanent API token sent as "Authorization: APIKey <token>". The header name is case-insensitive.'

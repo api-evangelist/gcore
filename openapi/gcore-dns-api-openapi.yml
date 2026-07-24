@@ -1,0 +1,159 @@
+openapi: 3.0.1
+info:
+  title: Gcore CDN DNS API
+  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey <token>".'
+  termsOfService: https://gcore.com/legal/lsa
+  contact:
+    name: Gcore Support
+    url: https://gcore.com/support
+    email: support@gcore.com
+  version: '1.0'
+servers:
+- url: https://api.gcore.com
+  description: Gcore unified API host
+security:
+- APIKey: []
+tags:
+- name: DNS
+  description: Managed authoritative DNS zones and RRSets.
+paths:
+  /dns/v2/zones:
+    get:
+      operationId: listZones
+      tags:
+      - DNS
+      summary: List DNS zones
+      responses:
+        '200':
+          description: A list of DNS zones.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  zones:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Zone'
+    post:
+      operationId: createZone
+      tags:
+      - DNS
+      summary: Create DNS zone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneCreate'
+      responses:
+        '200':
+          description: The created zone identifier.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+  /dns/v2/zones/{zoneName}/{rrsetName}/{rrsetType}:
+    post:
+      operationId: createRRset
+      tags:
+      - DNS
+      summary: Create RRSet
+      description: Adds an RRSet (resource record set) to the named zone. RRSets can be static or dynamic (GeoDNS, failover, weighted).
+      parameters:
+      - name: zoneName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: rrsetName
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: rrsetType
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - A
+          - AAAA
+          - CNAME
+          - MX
+          - NS
+          - TXT
+          - SRV
+          - CAA
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RRSetCreate'
+      responses:
+        '200':
+          description: The created RRSet.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RRSet'
+components:
+  schemas:
+    RRSet:
+      type: object
+      properties:
+        ttl:
+          type: integer
+        resource_records:
+          type: array
+          items:
+            type: object
+            properties:
+              content:
+                type: array
+                items:
+                  type: string
+    Zone:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+        status:
+          type: string
+        records_count:
+          type: integer
+    RRSetCreate:
+      type: object
+      required:
+      - resource_records
+      properties:
+        ttl:
+          type: integer
+        resource_records:
+          type: array
+          items:
+            type: object
+            properties:
+              content:
+                type: array
+                items:
+                  type: string
+    ZoneCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Permanent API token sent as "Authorization: APIKey <token>". The header name is case-insensitive.'

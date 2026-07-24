@@ -1,0 +1,171 @@
+openapi: 3.0.1
+info:
+  title: Gcore CDN Streaming API
+  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey <token>".'
+  termsOfService: https://gcore.com/legal/lsa
+  contact:
+    name: Gcore Support
+    url: https://gcore.com/support
+    email: support@gcore.com
+  version: '1.0'
+servers:
+- url: https://api.gcore.com
+  description: Gcore unified API host
+security:
+- APIKey: []
+tags:
+- name: Streaming
+  description: Video hosting (VOD) and live streaming.
+paths:
+  /streaming/videos:
+    get:
+      operationId: listVideos
+      tags:
+      - Streaming
+      summary: List videos
+      description: Returns the list of VOD videos.
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of videos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+    post:
+      operationId: createVideo
+      tags:
+      - Streaming
+      summary: Create video
+      description: Creates a video entry; the response includes an upload server for direct VOD upload.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoCreate'
+      responses:
+        '201':
+          description: The created video.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+  /streaming/videos/{video_id}:
+    get:
+      operationId: getVideo
+      tags:
+      - Streaming
+      summary: Get video
+      parameters:
+      - name: video_id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Video details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+  /streaming/streams:
+    get:
+      operationId: listStreams
+      tags:
+      - Streaming
+      summary: List live streams
+      responses:
+        '200':
+          description: A list of live streams.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stream'
+    post:
+      operationId: createStream
+      tags:
+      - Streaming
+      summary: Create live stream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamCreate'
+      responses:
+        '201':
+          description: The created live stream, with push and play URLs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stream'
+components:
+  schemas:
+    StreamCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        record:
+          type: boolean
+        pull:
+          type: boolean
+        uri:
+          type: string
+    VideoCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        origin_url:
+          type: string
+          description: Source URL to pull the video from, if fetching.
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        duration:
+          type: integer
+        hls_url:
+          type: string
+        screenshot:
+          type: string
+    Stream:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        live:
+          type: boolean
+        push_url:
+          type: string
+        backup_push_url:
+          type: string
+        hls_playlist_url:
+          type: string
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Permanent API token sent as "Authorization: APIKey <token>". The header name is case-insensitive.'

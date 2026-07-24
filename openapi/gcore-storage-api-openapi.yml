@@ -1,0 +1,100 @@
+openapi: 3.0.1
+info:
+  title: Gcore CDN Storage API
+  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey <token>".'
+  termsOfService: https://gcore.com/legal/lsa
+  contact:
+    name: Gcore Support
+    url: https://gcore.com/support
+    email: support@gcore.com
+  version: '1.0'
+servers:
+- url: https://api.gcore.com
+  description: Gcore unified API host
+security:
+- APIKey: []
+tags:
+- name: Storage
+  description: S3-compatible and SFTP object storage.
+paths:
+  /storage/provisioning/v1/storage:
+    get:
+      operationId: listStorages
+      tags:
+      - Storage
+      summary: List storages
+      description: Returns S3 and SFTP object storage buckets for the account.
+      parameters:
+      - name: location
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter by storage location.
+      responses:
+        '200':
+          description: A list of object storages.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Storage'
+    post:
+      operationId: createStorage
+      tags:
+      - Storage
+      summary: Create storage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageCreate'
+      responses:
+        '200':
+          description: The created storage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storage'
+components:
+  schemas:
+    StorageCreate:
+      type: object
+      required:
+      - name
+      - type
+      - location
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - s3
+          - sftp
+        location:
+          type: string
+    Storage:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - s3
+          - sftp
+        location:
+          type: string
+        address:
+          type: string
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'Permanent API token sent as "Authorization: APIKey <token>". The header name is case-insensitive.'
