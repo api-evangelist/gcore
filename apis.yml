@@ -8,7 +8,20 @@ description: Gcore is a global edge cloud, CDN, streaming, and AI infrastructure
   bare-metal compute, S3-compatible object storage, managed DNS, video
   streaming and live, Everywhere Inference (edge AI), WAAP/DDoS security, and
   FastEdge serverless functions.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/gcore.png
 tags:
 - Edge Cloud
 - CDN
@@ -19,192 +32,358 @@ created: '2026-06-20'
 modified: '2026-06-20'
 specificationVersion: '0.19'
 apis:
-- aid: gcore:cdn
+- aid: gcore:gcore-cdn-api
   name: Gcore CDN API
-  tags:
-  - CDN
-  - Content Delivery
-  - Caching
-  - Purge
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  description: Content delivery network resources, rules, origin groups, and purge.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
+  tags:
+  - CDN
   properties:
-  - url: https://gcore.com/docs/cdn
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/cdn
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: Manage CDN resources, origin groups, caching and delivery rules,
-    SSL certificates, and cache purge across 210+ points of presence.
-- aid: gcore:cloud
+  - type: OpenAPI
+    url: openapi/gcore-cdn-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-cloud-api
   name: Gcore Cloud API
+  description: Virtual machine instances, networks, and volumes.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
   tags:
   - Cloud
-  - Compute
-  - GPU
-  - Instances
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://gcore.com/docs/api-reference/cloud
-  baseURL: https://api.gcore.com/cloud
   properties:
-  - url: https://gcore.com/docs/cloud
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/cloud
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: Provision and manage virtual machine instances, GPU and bare-metal
-    compute, networks, volumes, floating IPs, and SSH keys scoped by project and
-    region under /cloud/v1.
-- aid: gcore:storage
-  name: Gcore Object Storage API
-  tags:
-  - Storage
-  - Object Storage
-  - S3
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://gcore.com/docs/api-reference/storage
-  baseURL: https://api.gcore.com/storage
-  properties:
-  - url: https://gcore.com/docs/storage
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/storage
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: Provision and manage S3-compatible and SFTP object storage buckets,
-    locations, and access credentials; billed per GB-hour of stored data.
-- aid: gcore:dns
+  - type: OpenAPI
+    url: openapi/gcore-cloud-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-dns-api
   name: Gcore DNS API
+  description: Managed authoritative DNS zones and RRSets.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
   tags:
   - DNS
-  - Zones
-  - RRSets
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://gcore.com/docs/api-reference/dns
-  baseURL: https://api.gcore.com/dns/v2
   properties:
-  - url: https://gcore.com/docs/dns
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/dns
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: Managed authoritative DNS - create and manage zones and RRSets
-    (A, AAAA, CNAME, MX, TXT and more), including dynamic GeoDNS and failover
-    records under /dns/v2.
-- aid: gcore:streaming
-  name: Gcore Streaming API
-  tags:
-  - Streaming
-  - Video
-  - Live
-  - VOD
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://gcore.com/docs/api-reference/streaming
-  baseURL: https://api.gcore.com/streaming
-  properties:
-  - url: https://gcore.com/docs/streaming-platform
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/streaming
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: Video hosting (VOD) and low-latency live streaming - upload and
-    manage videos, create live streams, restreams, and recordings with adaptive
-    multi-bitrate transcoding.
-- aid: gcore:inference
-  name: Gcore Everywhere Inference API
-  tags:
-  - Edge AI
-  - Inference
-  - AI Models
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://gcore.com/docs/edge-ai/everywhere-inference
-  baseURL: https://api.gcore.com/cloud
-  properties:
-  - url: https://gcore.com/docs/edge-ai/everywhere-inference
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/cloud
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: Everywhere Inference (Inference at the Edge) - deploy trained AI
-    models to edge nodes across 180+ locations with smart routing, container
-    registries, and optional per-deployment API-key auth (X-API-Key).
-- aid: gcore:security-waap
-  name: Gcore Security & WAAP API
-  tags:
-  - Security
-  - WAAP
-  - WAF
-  - DDoS
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://gcore.com/docs/api-reference/waap
-  baseURL: https://api.gcore.com/waap
-  properties:
-  - url: https://gcore.com/docs/waap
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/waap
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: Web Application and API Protection (WAAP), API discovery, custom
-    and policy rules, plus DDoS Protection for infrastructure under /waap and
-    /security/iaas.
-- aid: gcore:fastedge
+  - type: OpenAPI
+    url: openapi/gcore-dns-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-fastedge-api
   name: Gcore FastEdge API
+  description: Serverless edge functions and applications.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
   tags:
   - FastEdge
-  - Edge Functions
-  - Serverless
-  - WASM
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-  humanURL: https://gcore.com/docs/api-reference/fastedge
-  baseURL: https://api.gcore.com/fastedge
   properties:
-  - url: https://gcore.com/docs/fastedge
-    type: Documentation
-  - url: https://gcore.com/docs/api-reference/fastedge
-    type: APIReference
-  - url: openapi/gcore-openapi.yml
-    type: OpenAPI
-  - url: collections/gcore.postman_collection.json
-    type: PostmanCollection
-  - url: collections/gcore.opencollection.json
-    type: OpenCollection
-  description: FastEdge serverless edge computing - deploy WebAssembly apps and
-    functions that run on Gcore CDN edge nodes close to end users.
+  - type: OpenAPI
+    url: openapi/gcore-fastedge-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-inference-api
+  name: Gcore Inference API
+  description: Everywhere Inference edge AI model deployments.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Inference
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-inference-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-storage-api
+  name: Gcore Storage API
+  description: S3-compatible and SFTP object storage.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Storage
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-storage-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-streaming-api
+  name: Gcore Streaming API
+  description: Video hosting (VOD) and live streaming.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Streaming
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-streaming-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-waap-api
+  name: Gcore WAAP API
+  description: Web Application and API Protection domains.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - WAAP
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-waap-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
 common:
 - type: AgenticAccess
   url: agentic-access/gcore-agentic-access.yml
