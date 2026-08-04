@@ -1,0 +1,28 @@
+{
+  "provider": "gcore",
+  "sources": [
+    "gcore-cdn-api-openapi.yml",
+    "gcore-cloud-api-openapi.yml",
+    "gcore-dns-api-openapi.yml",
+    "gcore-fastedge-api-openapi.yml",
+    "gcore-inference-api-openapi.yml",
+    "gcore-storage-api-openapi.yml",
+    "gcore-streaming-api-openapi.yml",
+    "gcore-waap-api-openapi.yml"
+  ],
+  "outputs": [
+    "gcore-cdn-api-openapi.yml",
+    "gcore-cloud-api-openapi.yml",
+    "gcore-dns-api-openapi.yml",
+    "gcore-fastedge-api-openapi.yml",
+    "gcore-inference-api-openapi.yml",
+    "gcore-storage-api-openapi.yml",
+    "gcore-streaming-api-openapi.yml",
+    "gcore-waap-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
