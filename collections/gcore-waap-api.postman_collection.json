@@ -1,0 +1,131 @@
+{
+  "item": [
+    {
+      "id": "c59526a2-fb3a-40a0-a830-634eaade0868",
+      "name": "WAAP",
+      "description": {
+        "content": "Web Application and API Protection domains.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "03b2dffc-c6fc-4722-b90a-ecef86604673",
+          "name": "List WAAP domains",
+          "request": {
+            "name": "List WAAP domains",
+            "description": {
+              "content": "Returns domains protected by Web Application and API Protection.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "waap",
+                "v1",
+                "domains"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5c2ca7fc-180a-43fb-9fc7-45ab4556e254",
+              "name": "A list of WAAP domains.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "waap",
+                    "v1",
+                    "domains"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 9044,\n  \"results\": [\n    {\n      \"id\": 201,\n      \"name\": \"string\",\n      \"status\": \"string\",\n      \"enabled\": false\n    },\n    {\n      \"id\": 7948,\n      \"name\": \"string\",\n      \"status\": \"string\",\n      \"enabled\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.gcore.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "02bff162-134b-4dba-9d5f-e31e69ceca05",
+    "name": "Gcore CDN WAAP API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as \"Authorization: APIKey <token>\".\n\nContact Support:\n Name: Gcore Support\n Email: support@gcore.com",
+      "type": "text/plain"
+    }
+  }
+}

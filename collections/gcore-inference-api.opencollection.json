@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gcore CDN Inference API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Inference",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List inference deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v3/inference/:project_id/deployments",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              }
+            ]
+          },
+          "docs": "Returns Everywhere Inference deployments for the project."
+        },
+        {
+          "info": {
+            "name": "Create inference deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cloud/v3/inference/:project_id/deployments",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deploys a containerized AI model to edge inference nodes. Set auth_enabled to true to generate an API key required as X-API-Key on the deployment endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

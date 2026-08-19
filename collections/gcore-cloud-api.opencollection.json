@@ -1,0 +1,221 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gcore CDN Cloud API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Cloud",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/instances/:project_id/:region_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              },
+              {
+                "name": "region_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud region identifier."
+              }
+            ]
+          },
+          "docs": "Returns all virtual machine instances in a project and region."
+        },
+        {
+          "info": {
+            "name": "Create instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cloud/v1/instances/:project_id/:region_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              },
+              {
+                "name": "region_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud region identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new virtual machine instance from a flavor and image or volume."
+        },
+        {
+          "info": {
+            "name": "Get instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/instances/:project_id/:region_id/:instance_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              },
+              {
+                "name": "region_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud region identifier."
+              },
+              {
+                "name": "instance_id",
+                "value": "",
+                "type": "path",
+                "description": "Instance identifier (UUID)."
+              }
+            ]
+          },
+          "docs": "Get instance"
+        },
+        {
+          "info": {
+            "name": "Delete instance",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.gcore.com/cloud/v1/instances/:project_id/:region_id/:instance_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              },
+              {
+                "name": "region_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud region identifier."
+              },
+              {
+                "name": "instance_id",
+                "value": "",
+                "type": "path",
+                "description": "Instance identifier (UUID)."
+              }
+            ]
+          },
+          "docs": "Delete instance"
+        },
+        {
+          "info": {
+            "name": "List volumes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/volumes/:project_id/:region_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              },
+              {
+                "name": "region_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud region identifier."
+              }
+            ]
+          },
+          "docs": "List volumes"
+        },
+        {
+          "info": {
+            "name": "Create volume",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cloud/v1/volumes/:project_id/:region_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              },
+              {
+                "name": "region_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud region identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create volume"
+        },
+        {
+          "info": {
+            "name": "List networks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cloud/v1/networks/:project_id/:region_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud project identifier."
+              },
+              {
+                "name": "region_id",
+                "value": "",
+                "type": "path",
+                "description": "Cloud region identifier."
+              }
+            ]
+          },
+          "docs": "List networks"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

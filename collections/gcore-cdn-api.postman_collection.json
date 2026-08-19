@@ -1,0 +1,1354 @@
+{
+  "item": [
+    {
+      "id": "adc1aca6-317b-4cf7-b0c7-2851f79efd20",
+      "name": "CDN",
+      "description": {
+        "content": "Content delivery network resources, rules, origin groups, and purge.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "845b4d08-073f-450f-a8a4-6b7a695684c6",
+          "name": "List CDN resources",
+          "request": {
+            "name": "List CDN resources",
+            "description": {
+              "content": "Returns the list of CDN resources for the account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cdn",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "<boolean>",
+                  "description": "Filter by deletion status."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "80035e04-edc9-4bf6-acf4-69a482b72832",
+              "name": "A list of CDN resources.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 229,\n    \"cname\": \"string\",\n    \"active\": false,\n    \"status\": \"string\",\n    \"origin\": \"string\",\n    \"originGroup\": 8371,\n    \"sslData\": 9923,\n    \"rules\": [\n      {\n        \"id\": 8003,\n        \"name\": \"string\",\n        \"rule\": \"string\",\n        \"ruleType\": 6283,\n        \"originGroup\": 7069,\n        \"options\": {\n          \"key_0\": false\n        }\n      },\n      {\n        \"id\": 5342,\n        \"name\": \"string\",\n        \"rule\": \"string\",\n        \"ruleType\": 8289,\n        \"originGroup\": 4130,\n        \"options\": {\n          \"key_0\": 8356.61484296104\n        }\n      }\n    ]\n  },\n  {\n    \"id\": 8334,\n    \"cname\": \"string\",\n    \"active\": false,\n    \"status\": \"string\",\n    \"origin\": \"string\",\n    \"originGroup\": 7594,\n    \"sslData\": 2322,\n    \"rules\": [\n      {\n        \"id\": 1316,\n        \"name\": \"string\",\n        \"rule\": \"string\",\n        \"ruleType\": 4511,\n        \"originGroup\": 5936,\n        \"options\": {\n          \"key_0\": 5566.659114950281\n        }\n      },\n      {\n        \"id\": 6124,\n        \"name\": \"string\",\n        \"rule\": \"string\",\n        \"ruleType\": 4173,\n        \"originGroup\": 6699,\n        \"options\": {\n          \"key_0\": 6423,\n          \"key_1\": 3259\n        }\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5475b825-851e-477a-aa2c-2aa209a506bf",
+              "name": "Missing or invalid API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b96c0972-56e7-4c14-a0c8-3f30e47330ec",
+          "name": "Create CDN resource",
+          "request": {
+            "name": "Create CDN resource",
+            "description": {
+              "content": "Creates a new CDN resource bound to a primary delivery domain (cname).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cdn",
+                "resources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cname\": \"<string>\",\n  \"origin\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"sslData\": \"<integer>\",\n  \"options\": {\n    \"key_0\": 9513.246105248614\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "965945fa-f973-45b4-91d7-dee8922b50c7",
+              "name": "The created CDN resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cname\": \"<string>\",\n  \"origin\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"sslData\": \"<integer>\",\n  \"options\": {\n    \"key_0\": 7875.793643928922,\n    \"key_1\": 5021,\n    \"key_2\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 9164,\n  \"cname\": \"string\",\n  \"active\": true,\n  \"status\": \"string\",\n  \"origin\": \"string\",\n  \"originGroup\": 8713,\n  \"sslData\": 2674,\n  \"rules\": [\n    {\n      \"id\": 8573,\n      \"name\": \"string\",\n      \"rule\": \"string\",\n      \"ruleType\": 9461,\n      \"originGroup\": 496,\n      \"options\": {\n        \"key_0\": 4437.642769531638\n      }\n    },\n    {\n      \"id\": 1989,\n      \"name\": \"string\",\n      \"rule\": \"string\",\n      \"ruleType\": 7525,\n      \"originGroup\": 4880,\n      \"options\": {\n        \"key_0\": 8947,\n        \"key_1\": false,\n        \"key_2\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08291785-5792-4ec6-8c7f-a0a7d378ab79",
+              "name": "The request was malformed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cname\": \"<string>\",\n  \"origin\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"sslData\": \"<integer>\",\n  \"options\": {\n    \"key_0\": 7875.793643928922,\n    \"key_1\": 5021,\n    \"key_2\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f081f15d-2099-4c11-99d9-d466376aeac4",
+              "name": "Missing or invalid API token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cname\": \"<string>\",\n  \"origin\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"sslData\": \"<integer>\",\n  \"options\": {\n    \"key_0\": 7875.793643928922,\n    \"key_1\": 5021,\n    \"key_2\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e690a710-38dd-46fd-be92-c193b2e72d5f",
+          "name": "Get CDN resource details",
+          "request": {
+            "name": "Get CDN resource details",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                ":resource_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "resource_id",
+                  "description": "(Required) CDN resource identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "00e73b31-0311-44bc-8e55-a4041751c63c",
+              "name": "CDN resource details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 9164,\n  \"cname\": \"string\",\n  \"active\": true,\n  \"status\": \"string\",\n  \"origin\": \"string\",\n  \"originGroup\": 8713,\n  \"sslData\": 2674,\n  \"rules\": [\n    {\n      \"id\": 8573,\n      \"name\": \"string\",\n      \"rule\": \"string\",\n      \"ruleType\": 9461,\n      \"originGroup\": 496,\n      \"options\": {\n        \"key_0\": 4437.642769531638\n      }\n    },\n    {\n      \"id\": 1989,\n      \"name\": \"string\",\n      \"rule\": \"string\",\n      \"ruleType\": 7525,\n      \"originGroup\": 4880,\n      \"options\": {\n        \"key_0\": 8947,\n        \"key_1\": false,\n        \"key_2\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "75e5390d-185f-4fca-8c56-1412e1d3cc7f",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5201d14d-5319-4179-a8fe-1565d591bc06",
+          "name": "Update CDN resource",
+          "request": {
+            "name": "Update CDN resource",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                ":resource_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "resource_id",
+                  "description": "(Required) CDN resource identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cname\": \"<string>\",\n  \"origin\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"sslData\": \"<integer>\",\n  \"options\": {\n    \"key_0\": 9513.246105248614\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c0f54513-3a29-40f7-99da-f7741f036929",
+              "name": "The updated CDN resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cname\": \"<string>\",\n  \"origin\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"sslData\": \"<integer>\",\n  \"options\": {\n    \"key_0\": 7875.793643928922,\n    \"key_1\": 5021,\n    \"key_2\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 9164,\n  \"cname\": \"string\",\n  \"active\": true,\n  \"status\": \"string\",\n  \"origin\": \"string\",\n  \"originGroup\": 8713,\n  \"sslData\": 2674,\n  \"rules\": [\n    {\n      \"id\": 8573,\n      \"name\": \"string\",\n      \"rule\": \"string\",\n      \"ruleType\": 9461,\n      \"originGroup\": 496,\n      \"options\": {\n        \"key_0\": 4437.642769531638\n      }\n    },\n    {\n      \"id\": 1989,\n      \"name\": \"string\",\n      \"rule\": \"string\",\n      \"ruleType\": 7525,\n      \"originGroup\": 4880,\n      \"options\": {\n        \"key_0\": 8947,\n        \"key_1\": false,\n        \"key_2\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1cd3729-8105-406c-b8f0-0a8b12b41796",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cname\": \"<string>\",\n  \"origin\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"sslData\": \"<integer>\",\n  \"options\": {\n    \"key_0\": 7875.793643928922,\n    \"key_1\": 5021,\n    \"key_2\": true\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d76fe41-b7e5-4d4d-a07c-b130ae083a9a",
+          "name": "Delete CDN resource",
+          "request": {
+            "name": "Delete CDN resource",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                ":resource_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "resource_id",
+                  "description": "(Required) CDN resource identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b123fcdd-adaf-431d-b0e5-ff05d6d5855b",
+              "name": "CDN resource deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3941781f-13e3-4fd1-a63b-bed41c890736",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9ed1fea5-04c4-4813-8346-4ca8a588e29d",
+          "name": "List CDN resource rules",
+          "request": {
+            "name": "List CDN resource rules",
+            "description": {},
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                ":resource_id",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "resource_id",
+                  "description": "(Required) CDN resource identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b0412f94-1120-4bd0-9134-0caeaa623b3c",
+              "name": "A list of rules for the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 1625,\n    \"name\": \"string\",\n    \"rule\": \"string\",\n    \"ruleType\": 8324,\n    \"originGroup\": 1681,\n    \"options\": {\n      \"key_0\": \"string\"\n    }\n  },\n  {\n    \"id\": 7995,\n    \"name\": \"string\",\n    \"rule\": \"string\",\n    \"ruleType\": 843,\n    \"originGroup\": 490,\n    \"options\": {\n      \"key_0\": 8387,\n      \"key_1\": \"string\",\n      \"key_2\": 3511.994076331031\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dfa9e128-c895-4c8c-9828-653f3c681a36",
+          "name": "Create CDN resource rule",
+          "request": {
+            "name": "Create CDN resource rule",
+            "description": {
+              "content": "Creates a rule that applies custom caching, delivery, and security options to a path pattern within the CDN resource.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                ":resource_id",
+                "rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "resource_id",
+                  "description": "(Required) CDN resource identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rule\": \"<string>\",\n  \"ruleType\": \"<integer>\",\n  \"name\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"options\": {\n    \"key_0\": true,\n    \"key_1\": 8674.939402765496\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4c7a2340-0736-455b-b74f-271f3df82c67",
+              "name": "The created rule.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id",
+                    "rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"rule\": \"<string>\",\n  \"ruleType\": \"<integer>\",\n  \"name\": \"<string>\",\n  \"originGroup\": \"<integer>\",\n  \"options\": {\n    \"key_0\": true,\n    \"key_1\": false,\n    \"key_2\": 5864.498616020209,\n    \"key_3\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 4343,\n  \"name\": \"string\",\n  \"rule\": \"string\",\n  \"ruleType\": 3128,\n  \"originGroup\": 5457,\n  \"options\": {\n    \"key_0\": 95,\n    \"key_1\": 8951.38315668079\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "083db9f6-efd3-4ec6-8df5-eaaf6868edd8",
+          "name": "Purge CDN cache",
+          "request": {
+            "name": "Purge CDN cache",
+            "description": {
+              "content": "Purges content from CDN edge caches for the resource. Supply specific URLs, path patterns, or omit both to purge all cache.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cdn",
+                "resources",
+                ":resource_id",
+                "purge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "resource_id",
+                  "description": "(Required) CDN resource identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"urls\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"paths\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b3d05f18-659a-478b-8ceb-40e97816f916",
+              "name": "Purge request accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id",
+                    "purge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"urls\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"paths\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "11049f6c-7416-4cb9-aade-cca823b84f4b",
+              "name": "Rate limit exceeded for this operation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "resources",
+                    ":resource_id",
+                    "purge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "resource_id",
+                      "description": "(Required) CDN resource identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"urls\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"paths\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fbb4a752-96c1-4b96-85bb-e7e14b1f01a1",
+          "name": "Get CDN edge server IP list",
+          "request": {
+            "name": "Get CDN edge server IP list",
+            "description": {
+              "content": "Returns IP addresses of CDN servers used to pull content from origins.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cdn",
+                "public-ip-list"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "426ca291-469d-4182-993d-4371cf1b5350",
+              "name": "List of edge server IP ranges.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cdn",
+                    "public-ip-list"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"addresses\": [\n    \"string\",\n    \"string\"\n  ],\n  \"addresses_v6\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.gcore.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c5f957fe-5cf8-47d5-834b-e9de95d9d28d",
+    "name": "Gcore CDN API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as \"Authorization: APIKey <token>\".\n\nContact Support:\n Name: Gcore Support\n Email: support@gcore.com",
+      "type": "text/plain"
+    }
+  }
+}

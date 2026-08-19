@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gcore CDN WAAP API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "WAAP",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List WAAP domains",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/waap/v1/domains"
+          },
+          "docs": "Returns domains protected by Web Application and API Protection."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

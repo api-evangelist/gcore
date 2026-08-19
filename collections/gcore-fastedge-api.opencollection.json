@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gcore CDN FastEdge API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "FastEdge",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List FastEdge apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/fastedge/v1/apps"
+          },
+          "docs": "Returns the WebAssembly edge applications for the account."
+        },
+        {
+          "info": {
+            "name": "Create FastEdge app",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/fastedge/v1/apps",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create FastEdge app"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

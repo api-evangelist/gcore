@@ -1,0 +1,202 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gcore CDN API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CDN",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List CDN resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/resources",
+            "params": [
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter by deletion status."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns the list of CDN resources for the account."
+        },
+        {
+          "info": {
+            "name": "Create CDN resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cdn/resources",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new CDN resource bound to a primary delivery domain (cname)."
+        },
+        {
+          "info": {
+            "name": "Get CDN resource details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/resources/:resource_id",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "CDN resource identifier."
+              }
+            ]
+          },
+          "docs": "Get CDN resource details"
+        },
+        {
+          "info": {
+            "name": "Update CDN resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.gcore.com/cdn/resources/:resource_id",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "CDN resource identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update CDN resource"
+        },
+        {
+          "info": {
+            "name": "Delete CDN resource",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.gcore.com/cdn/resources/:resource_id",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "CDN resource identifier."
+              }
+            ]
+          },
+          "docs": "Delete CDN resource"
+        },
+        {
+          "info": {
+            "name": "List CDN resource rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/resources/:resource_id/rules",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "CDN resource identifier."
+              }
+            ]
+          },
+          "docs": "List CDN resource rules"
+        },
+        {
+          "info": {
+            "name": "Create CDN resource rule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cdn/resources/:resource_id/rules",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "CDN resource identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a rule that applies custom caching, delivery, and security options to a path pattern within the CDN resource."
+        },
+        {
+          "info": {
+            "name": "Purge CDN cache",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/cdn/resources/:resource_id/purge",
+            "params": [
+              {
+                "name": "resource_id",
+                "value": "",
+                "type": "path",
+                "description": "CDN resource identifier."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Purges content from CDN edge caches for the resource. Supply specific URLs, path patterns, or omit both to purge all cache."
+        },
+        {
+          "info": {
+            "name": "Get CDN edge server IP list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/cdn/public-ip-list"
+          },
+          "docs": "Returns IP addresses of CDN servers used to pull content from origins."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

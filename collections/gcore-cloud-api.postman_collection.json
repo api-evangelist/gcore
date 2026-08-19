@@ -1,0 +1,990 @@
+{
+  "item": [
+    {
+      "id": "33b3a741-76b7-481b-a38b-d06685f73284",
+      "name": "Cloud",
+      "description": {
+        "content": "Virtual machine instances, networks, and volumes.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c2acfcf7-b813-46ca-b845-a8ee87d61afb",
+          "name": "List instances",
+          "request": {
+            "name": "List instances",
+            "description": {
+              "content": "Returns all virtual machine instances in a project and region.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                ":project_id",
+                ":region_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "region_id",
+                  "description": "(Required) Cloud region identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1f130ed2-825d-46e5-8ce5-9f310d62f043",
+              "name": "A paginated list of instances.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "instances",
+                    ":project_id",
+                    ":region_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1095,\n  \"results\": [\n    {\n      \"instance_id\": \"string\",\n      \"instance_name\": \"string\",\n      \"status\": \"string\",\n      \"flavor\": {\n        \"key_0\": \"string\",\n        \"key_1\": true,\n        \"key_2\": true\n      },\n      \"region\": \"string\",\n      \"addresses\": {\n        \"key_0\": 5273,\n        \"key_1\": 8073.549275775929,\n        \"key_2\": 5666.541786275448\n      }\n    },\n    {\n      \"instance_id\": \"string\",\n      \"instance_name\": \"string\",\n      \"status\": \"string\",\n      \"flavor\": {\n        \"key_0\": false\n      },\n      \"region\": \"string\",\n      \"addresses\": {\n        \"key_0\": 9514.577657750473,\n        \"key_1\": 3725.6371234998987\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1d188b71-99c7-42e0-b006-1b7e2fe9f906",
+          "name": "Create instance",
+          "request": {
+            "name": "Create instance",
+            "description": {
+              "content": "Creates a new virtual machine instance from a flavor and image or volume.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                ":project_id",
+                ":region_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "region_id",
+                  "description": "(Required) Cloud region identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"flavor\": \"<string>\",\n  \"names\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"volumes\": [\n    {\n      \"key_0\": true,\n      \"key_1\": false\n    },\n    {\n      \"key_0\": 4990.8789839602205,\n      \"key_1\": \"string\",\n      \"key_2\": 4517.199285522812\n    }\n  ],\n  \"interfaces\": [\n    {\n      \"key_0\": 7161,\n      \"key_1\": 8401.84152891779,\n      \"key_2\": 8515.282934720144\n    },\n    {\n      \"key_0\": true,\n      \"key_1\": 3215.5176332458914\n    }\n  ],\n  \"keypair_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f0645391-5b4d-46a3-9815-b54475d23fdf",
+              "name": "Task created to provision the instance.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "instances",
+                    ":project_id",
+                    ":region_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"flavor\": \"<string>\",\n  \"names\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"volumes\": [\n    {\n      \"key_0\": \"string\",\n      \"key_1\": 1831\n    },\n    {\n      \"key_0\": 362,\n      \"key_1\": 1723.4365146671803\n    }\n  ],\n  \"interfaces\": [\n    {\n      \"key_0\": \"string\",\n      \"key_1\": \"string\",\n      \"key_2\": 9114\n    },\n    {\n      \"key_0\": 4674.916718640513\n    }\n  ],\n  \"keypair_name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tasks\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1cb59753-2f77-4b98-97fb-c66b3575f62d",
+          "name": "Get instance",
+          "request": {
+            "name": "Get instance",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                ":project_id",
+                ":region_id",
+                ":instance_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "region_id",
+                  "description": "(Required) Cloud region identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "instance_id",
+                  "description": "(Required) Instance identifier (UUID)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "45680497-faeb-4f3a-b4ff-7455fb939e58",
+              "name": "Instance details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "instances",
+                    ":project_id",
+                    ":region_id",
+                    ":instance_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "instance_id",
+                      "description": "(Required) Instance identifier (UUID)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"instance_id\": \"string\",\n  \"instance_name\": \"string\",\n  \"status\": \"string\",\n  \"flavor\": {\n    \"key_0\": \"string\"\n  },\n  \"region\": \"string\",\n  \"addresses\": {\n    \"key_0\": 9341,\n    \"key_1\": true,\n    \"key_2\": 2168.5564140448387\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5723c169-7514-4e61-832f-70e55e4e2eac",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "instances",
+                    ":project_id",
+                    ":region_id",
+                    ":instance_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "instance_id",
+                      "description": "(Required) Instance identifier (UUID)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d9858ab-2fde-464c-aea2-19f92880af4f",
+          "name": "Delete instance",
+          "request": {
+            "name": "Delete instance",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "instances",
+                ":project_id",
+                ":region_id",
+                ":instance_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "region_id",
+                  "description": "(Required) Cloud region identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "instance_id",
+                  "description": "(Required) Instance identifier (UUID)."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "32312b3f-8509-444c-82a4-0ac7e282dac9",
+              "name": "Task created to delete the instance.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "instances",
+                    ":project_id",
+                    ":region_id",
+                    ":instance_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "instance_id",
+                      "description": "(Required) Instance identifier (UUID)."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tasks\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4382a214-58a7-42be-8577-a8d86dca501d",
+          "name": "List volumes",
+          "request": {
+            "name": "List volumes",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "volumes",
+                ":project_id",
+                ":region_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "region_id",
+                  "description": "(Required) Cloud region identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8f8ac0ed-7844-40ae-9547-2d0fab425c69",
+              "name": "A list of block storage volumes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "volumes",
+                    ":project_id",
+                    ":region_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 6509,\n  \"results\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"size\": 7599,\n      \"volume_type\": \"string\",\n      \"status\": \"string\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"size\": 6644,\n      \"volume_type\": \"string\",\n      \"status\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "23cef20e-1f6e-459b-b909-e67b04f2cdf1",
+          "name": "Create volume",
+          "request": {
+            "name": "Create volume",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "volumes",
+                ":project_id",
+                ":region_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "region_id",
+                  "description": "(Required) Cloud region identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"size\": \"<integer>\",\n  \"source\": \"<string>\",\n  \"name\": \"<string>\",\n  \"type_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "09c79725-18d6-47f2-a995-a861a3b0309e",
+              "name": "Task created to provision the volume.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "volumes",
+                    ":project_id",
+                    ":region_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"size\": \"<integer>\",\n  \"source\": \"<string>\",\n  \"name\": \"<string>\",\n  \"type_name\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tasks\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "315b6d1d-6ded-49db-8ab0-dd77310ccbb8",
+          "name": "List networks",
+          "request": {
+            "name": "List networks",
+            "description": {},
+            "url": {
+              "path": [
+                "cloud",
+                "v1",
+                "networks",
+                ":project_id",
+                ":region_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "region_id",
+                  "description": "(Required) Cloud region identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "da97493f-c1be-4e29-b60c-3668d98d1726",
+              "name": "A list of virtual networks.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v1",
+                    "networks",
+                    ":project_id",
+                    ":region_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "region_id",
+                      "description": "(Required) Cloud region identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1947,\n  \"results\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"string\",\n      \"mtu\": 8004,\n      \"external\": false\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"string\",\n      \"mtu\": 1189,\n      \"external\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.gcore.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5fb3755f-a9c0-42f3-95ae-5e8f0b359741",
+    "name": "Gcore CDN Cloud API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as \"Authorization: APIKey <token>\".\n\nContact Support:\n Name: Gcore Support\n Email: support@gcore.com",
+      "type": "text/plain"
+    }
+  }
+}

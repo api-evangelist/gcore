@@ -1,0 +1,247 @@
+{
+  "item": [
+    {
+      "id": "2535f97b-e7f0-491f-8940-8eb137a9dbe0",
+      "name": "Storage",
+      "description": {
+        "content": "S3-compatible and SFTP object storage.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bb2b48e5-3236-4069-b2d0-53c03d95cb6e",
+          "name": "List storages",
+          "request": {
+            "name": "List storages",
+            "description": {
+              "content": "Returns S3 and SFTP object storage buckets for the account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "storage",
+                "provisioning",
+                "v1",
+                "storage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "location",
+                  "value": "<string>",
+                  "description": "Filter by storage location."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "31dc4966-c1c1-4689-88d3-57e014dcba3b",
+              "name": "A list of object storages.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "storage",
+                    "provisioning",
+                    "v1",
+                    "storage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "location",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 1283,\n    \"name\": \"string\",\n    \"type\": \"s3\",\n    \"location\": \"string\",\n    \"address\": \"string\"\n  },\n  {\n    \"id\": 670,\n    \"name\": \"string\",\n    \"type\": \"sftp\",\n    \"location\": \"string\",\n    \"address\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40411782-502e-4b65-a6a3-7668be880fa5",
+          "name": "Create storage",
+          "request": {
+            "name": "Create storage",
+            "description": {},
+            "url": {
+              "path": [
+                "storage",
+                "provisioning",
+                "v1",
+                "storage"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"location\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6dcc31cb-ddc4-4a49-a672-b21f768d1ca4",
+              "name": "The created storage.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "storage",
+                    "provisioning",
+                    "v1",
+                    "storage"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"location\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 9808,\n  \"name\": \"string\",\n  \"type\": \"s3\",\n  \"location\": \"string\",\n  \"address\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.gcore.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1cab7e1a-d741-42fb-864f-06161b9d5076",
+    "name": "Gcore CDN Storage API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as \"Authorization: APIKey <token>\".\n\nContact Support:\n Name: Gcore Support\n Email: support@gcore.com",
+      "type": "text/plain"
+    }
+  }
+}

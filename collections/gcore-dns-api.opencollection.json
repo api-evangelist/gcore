@@ -1,0 +1,84 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gcore CDN DNS API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "DNS",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List DNS zones",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gcore.com/dns/v2/zones"
+          },
+          "docs": "List DNS zones"
+        },
+        {
+          "info": {
+            "name": "Create DNS zone",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/dns/v2/zones",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create DNS zone"
+        },
+        {
+          "info": {
+            "name": "Create RRSet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gcore.com/dns/v2/zones/:zoneName/:rrsetName/:rrsetType",
+            "params": [
+              {
+                "name": "zoneName",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "rrsetName",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "rrsetType",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Adds an RRSet (resource record set) to the named zone. RRSets can be static or dynamic (GeoDNS, failover, weighted)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

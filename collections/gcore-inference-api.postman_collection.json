@@ -1,0 +1,274 @@
+{
+  "item": [
+    {
+      "id": "400f3048-b060-4c64-9bf3-4005c47c3e1b",
+      "name": "Inference",
+      "description": {
+        "content": "Everywhere Inference edge AI model deployments.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5d7acac6-caf4-49f9-b292-24f009fcf3f2",
+          "name": "List inference deployments",
+          "request": {
+            "name": "List inference deployments",
+            "description": {
+              "content": "Returns Everywhere Inference deployments for the project.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cloud",
+                "v3",
+                "inference",
+                ":project_id",
+                "deployments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7711defe-51e1-4c3a-b8fa-add0c448a6a5",
+              "name": "A list of inference deployments.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v3",
+                    "inference",
+                    ":project_id",
+                    "deployments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 5588,\n  \"results\": [\n    {\n      \"name\": \"string\",\n      \"status\": \"string\",\n      \"image\": \"string\",\n      \"listening_port\": 2161,\n      \"auth_enabled\": true,\n      \"containers\": [\n        {\n          \"key_0\": true\n        },\n        {\n          \"key_0\": 7420.818002600501\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"status\": \"string\",\n      \"image\": \"string\",\n      \"listening_port\": 307,\n      \"auth_enabled\": true,\n      \"containers\": [\n        {\n          \"key_0\": false,\n          \"key_1\": true\n        },\n        {\n          \"key_0\": false\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ffbedf5-1307-4139-a3bb-5f98f1e9e8a1",
+          "name": "Create inference deployment",
+          "request": {
+            "name": "Create inference deployment",
+            "description": {
+              "content": "Deploys a containerized AI model to edge inference nodes. Set auth_enabled to true to generate an API key required as X-API-Key on the deployment endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "cloud",
+                "v3",
+                "inference",
+                ":project_id",
+                "deployments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "project_id",
+                  "description": "(Required) Cloud project identifier."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"image\": \"<string>\",\n  \"listening_port\": \"<integer>\",\n  \"flavor_name\": \"<string>\",\n  \"auth_enabled\": \"<boolean>\",\n  \"containers\": [\n    {\n      \"key_0\": 7002,\n      \"key_1\": 9751,\n      \"key_2\": 3179.8482578565736\n    },\n    {\n      \"key_0\": 877,\n      \"key_1\": \"string\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "627b28a4-6497-4d85-b2ec-e6dc0038cca2",
+              "name": "The created inference deployment.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "cloud",
+                    "v3",
+                    "inference",
+                    ":project_id",
+                    "deployments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "project_id",
+                      "description": "(Required) Cloud project identifier."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"image\": \"<string>\",\n  \"listening_port\": \"<integer>\",\n  \"flavor_name\": \"<string>\",\n  \"auth_enabled\": \"<boolean>\",\n  \"containers\": [\n    {\n      \"key_0\": true,\n      \"key_1\": \"string\",\n      \"key_2\": 9289\n    },\n    {\n      \"key_0\": \"string\",\n      \"key_1\": 3526.194448182709\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"status\": \"string\",\n  \"image\": \"string\",\n  \"listening_port\": 5346,\n  \"auth_enabled\": false,\n  \"containers\": [\n    {\n      \"key_0\": 6496\n    },\n    {\n      \"key_0\": 8675.30816910389\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.gcore.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9c5ebc79-2cd4-41c0-a905-85738d1ecc3c",
+    "name": "Gcore CDN Inference API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as \"Authorization: APIKey <token>\".\n\nContact Support:\n Name: Gcore Support\n Email: support@gcore.com",
+      "type": "text/plain"
+    }
+  }
+}
