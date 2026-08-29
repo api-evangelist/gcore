@@ -8,6 +8,18 @@ description: Gcore is a global edge cloud, CDN, streaming, and AI infrastructure
   bare-metal compute, S3-compatible object storage, managed DNS, video
   streaming and live, Everywhere Inference (edge AI), WAAP/DDoS security, and
   FastEdge serverless functions.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: self-serve
