@@ -1,0 +1,63 @@
+slug: gcore
+provider: Gcore
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Telecommunications
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 5
+edges:
+- tag: Cloud
+  spec_file: gcore-cloud-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.88
+  evidence: POST /cloud/v1/instances/{project_id}/{region_id}  createInstance  Create instance; GET /cloud/v1/volumes
+    ... listVolumes; GET /cloud/v1/networks ... listNetworks
+  reason: Compute instances, block volumes and virtual networks — textbook cloud infrastructure provisioning
+    (compute, storage, network).
+- tag: Storage
+  spec_file: gcore-storage-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.8
+  evidence: POST /storage/provisioning/v1/storage  createStorage  Create storage
+  reason: Provisioning of S3-compatible object storage buckets — storage infrastructure management, a
+    cross-industry IT capability.
+- tag: CDN
+  spec_file: gcore-cdn-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.75
+  evidence: POST /cdn/resources  createCdnResource  Create CDN resource; POST /cdn/resources/{resource_id}/purge  purgeCdnResource  Purge
+    CDN cache
+  reason: Provisioning and rule/cache management of content-delivery edge resources — cloud/network infrastructure
+    management for the buyer, not telecom operator network operations.
+- tag: DNS
+  spec_file: gcore-dns-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.75
+  evidence: POST /dns/v2/zones  createZone  Create DNS zone; createRRset  Create RRSet
+  reason: Managed DNS zone and record-set provisioning is network infrastructure configuration under cross-industry
+    IT infrastructure management.
+- tag: WAAP
+  spec_file: gcore-waap-api-openapi.yml
+  capability_id: BC-620
+  capability_id_l1: BC-620
+  capability_name: Cybersecurity Management
+  confidence: 0.7
+  evidence: 'GET /waap/v1/domains listWaapDomains List WAAP domains; vendor: "WAAP/DDoS security"'
+  reason: Web Application and API Protection domain inventory — a security control surface, so Cybersecurity
+    Management at L1. Only one read operation is exposed, so no sub-capability (threat response vs. security
+    architecture) is evidenced.

@@ -397,6 +397,9 @@ apis:
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
 common:
+- type: CapabilityMap
+  url: capabilities/gcore-capability-edges.yml
+  name: Gcore Business Capability Map
 - type: AgenticAccess
   url: agentic-access/gcore-agentic-access.yml
 - type: DomainSecurity
