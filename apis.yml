@@ -398,6 +398,8 @@ apis:
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
 common:
+- type: Pricing
+  url: https://gcore.com/pricing/edge-network
 - type: CapabilityMap
   url: capabilities/gcore-capability-edges.yml
   name: Gcore Business Capability Map
