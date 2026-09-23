@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Gcore CDN WAAP API
-  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey <token>".'
+  title: Gcore WAAP API
+  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey ".'
   termsOfService: https://gcore.com/legal/lsa
   contact:
     name: Gcore Support

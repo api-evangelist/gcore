@@ -1,14 +1,7 @@
 {
   "provider": "gcore",
   "sources": [
-    "gcore-cdn-api-openapi.yml",
-    "gcore-cloud-api-openapi.yml",
-    "gcore-dns-api-openapi.yml",
-    "gcore-fastedge-api-openapi.yml",
-    "gcore-inference-api-openapi.yml",
-    "gcore-storage-api-openapi.yml",
-    "gcore-streaming-api-openapi.yml",
-    "gcore-waap-api-openapi.yml"
+    "_original/gcore-openapi.yml"
   ],
   "outputs": [
     "gcore-cdn-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "gcore-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "gcore-cdn-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gcore-cloud-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gcore-dns-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gcore-fastedge-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gcore-inference-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gcore-storage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gcore-streaming-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gcore-waap-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

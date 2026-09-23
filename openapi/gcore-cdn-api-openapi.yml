@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Gcore CDN API
-  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey <token>".'
+  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey ".'
   termsOfService: https://gcore.com/legal/lsa
   contact:
     name: Gcore Support
@@ -207,14 +207,31 @@ paths:
                     items:
                       type: string
 components:
-  parameters:
-    ResourceId:
-      name: resource_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: CDN resource identifier.
+  responses:
+    BadRequest:
+      description: The request was malformed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded for this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
     CdnRule:
       type: object
@@ -250,43 +267,6 @@ components:
         options:
           type: object
           additionalProperties: true
-    CdnResource:
-      type: object
-      properties:
-        id:
-          type: integer
-        cname:
-          type: string
-          description: Primary delivery domain for the resource.
-        active:
-          type: boolean
-        status:
-          type: string
-        origin:
-          type: string
-        originGroup:
-          type: integer
-        sslData:
-          type: integer
-          nullable: true
-          description: SSL certificate identifier.
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/CdnRule'
-    PurgeRequest:
-      type: object
-      properties:
-        urls:
-          type: array
-          items:
-            type: string
-          description: Up to 100 absolute URLs to purge.
-        paths:
-          type: array
-          items:
-            type: string
-          description: Up to 10 path patterns to purge.
     Error:
       type: object
       properties:
@@ -311,31 +291,52 @@ components:
         options:
           type: object
           additionalProperties: true
-  responses:
-    Unauthorized:
-      description: Missing or invalid API token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded for this operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    PurgeRequest:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+          description: Up to 100 absolute URLs to purge.
+        paths:
+          type: array
+          items:
+            type: string
+          description: Up to 10 path patterns to purge.
+    CdnResource:
+      type: object
+      properties:
+        id:
+          type: integer
+        cname:
+          type: string
+          description: Primary delivery domain for the resource.
+        active:
+          type: boolean
+        status:
+          type: string
+        origin:
+          type: string
+        originGroup:
+          type: integer
+        sslData:
+          type:
+          - integer
+          - 'null'
+          description: SSL certificate identifier.
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/CdnRule'
+  parameters:
+    ResourceId:
+      name: resource_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: CDN resource identifier.
   securitySchemes:
     APIKey:
       type: apiKey

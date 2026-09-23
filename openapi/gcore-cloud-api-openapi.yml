@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  title: Gcore CDN Cloud API
-  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey <token>".'
+  title: Gcore Cloud API
+  description: 'Partial OpenAPI description of the Gcore edge cloud platform REST API, covering representative documented endpoints across CDN, Cloud (compute), Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP security, and FastEdge. All services share a single host, https://api.gcore.com, and authenticate with a permanent API token sent as "Authorization: APIKey ".'
   termsOfService: https://gcore.com/legal/lsa
   contact:
     name: Gcore Support
@@ -159,29 +159,55 @@ paths:
                     items:
                       $ref: '#/components/schemas/Network'
 components:
-  parameters:
-    RegionId:
-      name: region_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: Cloud region identifier.
-    InstanceId:
-      name: instance_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Instance identifier (UUID).
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: Cloud project identifier.
   schemas:
+    Instance:
+      type: object
+      properties:
+        instance_id:
+          type: string
+        instance_name:
+          type: string
+        status:
+          type: string
+        flavor:
+          type: object
+          additionalProperties: true
+        region:
+          type: string
+        addresses:
+          type: object
+          additionalProperties: true
+    VolumeCreate:
+      type: object
+      required:
+      - size
+      - source
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        source:
+          type: string
+          enum:
+          - new-volume
+          - image
+          - snapshot
+        type_name:
+          type: string
+          enum:
+          - standard
+          - ssd_hiiops
+          - cold
+          - ultra
+    TaskResponse:
+      type: object
+      description: Asynchronous task acknowledgement returned by Cloud operations.
+      properties:
+        tasks:
+          type: array
+          items:
+            type: string
     InstanceList:
       type: object
       properties:
@@ -216,68 +242,6 @@ components:
             additionalProperties: true
         keypair_name:
           type: string
-    Instance:
-      type: object
-      properties:
-        instance_id:
-          type: string
-        instance_name:
-          type: string
-        status:
-          type: string
-        flavor:
-          type: object
-          additionalProperties: true
-        region:
-          type: string
-        addresses:
-          type: object
-          additionalProperties: true
-    TaskResponse:
-      type: object
-      description: Asynchronous task acknowledgement returned by Cloud operations.
-      properties:
-        tasks:
-          type: array
-          items:
-            type: string
-    VolumeCreate:
-      type: object
-      required:
-      - size
-      - source
-      properties:
-        name:
-          type: string
-        size:
-          type: integer
-        source:
-          type: string
-          enum:
-          - new-volume
-          - image
-          - snapshot
-        type_name:
-          type: string
-          enum:
-          - standard
-          - ssd_hiiops
-          - cold
-          - ultra
-    Volume:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        size:
-          type: integer
-          description: Size in GiB.
-        volume_type:
-          type: string
-        status:
-          type: string
     Error:
       type: object
       properties:
@@ -298,6 +262,42 @@ components:
           type: integer
         external:
           type: boolean
+    Volume:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+          description: Size in GiB.
+        volume_type:
+          type: string
+        status:
+          type: string
+  parameters:
+    RegionId:
+      name: region_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud region identifier.
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Instance identifier (UUID).
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud project identifier.
   responses:
     NotFound:
       description: The requested resource was not found.
