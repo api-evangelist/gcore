@@ -207,66 +207,7 @@ paths:
                     items:
                       type: string
 components:
-  responses:
-    BadRequest:
-      description: The request was malformed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Rate limit exceeded for this operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    CdnRule:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        rule:
-          type: string
-          description: Path pattern the rule applies to (regular expression).
-        ruleType:
-          type: integer
-        originGroup:
-          type: integer
-        options:
-          type: object
-          additionalProperties: true
-    CdnRuleCreate:
-      type: object
-      required:
-      - rule
-      - ruleType
-      properties:
-        name:
-          type: string
-        rule:
-          type: string
-        ruleType:
-          type: integer
-        originGroup:
-          type: integer
-        options:
-          type: object
-          additionalProperties: true
     Error:
       type: object
       properties:
@@ -274,36 +215,6 @@ components:
           type: string
         message:
           type: string
-    CdnResourceCreate:
-      type: object
-      required:
-      - cname
-      properties:
-        cname:
-          type: string
-        origin:
-          type: string
-          description: Origin server hostname or IP.
-        originGroup:
-          type: integer
-        sslData:
-          type: integer
-        options:
-          type: object
-          additionalProperties: true
-    PurgeRequest:
-      type: object
-      properties:
-        urls:
-          type: array
-          items:
-            type: string
-          description: Up to 100 absolute URLs to purge.
-        paths:
-          type: array
-          items:
-            type: string
-          description: Up to 10 path patterns to purge.
     CdnResource:
       type: object
       properties:
@@ -329,6 +240,70 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CdnRule'
+    CdnResourceCreate:
+      type: object
+      required:
+      - cname
+      properties:
+        cname:
+          type: string
+        origin:
+          type: string
+          description: Origin server hostname or IP.
+        originGroup:
+          type: integer
+        sslData:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
+    CdnRuleCreate:
+      type: object
+      required:
+      - rule
+      - ruleType
+      properties:
+        name:
+          type: string
+        rule:
+          type: string
+        ruleType:
+          type: integer
+        originGroup:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
+    CdnRule:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        rule:
+          type: string
+          description: Path pattern the rule applies to (regular expression).
+        ruleType:
+          type: integer
+        originGroup:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
+    PurgeRequest:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+          description: Up to 100 absolute URLs to purge.
+        paths:
+          type: array
+          items:
+            type: string
+          description: Up to 10 path patterns to purge.
   parameters:
     ResourceId:
       name: resource_id
@@ -337,6 +312,31 @@ components:
       schema:
         type: integer
       description: CDN resource identifier.
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded for this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     APIKey:
       type: apiKey

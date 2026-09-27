@@ -160,6 +160,13 @@ paths:
                       $ref: '#/components/schemas/Network'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
     Instance:
       type: object
       properties:
@@ -177,78 +184,6 @@ components:
         addresses:
           type: object
           additionalProperties: true
-    VolumeCreate:
-      type: object
-      required:
-      - size
-      - source
-      properties:
-        name:
-          type: string
-        size:
-          type: integer
-        source:
-          type: string
-          enum:
-          - new-volume
-          - image
-          - snapshot
-        type_name:
-          type: string
-          enum:
-          - standard
-          - ssd_hiiops
-          - cold
-          - ultra
-    TaskResponse:
-      type: object
-      description: Asynchronous task acknowledgement returned by Cloud operations.
-      properties:
-        tasks:
-          type: array
-          items:
-            type: string
-    InstanceList:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Instance'
-    InstanceCreate:
-      type: object
-      required:
-      - flavor
-      - names
-      properties:
-        names:
-          type: array
-          items:
-            type: string
-        flavor:
-          type: string
-          description: Flavor (compute shape) identifier, e.g. g1-standard-2-4.
-        volumes:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-        interfaces:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-        keypair_name:
-          type: string
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
     Network:
       type: object
       properties:
@@ -276,14 +211,72 @@ components:
           type: string
         status:
           type: string
+    InstanceList:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instance'
+    TaskResponse:
+      type: object
+      description: Asynchronous task acknowledgement returned by Cloud operations.
+      properties:
+        tasks:
+          type: array
+          items:
+            type: string
+    InstanceCreate:
+      type: object
+      required:
+      - flavor
+      - names
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+        flavor:
+          type: string
+          description: Flavor (compute shape) identifier, e.g. g1-standard-2-4.
+        volumes:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        interfaces:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        keypair_name:
+          type: string
+    VolumeCreate:
+      type: object
+      required:
+      - size
+      - source
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        source:
+          type: string
+          enum:
+          - new-volume
+          - image
+          - snapshot
+        type_name:
+          type: string
+          enum:
+          - standard
+          - ssd_hiiops
+          - cold
+          - ultra
   parameters:
-    RegionId:
-      name: region_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: Cloud region identifier.
     InstanceId:
       name: instance_id
       in: path
@@ -298,6 +291,13 @@ components:
       schema:
         type: integer
       description: Cloud project identifier.
+    RegionId:
+      name: region_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud region identifier.
   responses:
     NotFound:
       description: The requested resource was not found.

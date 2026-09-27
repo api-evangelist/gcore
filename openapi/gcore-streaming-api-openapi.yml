@@ -112,16 +112,6 @@ paths:
                 $ref: '#/components/schemas/Stream'
 components:
   schemas:
-    VideoCreate:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        origin_url:
-          type: string
-          description: Source URL to pull the video from, if fetching.
     Video:
       type: object
       properties:
@@ -135,6 +125,16 @@ components:
           type: string
         screenshot:
           type: string
+    VideoCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        origin_url:
+          type: string
+          description: Source URL to pull the video from, if fetching.
     Stream:
       type: object
       properties:
