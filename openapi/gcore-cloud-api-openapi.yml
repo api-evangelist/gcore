@@ -167,67 +167,6 @@ components:
           type: string
         message:
           type: string
-    Instance:
-      type: object
-      properties:
-        instance_id:
-          type: string
-        instance_name:
-          type: string
-        status:
-          type: string
-        flavor:
-          type: object
-          additionalProperties: true
-        region:
-          type: string
-        addresses:
-          type: object
-          additionalProperties: true
-    Network:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        mtu:
-          type: integer
-        external:
-          type: boolean
-    Volume:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        size:
-          type: integer
-          description: Size in GiB.
-        volume_type:
-          type: string
-        status:
-          type: string
-    InstanceList:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Instance'
-    TaskResponse:
-      type: object
-      description: Asynchronous task acknowledgement returned by Cloud operations.
-      properties:
-        tasks:
-          type: array
-          items:
-            type: string
     InstanceCreate:
       type: object
       required:
@@ -253,6 +192,15 @@ components:
             additionalProperties: true
         keypair_name:
           type: string
+    InstanceList:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instance'
     VolumeCreate:
       type: object
       required:
@@ -276,14 +224,66 @@ components:
           - ssd_hiiops
           - cold
           - ultra
+    Volume:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+          description: Size in GiB.
+        volume_type:
+          type: string
+        status:
+          type: string
+    Network:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        mtu:
+          type: integer
+        external:
+          type: boolean
+    Instance:
+      type: object
+      properties:
+        instance_id:
+          type: string
+        instance_name:
+          type: string
+        status:
+          type: string
+        flavor:
+          type: object
+          additionalProperties: true
+        region:
+          type: string
+        addresses:
+          type: object
+          additionalProperties: true
+    TaskResponse:
+      type: object
+      description: Asynchronous task acknowledgement returned by Cloud operations.
+      properties:
+        tasks:
+          type: array
+          items:
+            type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
-    InstanceId:
-      name: instance_id
-      in: path
-      required: true
-      schema:
-        type: string
-      description: Instance identifier (UUID).
     ProjectId:
       name: project_id
       in: path
@@ -298,13 +298,13 @@ components:
       schema:
         type: integer
       description: Cloud region identifier.
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Instance identifier (UUID).
   securitySchemes:
     APIKey:
       type: apiKey

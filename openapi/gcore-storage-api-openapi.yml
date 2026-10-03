@@ -60,22 +60,6 @@ paths:
                 $ref: '#/components/schemas/Storage'
 components:
   schemas:
-    Storage:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        type:
-          type: string
-          enum:
-          - s3
-          - sftp
-        location:
-          type: string
-        address:
-          type: string
     StorageCreate:
       type: object
       required:
@@ -91,6 +75,22 @@ components:
           - s3
           - sftp
         location:
+          type: string
+    Storage:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - s3
+          - sftp
+        location:
+          type: string
+        address:
           type: string
   securitySchemes:
     APIKey:

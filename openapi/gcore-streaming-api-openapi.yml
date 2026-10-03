@@ -112,29 +112,6 @@ paths:
                 $ref: '#/components/schemas/Stream'
 components:
   schemas:
-    Video:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        duration:
-          type: integer
-        hls_url:
-          type: string
-        screenshot:
-          type: string
-    VideoCreate:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        origin_url:
-          type: string
-          description: Source URL to pull the video from, if fetching.
     Stream:
       type: object
       properties:
@@ -149,6 +126,29 @@ components:
         backup_push_url:
           type: string
         hls_playlist_url:
+          type: string
+    VideoCreate:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        origin_url:
+          type: string
+          description: Source URL to pull the video from, if fetching.
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        duration:
+          type: integer
+        hls_url:
+          type: string
+        screenshot:
           type: string
     StreamCreate:
       type: object

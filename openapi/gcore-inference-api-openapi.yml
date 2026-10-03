@@ -63,6 +63,24 @@ paths:
                 $ref: '#/components/schemas/InferenceDeployment'
 components:
   schemas:
+    InferenceDeployment:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+        image:
+          type: string
+        listening_port:
+          type: integer
+        auth_enabled:
+          type: boolean
+        containers:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
     InferenceDeploymentCreate:
       type: object
       required:
@@ -83,24 +101,6 @@ components:
         auth_enabled:
           type: boolean
           description: When true, generates an API key required as X-API-Key.
-        containers:
-          type: array
-          items:
-            type: object
-            additionalProperties: true
-    InferenceDeployment:
-      type: object
-      properties:
-        name:
-          type: string
-        status:
-          type: string
-        image:
-          type: string
-        listening_port:
-          type: integer
-        auth_enabled:
-          type: boolean
         containers:
           type: array
           items:

@@ -240,6 +240,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CdnRule'
+    PurgeRequest:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+          description: Up to 100 absolute URLs to purge.
+        paths:
+          type: array
+          items:
+            type: string
+          description: Up to 10 path patterns to purge.
+    CdnRule:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        rule:
+          type: string
+          description: Path pattern the rule applies to (regular expression).
+        ruleType:
+          type: integer
+        originGroup:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
     CdnResourceCreate:
       type: object
       required:
@@ -274,45 +304,13 @@ components:
         options:
           type: object
           additionalProperties: true
-    CdnRule:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        rule:
-          type: string
-          description: Path pattern the rule applies to (regular expression).
-        ruleType:
-          type: integer
-        originGroup:
-          type: integer
-        options:
-          type: object
-          additionalProperties: true
-    PurgeRequest:
-      type: object
-      properties:
-        urls:
-          type: array
-          items:
-            type: string
-          description: Up to 100 absolute URLs to purge.
-        paths:
-          type: array
-          items:
-            type: string
-          description: Up to 10 path patterns to purge.
-  parameters:
-    ResourceId:
-      name: resource_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: CDN resource identifier.
   responses:
+    BadRequest:
+      description: The request was malformed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: The requested resource was not found.
       content:
@@ -331,12 +329,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    ResourceId:
+      name: resource_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: CDN resource identifier.
   securitySchemes:
     APIKey:
       type: apiKey
