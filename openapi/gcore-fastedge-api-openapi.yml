@@ -56,19 +56,6 @@ paths:
                 $ref: '#/components/schemas/FastEdgeApp'
 components:
   schemas:
-    FastEdgeApp:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        status:
-          type: integer
-        binary:
-          type: integer
-        url:
-          type: string
     FastEdgeAppCreate:
       type: object
       required:
@@ -83,6 +70,19 @@ components:
           type: object
           additionalProperties:
             type: string
+    FastEdgeApp:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          type: integer
+        binary:
+          type: integer
+        url:
+          type: string
   securitySchemes:
     APIKey:
       type: apiKey

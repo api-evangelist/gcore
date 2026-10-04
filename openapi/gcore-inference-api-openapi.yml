@@ -62,6 +62,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/InferenceDeployment'
 components:
+  parameters:
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud project identifier.
   schemas:
     InferenceDeployment:
       type: object
@@ -106,14 +114,6 @@ components:
           items:
             type: object
             additionalProperties: true
-  parameters:
-    ProjectId:
-      name: project_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: Cloud project identifier.
   securitySchemes:
     APIKey:
       type: apiKey
