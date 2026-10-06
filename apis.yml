@@ -42,7 +42,7 @@ tags:
 - Edge AI
 - Infrastructure
 created: '2026-06-20'
-modified: '2026-06-20'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: gcore:gcore-cdn-api
@@ -398,6 +398,8 @@ apis:
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
 common:
+- url: https://gcore.com/blog
+  type: Blog
 - type: VendorFacets
   url: vendor-facets/gcore-vendor-facets.yml
 - type: Pricing
