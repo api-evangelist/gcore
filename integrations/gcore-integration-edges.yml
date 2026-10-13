@@ -1,0 +1,17 @@
+edges:
+- partner_name: Amazon Web Services
+  partner: amazon-web-services
+  partner_match: shape-anchor
+  channel: provider-built
+  relationship: compatible
+  direction: provider-built
+  shape: aws-s3
+  type: contract
+  degree: declared-unqualified
+  evidence: https://github.com/api-evangelist/gcore/blob/main/openapi/gcore-storage-api-openapi.yml#L18
+  evidence_kind: own-contract
+  quote: 'description: S3-compatible and SFTP object storage.'
+  detected_by: sweep-shape-compat.py
+  first_seen: '2026-10-13'
+generated: '2026-10-13'
+method: searched
