@@ -207,56 +207,40 @@ paths:
                     items:
                       type: string
 components:
+  parameters:
+    ResourceId:
+      name: resource_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: CDN resource identifier.
+  responses:
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded for this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: The request was malformed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    CdnRule:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        rule:
-          type: string
-          description: Path pattern the rule applies to (regular expression).
-        ruleType:
-          type: integer
-        originGroup:
-          type: integer
-        options:
-          type: object
-          additionalProperties: true
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
-    CdnResource:
-      type: object
-      properties:
-        id:
-          type: integer
-        cname:
-          type: string
-          description: Primary delivery domain for the resource.
-        active:
-          type: boolean
-        status:
-          type: string
-        origin:
-          type: string
-        originGroup:
-          type: integer
-        sslData:
-          type:
-          - integer
-          - 'null'
-          description: SSL certificate identifier.
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/CdnRule'
     CdnRuleCreate:
       type: object
       required:
@@ -274,6 +258,13 @@ components:
         options:
           type: object
           additionalProperties: true
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
     PurgeRequest:
       type: object
       properties:
@@ -304,39 +295,48 @@ components:
         options:
           type: object
           additionalProperties: true
-  responses:
-    RateLimited:
-      description: Rate limit exceeded for this operation.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API token.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: The request was malformed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    ResourceId:
-      name: resource_id
-      in: path
-      required: true
-      schema:
-        type: integer
-      description: CDN resource identifier.
+    CdnRule:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        rule:
+          type: string
+          description: Path pattern the rule applies to (regular expression).
+        ruleType:
+          type: integer
+        originGroup:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
+    CdnResource:
+      type: object
+      properties:
+        id:
+          type: integer
+        cname:
+          type: string
+          description: Primary delivery domain for the resource.
+        active:
+          type: boolean
+        status:
+          type: string
+        origin:
+          type: string
+        originGroup:
+          type: integer
+        sslData:
+          type:
+          - integer
+          - 'null'
+          description: SSL certificate identifier.
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/CdnRule'
   securitySchemes:
     APIKey:
       type: apiKey

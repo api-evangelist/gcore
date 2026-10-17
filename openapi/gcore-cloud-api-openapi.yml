@@ -160,6 +160,30 @@ paths:
                       $ref: '#/components/schemas/Network'
 components:
   schemas:
+    InstanceList:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instance'
+    TaskResponse:
+      type: object
+      description: Asynchronous task acknowledgement returned by Cloud operations.
+      properties:
+        tasks:
+          type: array
+          items:
+            type: string
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
     Network:
       type: object
       properties:
@@ -173,13 +197,6 @@ components:
           type: integer
         external:
           type: boolean
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-        message:
-          type: string
     InstanceCreate:
       type: object
       required:
@@ -205,37 +222,6 @@ components:
             additionalProperties: true
         keypair_name:
           type: string
-    TaskResponse:
-      type: object
-      description: Asynchronous task acknowledgement returned by Cloud operations.
-      properties:
-        tasks:
-          type: array
-          items:
-            type: string
-    Volume:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        size:
-          type: integer
-          description: Size in GiB.
-        volume_type:
-          type: string
-        status:
-          type: string
-    InstanceList:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Instance'
     Instance:
       type: object
       properties:
@@ -276,6 +262,27 @@ components:
           - ssd_hiiops
           - cold
           - ultra
+    Volume:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+          description: Size in GiB.
+        volume_type:
+          type: string
+        status:
+          type: string
+  responses:
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     ProjectId:
       name: project_id
@@ -298,13 +305,6 @@ components:
       schema:
         type: integer
       description: Cloud region identifier.
-  responses:
-    NotFound:
-      description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   securitySchemes:
     APIKey:
       type: apiKey

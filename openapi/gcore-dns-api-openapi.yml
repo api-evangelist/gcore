@@ -103,8 +103,17 @@ paths:
                 $ref: '#/components/schemas/RRSet'
 components:
   schemas:
-    RRSet:
+    ZoneCreate:
       type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    RRSetCreate:
+      type: object
+      required:
+      - resource_records
       properties:
         ttl:
           type: integer
@@ -117,17 +126,8 @@ components:
                 type: array
                 items:
                   type: string
-    ZoneCreate:
+    RRSet:
       type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-    RRSetCreate:
-      type: object
-      required:
-      - resource_records
       properties:
         ttl:
           type: integer
