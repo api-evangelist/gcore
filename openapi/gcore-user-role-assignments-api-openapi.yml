@@ -1,0 +1,486 @@
+openapi: 3.2.0
+info:
+  title: Cloud User Role Assignments API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: User Role Assignments
+paths:
+  /v1/users:
+    get:
+      operationId: UsersListHandler.get
+      summary: List users
+      description: List all users in the account.
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        description: Limit the number of returned items. Falls back to default of 1000 if not specified. Limited by max limit value of 1000
+        schema:
+          default: 1000
+          description: Limit the number of returned items. Falls back to default of 1000 if not specified. Limited by max limit value of 1000
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: user_id
+        required: false
+        description: User ID for filtering
+        schema:
+          description: User ID for filtering
+          examples:
+          - 123
+          title: User Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientUsersCollectionSerializer'
+      tags:
+      - User Role Assignments
+  /v1/users/assignments:
+    post:
+      operationId: AssignmentHandler.post
+      summary: Create role assignment
+      description: Assign a role to an existing user in the specified scope.
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleAssignmentSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAssignmentSerializer'
+      tags:
+      - User Role Assignments
+    get:
+      operationId: AssignmentHandler.get
+      summary: List role assignments
+      description: List all role assignments in the specified scope.
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        description: Limit the number of returned items. Falls back to default of 1000 if not specified. Limited by max limit value of 1000
+        schema:
+          default: 1000
+          description: Limit the number of returned items. Falls back to default of 1000 if not specified. Limited by max limit value of 1000
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: project_id
+        required: false
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+          type: integer
+      - in: query
+        name: user_id
+        required: false
+        description: User ID for filtering
+        schema:
+          description: User ID for filtering
+          examples:
+          - 123
+          title: User Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleAssignmentCollectionSerializer'
+      tags:
+      - User Role Assignments
+  /v1/users/assignments/{assignment_id}:
+    patch:
+      operationId: PatchDeleteAssignmentHandler.patch
+      summary: Update role assignment
+      description: Modify an existing role assignment for a user.
+      parameters:
+      - in: path
+        name: assignment_id
+        required: true
+        description: Assignment ID
+        schema:
+          description: Assignment ID
+          examples:
+          - 123
+          title: Assignment Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestAssignmentSerializer'
+      tags:
+      - User Role Assignments
+    delete:
+      operationId: PatchDeleteAssignmentHandler.delete
+      summary: Delete role assignment
+      description: Delete an existing role assignment.
+      parameters:
+      - in: path
+        name: assignment_id
+        required: true
+        description: Assignment ID
+        schema:
+          description: Assignment ID
+          examples:
+          - 123
+          title: Assignment Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentSerializer'
+      tags:
+      - User Role Assignments
+  /v1/users/roles:
+    get:
+      operationId: RoleListHandler.get
+      summary: List roles
+      description: 'List of available roles is now exposed as an enum in endpoints where they are used,
+
+        for example (/v1/users/assignments).'
+      parameters:
+      - in: query
+        name: project_id
+        required: false
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleCollectionSerializer'
+      deprecated: true
+      tags:
+      - User Role Assignments
+components:
+  schemas:
+    ClientUsersSerializer:
+      properties:
+        activated:
+          description: True if the user is active
+          examples:
+          - true
+          title: Activated
+          type: boolean
+        email:
+          description: User email
+          examples:
+          - johnsmith@gmail.com
+          format: email
+          title: Email
+          type: string
+        id:
+          description: User ID
+          examples:
+          - 123
+          title: Id
+          type: integer
+        is_admin:
+          description: True if the user has admin role
+          examples:
+          - true
+          title: Is Admin
+          type: boolean
+        name:
+          description: User name
+          examples:
+          - John
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      - email
+      - activated
+      - is_admin
+      title: Client users schema
+      type: object
+    RoleAssignmentCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RoleAssignmentSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RoleAssignmentCollectionSerializer
+      type: object
+    RequestAssignmentSerializer:
+      properties:
+        client_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Client ID. Required if project_id is specified
+          examples:
+          - 8
+          title: Client Id
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Project ID
+          examples:
+          - null
+          title: Project Id
+        role:
+          $ref: '#/components/schemas/CustomerAssignableRole'
+          description: User role
+          examples:
+          - ClientAdministrator
+        user_id:
+          description: User ID
+          examples:
+          - 777
+          title: User Id
+          type: integer
+      required:
+      - user_id
+      - role
+      title: AssignRoleRequestSchema schema
+      type: object
+    CustomerAssignableRole:
+      enum:
+      - ClientAdministrator
+      - Observer
+      - ProjectAdministrator
+      - User
+      title: CustomerAssignableRole
+      type: string
+    ClientUsersCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ClientUsersSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ClientUsersCollectionSerializer
+      type: object
+    UserRoleSerializer:
+      properties:
+        role:
+          $ref: '#/components/schemas/CustomerAssignableRole'
+          description: Available role
+          examples:
+          - ClientAdministrator
+        scope:
+          description: Role's scope
+          examples:
+          - Client
+          title: Scope
+          type: string
+      required:
+      - role
+      - scope
+      title: RoleScopeSchema schema
+      type: object
+    RoleCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/UserRoleSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RoleCollectionSerializer
+      type: object
+    RoleAssignmentSerializer:
+      properties:
+        assigned_by:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Assigned By
+        client_id:
+          description: Client ID
+          examples:
+          - 123
+          title: Client Id
+          type: integer
+        created_at:
+          description: Created timestamp
+          examples:
+          - '2019-06-25T08:42:42Z'
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          description: Assignment ID
+          examples:
+          - 12
+          title: Id
+          type: integer
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+        role:
+          $ref: '#/components/schemas/CustomerAssignableRole'
+          description: User role
+          examples:
+          - ClientAdministrator
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Updated timestamp
+          examples:
+          - '2019-06-25T08:42:42Z'
+          title: Updated At
+        user_id:
+          description: User ID
+          examples:
+          - 123
+          title: User Id
+          type: integer
+      required:
+      - id
+      - user_id
+      - role
+      - client_id
+      - project_id
+      - assigned_by
+      - created_at
+      - updated_at
+      title: Role assignments schema
+      type: object
+    AssignmentSerializer:
+      properties:
+        assignment_id:
+          description: Assignment ID
+          examples:
+          - 12
+          title: Assignment Id
+          type: integer
+      required:
+      - assignment_id
+      title: AssignmentSerializer
+      type: object

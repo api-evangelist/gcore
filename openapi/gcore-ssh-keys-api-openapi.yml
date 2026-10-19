@@ -1,0 +1,975 @@
+openapi: 3.2.0
+info:
+  title: Cloud SSH Keys API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: SSH Keys
+paths:
+  /v1/ssh_keys/{project_id}:
+    post:
+      operationId: SSHKeyCollectionViewSet.post
+      summary: Add or generate SSH key
+      description: To generate a key, omit the public_key parameter from the request body
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedSSHKeySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSSHKeySerializer'
+      tags:
+      - SSH Keys
+    get:
+      operationId: SSHKeyCollectionViewSet.get
+      summary: List SSH keys
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Maximum number of SSH keys to return
+        schema:
+          default: 10
+          description: Maximum number of SSH keys to return
+          examples:
+          - 100
+          maximum: 1000
+          minimum: 1
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: 'SSH key name. Partial substring match. Example: `name=abc` matches any key containing `abc` in name.'
+        schema:
+          description: 'SSH key name. Partial substring match. Example: `name=abc` matches any key containing `abc` in name.'
+          examples:
+          - my-ssh-key
+          title: Name
+          type: string
+      - in: query
+        name: offset
+        required: false
+        description: Offset for pagination
+        schema:
+          default: 0
+          description: Offset for pagination
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Sort order for the SSH keys
+        schema:
+          $ref: '#/components/schemas/SSHKeyOrderByChoices'
+          default: created_at.desc
+          description: Sort order for the SSH keys
+          examples:
+          - created_at.desc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSHKeyCollectionSerializer'
+      tags:
+      - SSH Keys
+  /v1/ssh_keys/{project_id}/{ssh_key_id}:
+    get:
+      operationId: SSHKeyViewSet.get
+      summary: Get SSH key
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: ssh_key_id
+        required: true
+        description: SSH key ID
+        schema:
+          description: SSH key ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          format: uuid4
+          title: Ssh Key Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSHKeySerializer'
+      tags:
+      - SSH Keys
+    patch:
+      operationId: SSHKeyViewSet.patch
+      summary: Share or unshare SSH key with users
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: ssh_key_id
+        required: true
+        description: SSH key ID
+        schema:
+          description: SSH key ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          format: uuid4
+          title: Ssh Key Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSHKeySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareSSHKeySerializer'
+      tags:
+      - SSH Keys
+    delete:
+      operationId: SSHKeyViewSet.delete
+      summary: Delete SSH key
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: ssh_key_id
+        required: true
+        description: SSH key ID
+        schema:
+          description: SSH key ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          format: uuid4
+          title: Ssh Key Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - SSH Keys
+  /v2/keypairs:
+    post:
+      operationId: KeypairListV2ViewSet.post
+      summary: Import or generate keypair
+      description: To generate a keypair do not use the public_key parameter in the request body
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeypairSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKeypairV2Serializer'
+      tags:
+      - SSH Keys
+    get:
+      operationId: KeypairListV2ViewSet.get
+      summary: List keypairs
+      description: ''
+      parameters:
+      - in: query
+        name: project_id
+        required: false
+        description: Project ID. It's required with rights lower than a cloud administrator.
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Project ID. It's required with rights lower than a cloud administrator.
+          examples:
+          - 100
+          title: Project Id
+      - in: query
+        name: user_id
+        required: false
+        description: User ID. To use it, you need set project id or use cloud administrator rights.
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: User ID. To use it, you need set project id or use cloud administrator rights.
+          examples:
+          - 5
+          title: User Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListKeypairSerializer'
+      deprecated: true
+      tags:
+      - SSH Keys
+  /v2/keypairs/{keypair_id}:
+    get:
+      operationId: KeypairInstanceViewSetV2.get
+      summary: Get keypair
+      description: ''
+      parameters:
+      - in: path
+        name: keypair_id
+        required: true
+        description: Keypair ID
+        schema:
+          description: Keypair ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          title: Keypair Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeypairSerializer'
+      deprecated: true
+      tags:
+      - SSH Keys
+    delete:
+      operationId: KeypairInstanceViewSetV2.delete
+      summary: Delete keypair
+      description: ''
+      parameters:
+      - in: path
+        name: keypair_id
+        required: true
+        description: Keypair ID
+        schema:
+          description: Keypair ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          title: Keypair Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      tags:
+      - SSH Keys
+  /v1/keypairs/{project_id}/{region_id}:
+    post:
+      operationId: KeypairViewSet.post
+      summary: Import or generate keypair
+      description: To generate a keypair do not use the public_key parameter in the request body
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeypairSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateKeypairSerializer'
+      tags:
+      - SSH Keys
+    get:
+      operationId: KeypairViewSet.get
+      summary: List keypairs
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListKeypairSerializer'
+      deprecated: true
+      tags:
+      - SSH Keys
+  /v1/keypairs/{project_id}/{region_id}/{keypair_id}:
+    get:
+      operationId: KeypairInstanceViewSet.get
+      summary: Get keypair
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: keypair_id
+        required: true
+        description: Keypair ID
+        schema:
+          description: Keypair ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          title: Keypair Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeypairSerializer'
+      deprecated: true
+      tags:
+      - SSH Keys
+    delete:
+      operationId: KeypairInstanceViewSet.delete
+      summary: Delete keypair
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: keypair_id
+        required: true
+        description: Keypair ID
+        schema:
+          description: Keypair ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          title: Keypair Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      tags:
+      - SSH Keys
+  /v1/keypairs/{project_id}/{region_id}/{keypair_id}/share:
+    patch:
+      operationId: ShareKeypairHandler.patch
+      summary: Share keypair to view for all users in project
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 123
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: keypair_id
+        required: true
+        description: Keypair ID
+        schema:
+          description: Keypair ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          title: Keypair Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeypairSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShareKeypairSerializer'
+      tags:
+      - SSH Keys
+components:
+  schemas:
+    KeypairState:
+      enum:
+      - ACTIVE
+      - DELETING
+      title: KeypairState
+      type: string
+    ListKeypairSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/KeypairSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ListKeypairSerializer
+      type: object
+    KeypairSerializer:
+      additionalProperties: false
+      properties:
+        created_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Keypair creation datetime
+          examples:
+          - '2022-06-16T17:05:50'
+          title: Created At
+        fingerprint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Key fingerprint
+          examples:
+          - 86:75:ce:e7:e9:1e:f0:79:ec:6f:d8:92:9b:43:fc:4d
+          title: Fingerprint
+        private_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Private part of the key
+          examples:
+          - <private_key>
+          title: Private Key
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+        public_key:
+          description: Public part of the key. To generate public and private keys in the platform, do not specify the parameter in the request body.
+          examples:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFHrnwGVBZs6q6vmTBzQFfzdRLQW8N6Rd0ogGe3h8tm83ZJLTTsF+1H4JcOvwI5ETkHMaFIWd2U15nHU5M7plE6UPRKfzy4rq6yI6cE4tojd3A9attMpbEEX7EbGKrbrb4AsjzxHKAVaREAb31ZplJkUlsiees25hTQXBcWQnOESlc9RCxZ/QQgNUUgqm7QGg7CNkL8Mpq9V4YaOhcFGWj0jXP1CL3g6Xe3xJo1CmUbkIOGUyAmrSfLEiy2O91iOUhbmYQyXksznNrT9O6uLkijf6syLZOdyAuUd/Z86eYXej4/YsvIA5eIFU4B6y9zOXEO2A81txPYMRAytYt7+e7 alice@alice
+          title: Public Key
+          type: string
+        shared_in_project:
+          description: Keypair is shared for all users in the project
+          examples:
+          - true
+          title: Shared In Project
+          type: boolean
+        sshkey_id:
+          description: Key ID, equal to sshkey_name
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          title: Sshkey Id
+          type: string
+        sshkey_name:
+          description: Keypair name
+          examples:
+          - alice
+          maxLength: 255
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Sshkey Name
+          type: string
+        state:
+          $ref: '#/components/schemas/KeypairState'
+          description: Keypair state
+          examples:
+          - ACTIVE
+          - DELETING
+      required:
+      - sshkey_id
+      - public_key
+      - sshkey_name
+      - state
+      - shared_in_project
+      title: Keypair response object
+      type: object
+    CreateKeypairSerializer:
+      properties:
+        public_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Public part of the key. To generate public and private keys in the platform, do not specify the parameter in the request body.
+          examples:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFHrnwGVBZs6q6vmTBzQFfzdRLQW8N6Rd0ogGe3h8tm83ZJLTTsF+1H4JcOvwI5ETkHMaFIWd2U15nHU5M7plE6UPRKfzy4rq6yI6cE4tojd3A9attMpbEEX7EbGKrbrb4AsjzxHKAVaREAb31ZplJkUlsiees25hTQXBcWQnOESlc9RCxZ/QQgNUUgqm7QGg7CNkL8Mpq9V4YaOhcFGWj0jXP1CL3g6Xe3xJo1CmUbkIOGUyAmrSfLEiy2O91iOUhbmYQyXksznNrT9O6uLkijf6syLZOdyAuUd/Z86eYXej4/YsvIA5eIFU4B6y9zOXEO2A81txPYMRAytYt7+e7 alice@alice
+          title: Public Key
+        shared_in_project:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: true
+          description: Keypair is shared for all users in the project. Default True
+          examples:
+          - true
+          - false
+          title: Shared In Project
+        sshkey_name:
+          description: Keypair name
+          examples:
+          - alice
+          maxLength: 255
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Sshkey Name
+          type: string
+      required:
+      - sshkey_name
+      title: Create Keypair schema
+      type: object
+    ShareKeypairSerializer:
+      properties:
+        shared_in_project:
+          description: Data for share(True)/unshare(False) Keypair between all users in project
+          examples:
+          - true
+          - false
+          title: Shared In Project
+          type: boolean
+      required:
+      - shared_in_project
+      title: Request body schema for share or unshare keypair
+      type: object
+    SSHKeySerializer:
+      additionalProperties: false
+      properties:
+        created_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: SSH key creation time
+          examples:
+          - '2025-06-16T17:05:50Z'
+          title: Created At
+        fingerprint:
+          description: Fingerprint
+          examples:
+          - 86:75:ce:e7:e9:1e:f0:79:ec:6f:d8:92:9b:43:fc:4d
+          title: Fingerprint
+          type: string
+        id:
+          description: SSH key ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          format: uuid4
+          title: Id
+          type: string
+        name:
+          description: SSH key name
+          examples:
+          - my-ssh-key
+          maxLength: 255
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+        public_key:
+          description: The public part of an SSH key is the shareable portion of an SSH key pair. It can be safely sent to servers or services to grant access. It does not contain sensitive information.
+          examples:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIjxL6g1II8NsO8odvBwGKvq2Dx/h/xrvsV9b9LVIYKm my-username@my-hostname
+          title: Public Key
+          type: string
+        shared_in_project:
+          description: SSH key will be visible to all users in the project
+          examples:
+          - true
+          title: Shared In Project
+          type: boolean
+        state:
+          $ref: '#/components/schemas/KeypairState'
+          description: SSH key state
+          examples:
+          - ACTIVE
+          - DELETING
+      required:
+      - id
+      - public_key
+      - name
+      - fingerprint
+      - state
+      - project_id
+      - shared_in_project
+      - created_at
+      title: SSH key response object
+      type: object
+    ShareSSHKeySerializer:
+      properties:
+        shared_in_project:
+          description: Share your ssh key with all users in the project
+          examples:
+          - true
+          - false
+          title: Shared In Project
+          type: boolean
+      required:
+      - shared_in_project
+      title: Request body schema for share or unshare keypair
+      type: object
+    SSHKeyCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/SSHKeySerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: SSHKeyCollectionSerializer
+      type: object
+    CreateSSHKeySerializer:
+      properties:
+        name:
+          description: SSH key name
+          examples:
+          - my-ssh-key
+          maxLength: 255
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        public_key:
+          description: "The public part of an SSH key is the shareable portion of an SSH key pair. It can be safely sent to servers or services to grant access. It does not contain sensitive information. \n- If you're uploading your own key, provide the public part here (usually found in a file like `id_ed25519.pub`).\n- If you want the platform to generate an Ed25519 key pair for you, leave this field empty — the system will return the private key in the response **once only**."
+          examples:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIjxL6g1II8NsO8odvBwGKvq2Dx/h/xrvsV9b9LVIYKm my-username@my-hostname
+          title: Public Key
+          type: string
+        shared_in_project:
+          default: true
+          description: SSH key is shared with all users in the project
+          examples:
+          - true
+          - false
+          title: Shared In Project
+          type: boolean
+      required:
+      - name
+      title: Create SSH Key schema
+      type: object
+    SSHKeyOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - name.asc
+      - name.desc
+      title: SSHKeyOrderByChoices
+      type: string
+    CreateKeypairV2Serializer:
+      properties:
+        project_id:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+        public_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Public part of the key. To generate public and private keys in the platform, do not specify the parameter in the request body.
+          examples:
+          - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFHrnwGVBZs6q6vmTBzQFfzdRLQW8N6Rd0ogGe3h8tm83ZJLTTsF+1H4JcOvwI5ETkHMaFIWd2U15nHU5M7plE6UPRKfzy4rq6yI6cE4tojd3A9attMpbEEX7EbGKrbrb4AsjzxHKAVaREAb31ZplJkUlsiees25hTQXBcWQnOESlc9RCxZ/QQgNUUgqm7QGg7CNkL8Mpq9V4YaOhcFGWj0jXP1CL3g6Xe3xJo1CmUbkIOGUyAmrSfLEiy2O91iOUhbmYQyXksznNrT9O6uLkijf6syLZOdyAuUd/Z86eYXej4/YsvIA5eIFU4B6y9zOXEO2A81txPYMRAytYt7+e7 alice@alice
+          title: Public Key
+        shared_in_project:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: true
+          description: Keypair is shared for all users in the project. Default True
+          examples:
+          - true
+          - false
+          title: Shared In Project
+        sshkey_name:
+          description: Keypair name
+          examples:
+          - alice
+          maxLength: 255
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Sshkey Name
+          type: string
+      required:
+      - sshkey_name
+      - project_id
+      title: Create Keypair schema (with project_id)
+      type: object
+    CreatedSSHKeySerializer:
+      properties:
+        created_at:
+          description: SSH key creation time
+          examples:
+          - '2025-06-16T17:05:50Z'
+          format: date-time
+          title: Created At
+          type: string
+        fingerprint:
+          description: Fingerprint
+          examples:
+          - 86:75:ce:e7:e9:1e:f0:79:ec:6f:d8:92:9b:43:fc:4d
+          title: Fingerprint
+          type: string
+        id:
+          description: SSH key ID
+          examples:
+          - 36a7a97a-0672-4911-8f2b-92cd4e5b0d91
+          format: uuid4
+          title: Id
+          type: string
+        name:
+          description: SSH key name
+          examples:
+          - my-ssh-key
+          maxLength: 255
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        private_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: "The private part of an SSH key is the confidential portion of the key pair. It should never be shared or exposed. This key is used to prove your identity when connecting to a server. \n\nIf you omit the `public_key`, the platform will generate a key for you. The private_key will be returned **once** in the API response. Be sure to save it securely, as it cannot be retrieved again later. \n\nBest practice: Save the private key to a secure location on your machine (e.g., `~/.ssh/id_ed25519`) and set the file permissions to be readable only by you."
+          examples:
+          - <private_key>
+          title: Private Key
+        project_id:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+        public_key:
+          description: The public part of an SSH key is the shareable portion of an SSH key pair. It can be safely sent to servers or services to grant access. It does not contain sensitive information.
+          examples:
+          - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIjxL6g1II8NsO8odvBwGKvq2Dx/h/xrvsV9b9LVIYKm my-username@my-hostname
+          title: Public Key
+          type: string
+        shared_in_project:
+          description: SSH key will be visible to all users in the project
+          examples:
+          - true
+          title: Shared In Project
+          type: boolean
+        state:
+          $ref: '#/components/schemas/KeypairState'
+          description: SSH key state
+          examples:
+          - ACTIVE
+          - DELETING
+      required:
+      - id
+      - public_key
+      - name
+      - fingerprint
+      - state
+      - project_id
+      - shared_in_project
+      - created_at
+      - private_key
+      title: Created SSH key response object
+      type: object

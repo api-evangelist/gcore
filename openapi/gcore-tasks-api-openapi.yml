@@ -1,0 +1,809 @@
+openapi: 3.2.0
+info:
+  title: Cloud Tasks API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Tasks
+paths:
+  /v1/tasks:
+    get:
+      operationId: TaskViewSet.get
+      summary: List tasks
+      description: ''
+      parameters:
+      - in: query
+        name: from_timestamp
+        required: false
+        description: ISO formatted datetime string. Filter the tasks by creation date greater than or equal to from_timestamp
+        schema:
+          description: ISO formatted datetime string. Filter the tasks by creation date greater than or equal to from_timestamp
+          format: date-time
+          title: From Timestamp
+          type: string
+      - in: query
+        name: is_acknowledged
+        required: false
+        description: Filter the tasks by their acknowledgement status
+        schema:
+          description: Filter the tasks by their acknowledgement status
+          title: Is Acknowledged
+          type: boolean
+      - in: query
+        name: limit
+        required: false
+        description: Limit the number of returned tasks. Falls back to default of 10 if not specified. Limited by max limit value of 1000
+        schema:
+          default: 10
+          description: Limit the number of returned tasks. Falls back to default of 10 if not specified. Limited by max limit value of 1000
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Sorting by creation date. Oldest first, or most recent first
+        schema:
+          $ref: '#/components/schemas/TaskOrderByChoices'
+          default: desc
+          description: Sorting by creation date. Oldest first, or most recent first
+          examples:
+          - asc
+          - desc
+      - in: query
+        name: project_id
+        required: false
+        description: The project ID to filter the tasks by project. Supports multiple values of kind key=value1&key=value2
+        schema:
+          description: The project ID to filter the tasks by project. Supports multiple values of kind key=value1&key=value2
+          examples:
+          - 123
+          items:
+            type: integer
+          title: Project Id
+          type: array
+      - in: query
+        name: region_id
+        required: false
+        description: The region ID to filter the tasks by region. Supports multiple values of kind key=value1&key=value2
+        schema:
+          description: The region ID to filter the tasks by region. Supports multiple values of kind key=value1&key=value2
+          examples:
+          - 123
+          items:
+            type: integer
+          title: Region Id
+          type: array
+      - in: query
+        name: sorting
+        required: false
+        description: (DEPRECATED Use 'order_by' instead) Sorting by creation date. Oldest first, or most recent first
+        schema:
+          $ref: '#/components/schemas/TaskOrderByChoices'
+          default: desc
+          deprecated: true
+          description: (DEPRECATED Use 'order_by' instead) Sorting by creation date. Oldest first, or most recent first
+          examples:
+          - asc
+          - desc
+      - in: query
+        name: state
+        required: false
+        description: Filter the tasks by state. Supports multiple values of kind key=value1&key=value2
+        schema:
+          description: Filter the tasks by state. Supports multiple values of kind key=value1&key=value2
+          examples:
+          - NEW
+          - RUNNING
+          - FINISHED
+          - ERROR
+          items:
+            $ref: '#/components/schemas/TaskState'
+          title: State
+          type: array
+      - in: query
+        name: task_type
+        required: false
+        description: Filter the tasks by their type one of ['activate_ddos_profile', 'attach_bm_to_reserved_fixed_ip', 'attach_vm_interface', 'attach_vm_to_reserved_fixed_ip', 'attach_volume', 'convert_fip_to_reserved_fixed_ip', 'convert_port_to_fip', 'convert_reserved_fixed_ip_to_fip', 'create_ai_cluster_gpu', 'create_basic_vm', 'create_bm', 'create_caas_container', 'create_dbaas_postgres_cluster', 'create_ddos_profile', 'create_faas_function', 'create_faas_namespace', 'create_fip', 'create_gpu_virtual_cluster', 'create_image', 'create_inference_application', 'create_inference_instance', 'create_k8s_cluster_pool_v2', 'create_k8s_cluster_v2', 'create_l7policy', 'create_l7rule', 'create_lblistener', 'create_lbmember', 'create_lbpool', 'create_lbpool_health_monitor', 'create_loadbalancer', 'create_network', 'create_port', 'create_reserved_fixed_ip', 'create_router', 'create_secret', 'create_security_group', 'create_security_group_rule', 'create_servergroup', 'create_sfs', 'create_slurm_cluster', 'create_slurm_node_set', 'create_snapshot', 'create_subnet', 'create_vm', 'create_volume', 'deactivate_ddos_profile', 'delete_ai_cluster_gpu', 'delete_basic_vm', 'delete_bm', 'delete_caas_container', 'delete_dbaas_postgres_cluster', 'delete_ddos_profile', 'delete_faas_function', 'delete_faas_namespace', 'delete_fip', 'delete_gpu_virtual_cluster', 'delete_gpu_virtual_server', 'delete_image', 'delete_inference_application', 'delete_inference_instance', 'delete_k8s_cluster_pool_v2', 'delete_k8s_cluster_v2', 'delete_l7policy', 'delete_l7rule', 'delete_lblistener', 'delete_lbmember', 'delete_lbmetadata', 'delete_lbpool', 'delete_loadbalancer', 'delete_network', 'delete_port', 'delete_project', 'delete_reserved_fixed_ip', 'delete_router', 'delete_secret', 'delete_security_group_rule', 'delete_servergroup', 'delete_sfs', 'delete_slurm_cluster', 'delete_slurm_node_set', 'delete_snapshot', 'delete_subnet', 'delete_vm', 'delete_volume', 'detach_vm_interface', 'detach_volume', 'download_image', 'downscale_ai_cluster_gpu', 'downscale_gpu_virtual_cluster', 'extend_sfs', 'extend_volume', 'failover_loadbalancer', 'hard_reboot_bm', 'hard_reboot_gpu_baremetal_cluster', 'hard_reboot_gpu_baremetal_server', 'hard_reboot_gpu_virtual_cluster', 'hard_reboot_gpu_virtual_server', 'hard_reboot_vm', 'patch_caas_container', 'patch_dbaas_postgres_cluster', 'patch_faas_function', 'patch_faas_namespace', 'patch_lblistener', 'patch_lbpool', 'put_into_server_group', 'put_l7rule', 'rebuild_bm', 'rebuild_gpu_baremetal_cluster', 'rebuild_gpu_baremetal_node', 'rebuild_gpu_baremetal_server', 'remove_from_server_group', 'replace_gpu_baremetal_server', 'replace_lbmetadata', 'resize_k8s_cluster_v2', 'resize_loadbalancer', 'resize_vm', 'resume_vm', 'revert_volume', 'soft_reboot_bm', 'soft_reboot_gpu_baremetal_cluster', 'soft_reboot_gpu_baremetal_server', 'soft_reboot_gpu_virtual_cluster', 'soft_reboot_gpu_virtual_server', 'soft_reboot_vm', 'start_bm', 'start_gpu_baremetal_cluster', 'start_gpu_baremetal_server', 'start_gpu_virtual_cluster', 'start_gpu_virtual_server', 'start_vm', 'stop_bm', 'stop_gpu_baremetal_cluster', 'stop_gpu_baremetal_server', 'stop_gpu_virtual_cluster', 'stop_gpu_virtual_server', 'stop_vm', 'suspend_vm', 'sync_private_flavors', 'update_basic_vm', 'update_bm', 'update_ddos_profile', 'update_floating_ip', 'update_inference_application', 'update_inference_instance', 'update_k8s_cluster_v2', 'update_l7policy', 'update_lbmember', 'update_lbmetadata', 'update_lbpool_health_monitor', 'update_loadbalancer', 'update_network', 'update_port', 'update_port_allowed_address_pairs', 'update_router', 'update_security_group', 'update_sfs', 'update_slurm_cluster', 'update_slurm_node_set', 'update_tags_gpu_virtual_cluster', 'update_vm', 'upgrade_k8s_cluster_v2', 'upscale_ai_cluster_gpu', 'upscale_gpu_virtual_cluster']
+        schema:
+          description: Filter the tasks by their type one of ['activate_ddos_profile', 'attach_bm_to_reserved_fixed_ip', 'attach_vm_interface', 'attach_vm_to_reserved_fixed_ip', 'attach_volume', 'convert_fip_to_reserved_fixed_ip', 'convert_port_to_fip', 'convert_reserved_fixed_ip_to_fip', 'create_ai_cluster_gpu', 'create_basic_vm', 'create_bm', 'create_caas_container', 'create_dbaas_postgres_cluster', 'create_ddos_profile', 'create_faas_function', 'create_faas_namespace', 'create_fip', 'create_gpu_virtual_cluster', 'create_image', 'create_inference_application', 'create_inference_instance', 'create_k8s_cluster_pool_v2', 'create_k8s_cluster_v2', 'create_l7policy', 'create_l7rule', 'create_lblistener', 'create_lbmember', 'create_lbpool', 'create_lbpool_health_monitor', 'create_loadbalancer', 'create_network', 'create_port', 'create_reserved_fixed_ip', 'create_router', 'create_secret', 'create_security_group', 'create_security_group_rule', 'create_servergroup', 'create_sfs', 'create_slurm_cluster', 'create_slurm_node_set', 'create_snapshot', 'create_subnet', 'create_vm', 'create_volume', 'deactivate_ddos_profile', 'delete_ai_cluster_gpu', 'delete_basic_vm', 'delete_bm', 'delete_caas_container', 'delete_dbaas_postgres_cluster', 'delete_ddos_profile', 'delete_faas_function', 'delete_faas_namespace', 'delete_fip', 'delete_gpu_virtual_cluster', 'delete_gpu_virtual_server', 'delete_image', 'delete_inference_application', 'delete_inference_instance', 'delete_k8s_cluster_pool_v2', 'delete_k8s_cluster_v2', 'delete_l7policy', 'delete_l7rule', 'delete_lblistener', 'delete_lbmember', 'delete_lbmetadata', 'delete_lbpool', 'delete_loadbalancer', 'delete_network', 'delete_port', 'delete_project', 'delete_reserved_fixed_ip', 'delete_router', 'delete_secret', 'delete_security_group_rule', 'delete_servergroup', 'delete_sfs', 'delete_slurm_cluster', 'delete_slurm_node_set', 'delete_snapshot', 'delete_subnet', 'delete_vm', 'delete_volume', 'detach_vm_interface', 'detach_volume', 'download_image', 'downscale_ai_cluster_gpu', 'downscale_gpu_virtual_cluster', 'extend_sfs', 'extend_volume', 'failover_loadbalancer', 'hard_reboot_bm', 'hard_reboot_gpu_baremetal_cluster', 'hard_reboot_gpu_baremetal_server', 'hard_reboot_gpu_virtual_cluster', 'hard_reboot_gpu_virtual_server', 'hard_reboot_vm', 'patch_caas_container', 'patch_dbaas_postgres_cluster', 'patch_faas_function', 'patch_faas_namespace', 'patch_lblistener', 'patch_lbpool', 'put_into_server_group', 'put_l7rule', 'rebuild_bm', 'rebuild_gpu_baremetal_cluster', 'rebuild_gpu_baremetal_node', 'rebuild_gpu_baremetal_server', 'remove_from_server_group', 'replace_gpu_baremetal_server', 'replace_lbmetadata', 'resize_k8s_cluster_v2', 'resize_loadbalancer', 'resize_vm', 'resume_vm', 'revert_volume', 'soft_reboot_bm', 'soft_reboot_gpu_baremetal_cluster', 'soft_reboot_gpu_baremetal_server', 'soft_reboot_gpu_virtual_cluster', 'soft_reboot_gpu_virtual_server', 'soft_reboot_vm', 'start_bm', 'start_gpu_baremetal_cluster', 'start_gpu_baremetal_server', 'start_gpu_virtual_cluster', 'start_gpu_virtual_server', 'start_vm', 'stop_bm', 'stop_gpu_baremetal_cluster', 'stop_gpu_baremetal_server', 'stop_gpu_virtual_cluster', 'stop_gpu_virtual_server', 'stop_vm', 'suspend_vm', 'sync_private_flavors', 'update_basic_vm', 'update_bm', 'update_ddos_profile', 'update_floating_ip', 'update_inference_application', 'update_inference_instance', 'update_k8s_cluster_v2', 'update_l7policy', 'update_lbmember', 'update_lbmetadata', 'update_lbpool_health_monitor', 'update_loadbalancer', 'update_network', 'update_port', 'update_port_allowed_address_pairs', 'update_router', 'update_security_group', 'update_sfs', 'update_slurm_cluster', 'update_slurm_node_set', 'update_tags_gpu_virtual_cluster', 'update_vm', 'upgrade_k8s_cluster_v2', 'upscale_ai_cluster_gpu', 'upscale_gpu_virtual_cluster']
+          title: Task Type
+          type: string
+      - in: query
+        name: to_timestamp
+        required: false
+        description: ISO formatted datetime string. Filter the tasks by creation date less than or equal to to_timestamp
+        schema:
+          description: ISO formatted datetime string. Filter the tasks by creation date less than or equal to to_timestamp
+          format: date-time
+          title: To Timestamp
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCollectionSerializer'
+      tags:
+      - Tasks
+  /v1/tasks/{project_id}/{region_id}/active:
+    get:
+      operationId: TasksActiveInProjectViewSet.get
+      summary: List active tasks
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Limit the number of returned tasks. Falls back to default of 10 if not specified. Limited by max limit value of 1000
+        schema:
+          default: 10
+          description: Limit the number of returned tasks. Falls back to default of 10 if not specified. Limited by max limit value of 1000
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: task_type
+        required: false
+        description: Filter the tasks by their type one of ['activate_ddos_profile', 'attach_bm_to_reserved_fixed_ip', 'attach_vm_interface', 'attach_vm_to_reserved_fixed_ip', 'attach_volume', 'convert_fip_to_reserved_fixed_ip', 'convert_port_to_fip', 'convert_reserved_fixed_ip_to_fip', 'create_ai_cluster_gpu', 'create_basic_vm', 'create_bm', 'create_caas_container', 'create_dbaas_postgres_cluster', 'create_ddos_profile', 'create_faas_function', 'create_faas_namespace', 'create_fip', 'create_gpu_virtual_cluster', 'create_image', 'create_inference_application', 'create_inference_instance', 'create_k8s_cluster_pool_v2', 'create_k8s_cluster_v2', 'create_l7policy', 'create_l7rule', 'create_lblistener', 'create_lbmember', 'create_lbpool', 'create_lbpool_health_monitor', 'create_loadbalancer', 'create_network', 'create_port', 'create_reserved_fixed_ip', 'create_router', 'create_secret', 'create_security_group', 'create_security_group_rule', 'create_servergroup', 'create_sfs', 'create_slurm_cluster', 'create_slurm_node_set', 'create_snapshot', 'create_subnet', 'create_vm', 'create_volume', 'deactivate_ddos_profile', 'delete_ai_cluster_gpu', 'delete_basic_vm', 'delete_bm', 'delete_caas_container', 'delete_dbaas_postgres_cluster', 'delete_ddos_profile', 'delete_faas_function', 'delete_faas_namespace', 'delete_fip', 'delete_gpu_virtual_cluster', 'delete_gpu_virtual_server', 'delete_image', 'delete_inference_application', 'delete_inference_instance', 'delete_k8s_cluster_pool_v2', 'delete_k8s_cluster_v2', 'delete_l7policy', 'delete_l7rule', 'delete_lblistener', 'delete_lbmember', 'delete_lbmetadata', 'delete_lbpool', 'delete_loadbalancer', 'delete_network', 'delete_port', 'delete_project', 'delete_reserved_fixed_ip', 'delete_router', 'delete_secret', 'delete_security_group_rule', 'delete_servergroup', 'delete_sfs', 'delete_slurm_cluster', 'delete_slurm_node_set', 'delete_snapshot', 'delete_subnet', 'delete_vm', 'delete_volume', 'detach_vm_interface', 'detach_volume', 'download_image', 'downscale_ai_cluster_gpu', 'downscale_gpu_virtual_cluster', 'extend_sfs', 'extend_volume', 'failover_loadbalancer', 'hard_reboot_bm', 'hard_reboot_gpu_baremetal_cluster', 'hard_reboot_gpu_baremetal_server', 'hard_reboot_gpu_virtual_cluster', 'hard_reboot_gpu_virtual_server', 'hard_reboot_vm', 'patch_caas_container', 'patch_dbaas_postgres_cluster', 'patch_faas_function', 'patch_faas_namespace', 'patch_lblistener', 'patch_lbpool', 'put_into_server_group', 'put_l7rule', 'rebuild_bm', 'rebuild_gpu_baremetal_cluster', 'rebuild_gpu_baremetal_node', 'rebuild_gpu_baremetal_server', 'remove_from_server_group', 'replace_gpu_baremetal_server', 'replace_lbmetadata', 'resize_k8s_cluster_v2', 'resize_loadbalancer', 'resize_vm', 'resume_vm', 'revert_volume', 'soft_reboot_bm', 'soft_reboot_gpu_baremetal_cluster', 'soft_reboot_gpu_baremetal_server', 'soft_reboot_gpu_virtual_cluster', 'soft_reboot_gpu_virtual_server', 'soft_reboot_vm', 'start_bm', 'start_gpu_baremetal_cluster', 'start_gpu_baremetal_server', 'start_gpu_virtual_cluster', 'start_gpu_virtual_server', 'start_vm', 'stop_bm', 'stop_gpu_baremetal_cluster', 'stop_gpu_baremetal_server', 'stop_gpu_virtual_cluster', 'stop_gpu_virtual_server', 'stop_vm', 'suspend_vm', 'sync_private_flavors', 'update_basic_vm', 'update_bm', 'update_ddos_profile', 'update_floating_ip', 'update_inference_application', 'update_inference_instance', 'update_k8s_cluster_v2', 'update_l7policy', 'update_lbmember', 'update_lbmetadata', 'update_lbpool_health_monitor', 'update_loadbalancer', 'update_network', 'update_port', 'update_port_allowed_address_pairs', 'update_router', 'update_security_group', 'update_sfs', 'update_slurm_cluster', 'update_slurm_node_set', 'update_tags_gpu_virtual_cluster', 'update_vm', 'upgrade_k8s_cluster_v2', 'upscale_ai_cluster_gpu', 'upscale_gpu_virtual_cluster']
+        schema:
+          description: Filter the tasks by their type one of ['activate_ddos_profile', 'attach_bm_to_reserved_fixed_ip', 'attach_vm_interface', 'attach_vm_to_reserved_fixed_ip', 'attach_volume', 'convert_fip_to_reserved_fixed_ip', 'convert_port_to_fip', 'convert_reserved_fixed_ip_to_fip', 'create_ai_cluster_gpu', 'create_basic_vm', 'create_bm', 'create_caas_container', 'create_dbaas_postgres_cluster', 'create_ddos_profile', 'create_faas_function', 'create_faas_namespace', 'create_fip', 'create_gpu_virtual_cluster', 'create_image', 'create_inference_application', 'create_inference_instance', 'create_k8s_cluster_pool_v2', 'create_k8s_cluster_v2', 'create_l7policy', 'create_l7rule', 'create_lblistener', 'create_lbmember', 'create_lbpool', 'create_lbpool_health_monitor', 'create_loadbalancer', 'create_network', 'create_port', 'create_reserved_fixed_ip', 'create_router', 'create_secret', 'create_security_group', 'create_security_group_rule', 'create_servergroup', 'create_sfs', 'create_slurm_cluster', 'create_slurm_node_set', 'create_snapshot', 'create_subnet', 'create_vm', 'create_volume', 'deactivate_ddos_profile', 'delete_ai_cluster_gpu', 'delete_basic_vm', 'delete_bm', 'delete_caas_container', 'delete_dbaas_postgres_cluster', 'delete_ddos_profile', 'delete_faas_function', 'delete_faas_namespace', 'delete_fip', 'delete_gpu_virtual_cluster', 'delete_gpu_virtual_server', 'delete_image', 'delete_inference_application', 'delete_inference_instance', 'delete_k8s_cluster_pool_v2', 'delete_k8s_cluster_v2', 'delete_l7policy', 'delete_l7rule', 'delete_lblistener', 'delete_lbmember', 'delete_lbmetadata', 'delete_lbpool', 'delete_loadbalancer', 'delete_network', 'delete_port', 'delete_project', 'delete_reserved_fixed_ip', 'delete_router', 'delete_secret', 'delete_security_group_rule', 'delete_servergroup', 'delete_sfs', 'delete_slurm_cluster', 'delete_slurm_node_set', 'delete_snapshot', 'delete_subnet', 'delete_vm', 'delete_volume', 'detach_vm_interface', 'detach_volume', 'download_image', 'downscale_ai_cluster_gpu', 'downscale_gpu_virtual_cluster', 'extend_sfs', 'extend_volume', 'failover_loadbalancer', 'hard_reboot_bm', 'hard_reboot_gpu_baremetal_cluster', 'hard_reboot_gpu_baremetal_server', 'hard_reboot_gpu_virtual_cluster', 'hard_reboot_gpu_virtual_server', 'hard_reboot_vm', 'patch_caas_container', 'patch_dbaas_postgres_cluster', 'patch_faas_function', 'patch_faas_namespace', 'patch_lblistener', 'patch_lbpool', 'put_into_server_group', 'put_l7rule', 'rebuild_bm', 'rebuild_gpu_baremetal_cluster', 'rebuild_gpu_baremetal_node', 'rebuild_gpu_baremetal_server', 'remove_from_server_group', 'replace_gpu_baremetal_server', 'replace_lbmetadata', 'resize_k8s_cluster_v2', 'resize_loadbalancer', 'resize_vm', 'resume_vm', 'revert_volume', 'soft_reboot_bm', 'soft_reboot_gpu_baremetal_cluster', 'soft_reboot_gpu_baremetal_server', 'soft_reboot_gpu_virtual_cluster', 'soft_reboot_gpu_virtual_server', 'soft_reboot_vm', 'start_bm', 'start_gpu_baremetal_cluster', 'start_gpu_baremetal_server', 'start_gpu_virtual_cluster', 'start_gpu_virtual_server', 'start_vm', 'stop_bm', 'stop_gpu_baremetal_cluster', 'stop_gpu_baremetal_server', 'stop_gpu_virtual_cluster', 'stop_gpu_virtual_server', 'stop_vm', 'suspend_vm', 'sync_private_flavors', 'update_basic_vm', 'update_bm', 'update_ddos_profile', 'update_floating_ip', 'update_inference_application', 'update_inference_instance', 'update_k8s_cluster_v2', 'update_l7policy', 'update_lbmember', 'update_lbmetadata', 'update_lbpool_health_monitor', 'update_loadbalancer', 'update_network', 'update_port', 'update_port_allowed_address_pairs', 'update_router', 'update_security_group', 'update_sfs', 'update_slurm_cluster', 'update_slurm_node_set', 'update_tags_gpu_virtual_cluster', 'update_vm', 'upgrade_k8s_cluster_v2', 'upscale_ai_cluster_gpu', 'upscale_gpu_virtual_cluster']
+          items:
+            type: string
+          title: Task Type
+          type: array
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskCollectionSerializer'
+      tags:
+      - Tasks
+  /v1/tasks/{task_id}:
+    get:
+      operationId: TaskInstanceViewSet.get
+      summary: Get task
+      description: ''
+      parameters:
+      - in: path
+        name: task_id
+        required: true
+        description: Task ID
+        schema:
+          description: Task ID
+          title: Task Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskSerializer'
+      tags:
+      - Tasks
+  /v1/tasks/{task_id}/acknowledge:
+    post:
+      operationId: TaskInstanceAcknowledge.post
+      summary: Acknowledge one task
+      description: ''
+      parameters:
+      - in: path
+        name: task_id
+        required: true
+        description: Task ID
+        schema:
+          description: Task ID
+          title: Task Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskSerializer'
+      tags:
+      - Tasks
+  /v1/tasks/acknowledge_all:
+    post:
+      operationId: TasksAcknowledgeAll.post
+      summary: Acknowledge all tasks
+      description: ''
+      parameters:
+      - in: query
+        name: project_id
+        required: false
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: query
+        name: region_id
+        required: false
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Tasks
+  /v1/tasks/acknowledge:
+    post:
+      operationId: TasksAcknowledge.post
+      summary: Acknowledge tasks
+      description: 'Deprecated
+
+
+        Use `/v1/tasks/acknowledge_all` instead'
+      parameters:
+      - in: query
+        name: project_id
+        required: false
+        description: Project ID of the project where tasks should be acknowledged
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Project ID of the project where tasks should be acknowledged
+          examples:
+          - 123
+          title: Project Id
+      - in: query
+        name: region_id
+        required: false
+        description: Region ID of the region where tasks should be acknowledged
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Region ID of the region where tasks should be acknowledged
+          examples:
+          - 123
+          title: Region Id
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeprecatedTasksAcknowledgeBodySerializer'
+      tags:
+      - Tasks
+components:
+  schemas:
+    TaskOrderByChoices:
+      enum:
+      - asc
+      - desc
+      title: TaskOrderByChoices
+      type: string
+    TaskSerializer:
+      properties:
+        acknowledged_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: If task was acknowledged, this field stores acknowledge timestamp
+          title: Acknowledged At
+        acknowledged_by:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: If task was acknowledged, this field stores user_id of the person
+          examples:
+          - 123
+          title: Acknowledged By
+        client_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: The client ID
+          examples:
+          - 123
+          title: Client Id
+        created_on:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Created timestamp
+          examples:
+          - '2019-06-25T08:42:42Z'
+          title: Created On
+        created_resources:
+          anyOf:
+          - $ref: '#/components/schemas/CreatedResources'
+          - type: 'null'
+          default: null
+          description: If the task creates resources, this field will contain their IDs
+        data:
+          description: Task parameters
+          examples:
+          - block_device_config:
+            - boot_index: 0
+              image_id: f01fd9a0-9548-48ba-82dc-a8c8b2d6f2f1
+              name: volume for vm1
+              size: 1
+              source: image
+              type_name: standard
+            flavor_name: g1s-shared-1-0.5
+            keypair_name: null
+            name: cirroz1
+            network_config: null
+            reservation_id: 01d4925e-f5db-414a-9808-74e08aa4a741
+            security_groups: null
+          title: Data
+        detailed_state:
+          anyOf:
+          - $ref: '#/components/schemas/TaskDetailedStateEnum'
+          - type: 'null'
+          default: null
+          description: Task detailed state that is more specific to task type
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The error value
+          title: Error
+        finished_on:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Finished timestamp
+          title: Finished On
+        id:
+          description: The task ID
+          examples:
+          - 26986bc0-748a-4448-b836-0a2aa465eb06
+          title: Id
+          type: string
+        job_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Job ID
+          title: Job Id
+        lifecycle_policy_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Lifecycle policy ID
+          title: Lifecycle Policy Id
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: The project ID
+          examples:
+          - 123
+          title: Project Id
+        region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: The region ID
+          examples:
+          - 123
+          title: Region Id
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The request ID
+          title: Request Id
+        schedule_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Schedule ID
+          title: Schedule Id
+        state:
+          $ref: '#/components/schemas/TaskState'
+          description: The task state
+          examples:
+          - RUNNING
+        task_type:
+          description: The task type
+          examples:
+          - create_vm
+          title: Task Type
+          type: string
+        updated_on:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Last updated timestamp
+          title: Updated On
+        user_client_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Client, specified in user's JWT
+          examples:
+          - 123
+          title: User Client Id
+        user_id:
+          description: The user ID that initiated the task
+          examples:
+          - 123
+          title: User Id
+          type: integer
+      required:
+      - id
+      - user_id
+      - task_type
+      - state
+      - created_on
+      title: TaskSerializer
+      type: object
+    TaskDetailedStateEnum:
+      enum:
+      - CLUSTER_CLEAN_UP
+      - CLUSTER_REBUILD
+      - CLUSTER_RESIZE
+      - CLUSTER_RESUME
+      - CLUSTER_SERVER_REBUILD
+      - CLUSTER_SUSPEND
+      - ERROR
+      - FINISHED
+      - IPU_SERVERS
+      - NETWORK
+      - POPLAR_SERVERS
+      - POST_DEPLOY_SETUP
+      - VIPU_CONTROLLER
+      title: TaskDetailedStateEnum
+      type: string
+    DeprecatedTasksAcknowledgeBodySerializer:
+      properties:
+        task_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          description: List of tasks ids
+          title: Task Ids
+      title: DeprecatedTasksAcknowledgeBodySerializer
+      type: object
+    TaskCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/TaskSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: TaskCollectionSerializer
+      type: object
+    TaskState:
+      enum:
+      - ERROR
+      - FINISHED
+      - NEW
+      - RUNNING
+      title: TaskState
+      type: string
+    CreatedResources:
+      properties:
+        ai_clusters:
+          deprecated: true
+          description: Deprecated, use 'clusters' instead. IDs of created GPU clusters
+          items:
+            type: string
+          title: Ai Clusters
+          type: array
+        api_keys:
+          description: IDs of created API keys
+          items:
+            type: string
+          title: Api Keys
+          type: array
+        caas_containers:
+          description: IDs of created CaaS containers
+          items:
+            type: string
+          title: Caas Containers
+          type: array
+        clusters:
+          description: IDs of created GPU clusters
+          items:
+            type: string
+          title: Clusters
+          type: array
+        ddos_profiles:
+          description: IDs of created ddos protection profiles
+          items:
+            type: integer
+          title: Ddos Profiles
+          type: array
+        faas_functions:
+          description: IDs of created FaaS functions
+          items:
+            type: string
+          title: Faas Functions
+          type: array
+        faas_namespaces:
+          description: IDs of created FaaS namespaces
+          items:
+            type: string
+          title: Faas Namespaces
+          type: array
+        file_shares:
+          description: IDs of created file shares
+          items:
+            type: string
+          title: File Shares
+          type: array
+        floatingips:
+          description: IDs of created floating IPs
+          items:
+            type: string
+          title: Floatingips
+          type: array
+        healthmonitors:
+          description: IDs of created health monitors
+          items:
+            type: string
+          title: Healthmonitors
+          type: array
+        images:
+          description: IDs of created images
+          items:
+            type: string
+          title: Images
+          type: array
+        inference_instances:
+          description: IDs of created inference instances
+          items:
+            type: string
+          title: Inference Instances
+          type: array
+        instances:
+          description: IDs of created instances
+          items:
+            type: string
+          title: Instances
+          type: array
+        k8s_clusters:
+          description: IDs of created Kubernetes clusters
+          items:
+            type: string
+          title: K8S Clusters
+          type: array
+        k8s_pools:
+          description: IDs of created Kubernetes pools
+          items:
+            type: string
+          title: K8S Pools
+          type: array
+        l7polices:
+          description: IDs of created L7 policies
+          items:
+            type: string
+          title: L7Polices
+          type: array
+        l7rules:
+          description: IDs of created L7 rules
+          items:
+            type: string
+          title: L7Rules
+          type: array
+        laas_topic:
+          description: IDs of created LaaS topics
+          items:
+            type: string
+          title: Laas Topic
+          type: array
+        listeners:
+          description: IDs of created load balancer listeners
+          items:
+            type: string
+          title: Listeners
+          type: array
+        loadbalancers:
+          description: IDs of created load balancers
+          items:
+            type: string
+          title: Loadbalancers
+          type: array
+        members:
+          description: IDs of created pool members
+          items:
+            type: string
+          title: Members
+          type: array
+        networks:
+          description: IDs of created networks
+          items:
+            type: string
+          title: Networks
+          type: array
+        pools:
+          description: IDs of created load balancer pools
+          items:
+            type: string
+          title: Pools
+          type: array
+        ports:
+          description: IDs of created ports
+          items:
+            type: string
+          title: Ports
+          type: array
+        postgresql_clusters:
+          description: IDs of created postgres clusters
+          items:
+            type: string
+          title: Postgresql Clusters
+          type: array
+        projects:
+          description: IDs of created projects
+          items:
+            type: integer
+          title: Projects
+          type: array
+        registry_registries:
+          description: IDs of created registry registries
+          items:
+            type: string
+          title: Registry Registries
+          type: array
+        registry_users:
+          description: IDs of created registry users
+          items:
+            type: string
+          title: Registry Users
+          type: array
+        routers:
+          description: IDs of created routers
+          items:
+            type: string
+          title: Routers
+          type: array
+        secrets:
+          description: IDs of created secrets
+          items:
+            type: string
+          title: Secrets
+          type: array
+        security_group_rules:
+          description: IDs of created security group rules
+          items:
+            type: string
+          title: Security Group Rules
+          type: array
+        security_groups:
+          description: IDs of created security groups
+          items:
+            type: string
+          title: Security Groups
+          type: array
+        servergroups:
+          description: IDs of created placement groups
+          items:
+            type: string
+          title: Servergroups
+          type: array
+        snapshots:
+          description: IDs of created volume snapshots
+          items:
+            type: string
+          title: Snapshots
+          type: array
+        subnets:
+          description: IDs of created subnets
+          items:
+            type: string
+          title: Subnets
+          type: array
+        volumes:
+          description: IDs of created volumes
+          items:
+            type: string
+          title: Volumes
+          type: array
+      title: CreatedResources
+      type: object

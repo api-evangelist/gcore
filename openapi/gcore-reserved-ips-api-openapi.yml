@@ -1,0 +1,1751 @@
+openapi: 3.2.0
+info:
+  title: Cloud Reserved IPs API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Reserved IPs
+paths:
+  /v1/pricing/{project_id}/{region_id}/reserved_fixed_ips:
+    post:
+      operationId: ReservedFixedIpPricingPreviewHandler.post
+      summary: Preview reserved fixed IP price
+      description: Preview the billing price for a reserved fixed IP.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Item price
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReservedFixedIpSerializer'
+      tags:
+      - Reserved IPs
+  /v1/reserved_fixed_ips/{project_id}/{region_id}:
+    post:
+      operationId: ReservedFixedIPsViewSet.post
+      summary: Create reserved fixed IP
+      description: Create a new reserved fixed IP with the specified configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReservedFixedIpSerializer'
+      tags:
+      - Reserved IPs
+    get:
+      operationId: ReservedFixedIPsViewSet.get
+      summary: List reserved fixed IPs
+      description: List all reserved fixed IPs in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: query
+        name: available_only
+        required: false
+        description: Set True if response should only list IP addresses that are not attached to any instance
+        schema:
+          default: false
+          description: Set True if response should only list IP addresses that are not attached to any instance
+          title: Available Only
+          type: boolean
+      - in: query
+        name: device_id
+        required: false
+        description: Filter IPs by device ID it is attached to
+        schema:
+          description: Filter IPs by device ID it is attached to
+          title: Device Id
+          type: string
+      - in: query
+        name: external_only
+        required: false
+        description: Set to true if the response should only list public IP addresses
+        schema:
+          default: false
+          description: Set to true if the response should only list public IP addresses
+          title: External Only
+          type: boolean
+      - in: query
+        name: internal_only
+        required: false
+        description: Set to true if the response should only list private IP addresses
+        schema:
+          default: false
+          description: Set to true if the response should only list private IP addresses
+          title: Internal Only
+          type: boolean
+      - in: query
+        name: ip_address
+        required: false
+        description: Optional. An IPv4 address to filter results by. Regular expression allowed
+        schema:
+          description: Optional. An IPv4 address to filter results by. Regular expression allowed
+          title: Ip Address
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Optional. Ordering reserved fixed IP list result by name, status, updated_at, fixed_ip_address or created_at fields of the reserved fixed IP and directions (status.asc).
+        schema:
+          $ref: '#/components/schemas/ReservedFixedIPOrderByChoices'
+          default: fixed_ip_address.asc
+          description: Optional. Ordering reserved fixed IP list result by name, status, updated_at, fixed_ip_address or created_at fields of the reserved fixed IP and directions (status.asc).
+      - in: query
+        name: vip_only
+        required: false
+        description: Set to true if the response should only list VIPs
+        schema:
+          default: false
+          description: Set to true if the response should only list VIPs
+          title: Vip Only
+          type: boolean
+      responses:
+        '200':
+          description: Reserved fixed IPs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservedFixedIPCollectionSerializer'
+      tags:
+      - Reserved IPs
+  /v1/reserved_fixed_ips/{project_id}/{region_id}/{port_id}:
+    get:
+      operationId: ReservedFixedIPViewSet.get
+      summary: Get reserved fixed IP
+      description: Get detailed information about a specific reserved fixed IP.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Reserved fixed IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservedFixedIPSerializer'
+      tags:
+      - Reserved IPs
+    patch:
+      operationId: ReservedFixedIPViewSet.patch
+      summary: Update reserved fixed IP
+      description: Update the VIP status of a reserved fixed IP.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Reserved fixed IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservedFixedIPSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchReservedFixedIPSerializer'
+      tags:
+      - Reserved IPs
+    delete:
+      operationId: ReservedFixedIPViewSet.delete
+      summary: Delete reserved fixed IP
+      description: Delete a specific reserved fixed IP and all its associated resources.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Reserved IPs
+  /v1/reserved_fixed_ips/{project_id}/{region_id}/{port_id}/available_devices:
+    get:
+      operationId: ReservedFixedIPAddressPairsAvailableDevicesViewSet.get
+      summary: List VIP available ports
+      description: List all instance ports that are available for connecting to a VIP.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: VIP attach candidates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VIPAttachCandidateCollectionSerializer'
+      tags:
+      - Reserved IPs
+  /v1/reserved_fixed_ips/{project_id}/{region_id}/{port_id}/connected_devices:
+    get:
+      operationId: ReservedFixedIPAddressPairsViewSet.get
+      summary: List VIP connected ports
+      description: List all instance ports that share a VIP.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Connected devices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedDevicesVIPCollectionSerializer'
+      tags:
+      - Reserved IPs
+    put:
+      operationId: ReservedFixedIPAddressPairsViewSet.put
+      summary: Replace VIP connected ports
+      description: Replace the list of instance ports that share a VIP.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Connected devices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedDevicesVIPCollectionSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortIDsForVIPSerializer'
+      tags:
+      - Reserved IPs
+    patch:
+      operationId: ReservedFixedIPAddressPairsViewSet.patch
+      summary: Add VIP connected port
+      description: Add instance ports to share a VIP.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Connected devices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedDevicesVIPCollectionSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortIDsForVIPSerializer'
+      tags:
+      - Reserved IPs
+  /v1/reserved_fixed_ips/{project_id}/{region_id}/{port_id}/convert:
+    post:
+      operationId: ReservedFixedIPConvertHandler.post
+      summary: Convert reserved fixed IP
+      description: 'Convert an unassigned reserved fixed IP to another resource type.
+
+        The reserved fixed IP must not be attached to any device (status must be AVAILABLE).
+
+        Only reserved fixed IPs on external networks can be converted.
+
+
+        Note: In rare cases, if the conversion fails due to concurrent network operations,
+
+        the original IP address may be lost and a new one will need to be created.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - ac177f1f-eb04-42c4-9864-e7d6486813af
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertReservedFixedIPSerializer'
+      tags:
+      - Reserved IPs
+components:
+  schemas:
+    ReservedFixedIPConversionTargetType:
+      enum:
+      - floating_ip
+      title: ReservedFixedIPConversionTargetType
+      type: string
+    PortIDsForVIPSerializer:
+      properties:
+        port_ids:
+          description: List of port IDs that will share one VIP
+          examples:
+          - - 351b0dd7-ca09-431c-be53-935db3785067
+            - bc688791-f1b0-44eb-97d4-07697294b1e1
+          items:
+            format: uuid4
+            type: string
+          title: Port Ids
+          type: array
+      title: PortIDsForVIPSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    NewReservedFixedIpSpecificSubnetSerializer:
+      properties:
+        is_vip:
+          description: If reserved fixed IP is a VIP
+          examples:
+          - false
+          title: Is Vip
+          type: boolean
+        subnet_id:
+          description: Reserved fixed IP will be allocated in this subnet
+          examples:
+          - e3c6ee77-48cb-416b-b204-11b492cc776e3
+          format: uuid4
+          title: Subnet Id
+          type: string
+        type:
+          const: subnet
+          description: Must be 'subnet'.
+          title: Type
+          type: string
+      required:
+      - type
+      - subnet_id
+      title: NewReservedFixedIpSpecificSubnetSerializer
+      type: object
+    NewReservedFixedIpSpecificIpAddressSerializer:
+      properties:
+        ip_address:
+          description: Reserved fixed IP will be allocated the given IP address
+          examples:
+          - 192.168.123.20
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        is_vip:
+          description: If reserved fixed IP is a VIP
+          examples:
+          - false
+          title: Is Vip
+          type: boolean
+        network_id:
+          description: Reserved fixed IP will be allocated in a subnet of this network
+          examples:
+          - e3c6ee77-48cb-416b-b204-11b492cc776e3
+          format: uuid4
+          title: Network Id
+          type: string
+        type:
+          const: ip_address
+          description: Must be 'ip_address'.
+          title: Type
+          type: string
+      required:
+      - type
+      - network_id
+      - ip_address
+      title: NewReservedFixedIpSpecificIpAddressSerializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    SubnetSerializer:
+      properties:
+        available_ips:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Number of available ips in subnet. Null when this data isn't available.
+          examples:
+          - 250
+          title: Available Ips
+        cidr:
+          description: CIDR
+          examples:
+          - 192.168.13.0/24
+          format: ipvanynetwork
+          title: Cidr
+          type: string
+        created_at:
+          description: Datetime when the subnet was created
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity. Null when the subnet wasn't created via a tracked task.
+          examples:
+          - 5cc890da-d031-4a23-ac31-625edfa22812
+          title: Creator Task Id
+        dns_nameservers:
+          description: List IP addresses of a DNS resolver reachable from the network
+          examples:
+          - - 8.8.8.8
+            - 8.8.4.4
+          items:
+            format: ipvanyaddress
+            type: string
+          title: Dns Nameservers
+          type: array
+        enable_dhcp:
+          description: True if DHCP should be enabled
+          examples:
+          - true
+          title: Enable Dhcp
+          type: boolean
+        gateway_ip:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - type: 'null'
+          description: Default GW IPv4 address, advertised in DHCP routes of this subnet. If null, no gateway is advertised by this subnet.
+          examples:
+          - 192.168.13.1
+          title: Gateway Ip
+        has_router:
+          deprecated: true
+          description: Deprecated. Always returns `false`.
+          examples:
+          - false
+          readOnly: true
+          title: Has Router
+          type: boolean
+        host_routes:
+          description: List of custom static routes to advertise via DHCP.
+          examples:
+          - []
+          items:
+            $ref: '#/components/schemas/RouteOutSerializer'
+          title: Host Routes
+          type: array
+        id:
+          description: Subnet id.
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Id
+          type: string
+        ip_version:
+          $ref: '#/components/schemas/IPVersion'
+          description: IP version
+          examples:
+          - 4
+        name:
+          description: Subnet name
+          examples:
+          - subnet_3
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        network_id:
+          description: Network ID
+          examples:
+          - b30d0de7-bca2-4c83-9c57-9e645bd2cc92
+          format: uuid4
+          title: Network Id
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        total_ips:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Total number of ips in subnet. Null when this data isn't available.
+          examples:
+          - 253
+          title: Total Ips
+        updated_at:
+          description: Datetime when the subnet was last updated
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - name
+      - id
+      - network_id
+      - ip_version
+      - enable_dhcp
+      - cidr
+      - creator_task_id
+      - task_id
+      - available_ips
+      - total_ips
+      - dns_nameservers
+      - host_routes
+      - gateway_ip
+      - tags
+      - created_at
+      - updated_at
+      - has_router
+      title: SubnetSerializer
+      type: object
+    ReservedFixedIPOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - fixed_ip_address.asc
+      - fixed_ip_address.desc
+      - name.asc
+      - name.desc
+      - status.asc
+      - status.desc
+      - updated_at.asc
+      - updated_at.desc
+      title: ReservedFixedIPOrderByChoices
+      type: string
+    ConvertReservedFixedIPSerializer:
+      description: Serializer for reserved fixed IP conversion request.
+      properties:
+        target_type:
+          $ref: '#/components/schemas/ReservedFixedIPConversionTargetType'
+          description: Target type for conversion
+          examples:
+          - floating_ip
+      required:
+      - target_type
+      title: ConvertReservedFixedIPSerializer
+      type: object
+    ReservedFixedIPCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ReservedFixedIPSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ReservedFixedIPCollectionSerializer
+      type: object
+    ReservationSerializer:
+      properties:
+        resource_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: ID of the instance or load balancer the IP is attached to. Null when the IP isn't attached.
+          examples:
+          - 83ed4ea6-bcae-4100-9e4d-36e541ff919b
+          title: Resource Id
+        resource_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource type of the resource the IP is attached to. Null when the IP isn't attached.
+          examples:
+          - instance
+          title: Resource Type
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: IP reservation status. Null when the IP isn't attached to a resource.
+          examples:
+          - attached
+          title: Status
+      required:
+      - status
+      - resource_type
+      - resource_id
+      title: ReservationSerializer
+      type: object
+    NetworkSerializer:
+      properties:
+        created_at:
+          description: Datetime when the network was created
+          examples:
+          - 2019-06-18T11:56:16+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity
+          examples:
+          - fd50fdd1-0482-4c9b-b847-fc9924665af6
+          title: Creator Task Id
+        default:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: True if network has is_default attribute
+          examples:
+          - true
+          title: Default
+        external:
+          description: True if the network `router:external` attribute
+          examples:
+          - true
+          title: External
+          type: boolean
+        id:
+          description: Network ID
+          examples:
+          - eed97610-708d-43a5-a9a5-caebd2b7b4ee
+          format: uuid4
+          title: Id
+          type: string
+        mtu:
+          description: MTU (maximum transmission unit). Default value is 1450
+          examples:
+          - 1500
+          title: Mtu
+          type: integer
+        name:
+          description: Network name
+          examples:
+          - public
+          title: Name
+          type: string
+        port_security_enabled:
+          description: Indicates port_security_enabled status of all newly created in the network ports.
+          examples:
+          - true
+          - false
+          title: Port Security Enabled
+          type: boolean
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        segmentation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Id of network segment
+          examples:
+          - 9
+          title: Segmentation Id
+        shared:
+          description: True when the network is shared with your project by external owner
+          examples:
+          - false
+          title: Shared
+          type: boolean
+        subnets:
+          description: List of subnetworks
+          examples:
+          - - f00624ab-41bc-4d54-a723-1673ce32d997
+            - 41e0f698-4d39-483b-b77a-18eb070e4c09
+          items:
+            format: uuid4
+            type: string
+          title: Subnets
+          type: array
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        type:
+          description: Network type (vlan, vxlan)
+          examples:
+          - vlan
+          title: Type
+          type: string
+        updated_at:
+          description: Datetime when the network was last updated
+          examples:
+          - 2019-06-18T11:57:00+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - id
+      - name
+      - mtu
+      - created_at
+      - updated_at
+      - type
+      - segmentation_id
+      - external
+      - default
+      - shared
+      - subnets
+      - creator_task_id
+      - task_id
+      - tags
+      - port_security_enabled
+      title: NetworkSerializer
+      type: object
+    AttachmentSerializer:
+      properties:
+        resource_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource ID. Null when the attachment's resource is unknown.
+          examples:
+          - 83ed4ea6-bcae-4100-9e4d-36e541ff919b
+          title: Resource Id
+        resource_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Resource type. Null when the attachment's resource type is unknown.
+          examples:
+          - instance
+          title: Resource Type
+      required:
+      - resource_type
+      - resource_id
+      title: AttachmentSerializer
+      type: object
+    PortIpWithSubnetSerializer:
+      properties:
+        ip_address:
+          description: IP address
+          examples:
+          - 192.168.123.20
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        subnet:
+          $ref: '#/components/schemas/SubnetSerializer'
+          description: Subnet details
+        subnet_id:
+          description: ID of the subnet that allocated the IP
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      - ip_address
+      - subnet
+      title: PortIpWithSubnetSerializer
+      type: object
+    ConnectedDevicesVIPSerializer:
+      properties:
+        instance_id:
+          description: ID of the instance that owns the port
+          examples:
+          - bc688791-f1b0-44eb-97d4-07697294b1e1
+          format: uuid4
+          title: Instance Id
+          type: string
+        instance_name:
+          description: Name of the instance that owns the port
+          examples:
+          - Virtual Machine 1
+          title: Instance Name
+          type: string
+        ip_assignments:
+          description: IP addresses assigned to this port
+          items:
+            $ref: '#/components/schemas/PortIpWithSubnetSerializer'
+          title: Ip Assignments
+          type: array
+        network:
+          $ref: '#/components/schemas/NetworkSerializer'
+          description: Network details
+        port_id:
+          description: Port ID that shares VIP
+          examples:
+          - 351b0dd7-ca09-431c-be53-935db3785067
+          format: uuid4
+          title: Port Id
+          type: string
+      required:
+      - port_id
+      - instance_id
+      - instance_name
+      - network
+      - ip_assignments
+      title: ConnectedDevicesVIPSerializer
+      type: object
+    NewReservedFixedIpSpecificPortSerializer:
+      properties:
+        port_id:
+          description: Port ID to make a reserved fixed IP (for example, `vip_port_id` of the Load Balancer entity).
+          examples:
+          - 77f1394f-2a18-4686-a2eb-acea25146374
+          format: uuid4
+          title: Port Id
+          type: string
+        type:
+          const: port
+          description: Must be 'port'.
+          title: Type
+          type: string
+      required:
+      - type
+      - port_id
+      title: NewReservedFixedIpSpecificPortSerializer
+      type: object
+    InterfaceIPFamily:
+      enum:
+      - dual
+      - ipv4
+      - ipv6
+      title: InterfaceIPFamily
+      type: string
+    IPVersion:
+      enum:
+      - 4
+      - 6
+      title: IPVersion
+      type: integer
+    PatchReservedFixedIPSerializer:
+      properties:
+        is_vip:
+          description: If reserved fixed IP should be a VIP
+          examples:
+          - true
+          title: Is Vip
+          type: boolean
+      required:
+      - is_vip
+      title: PatchReservedFixedIPSerializer
+      type: object
+    VIPAttachCandidateSerializer:
+      properties:
+        instance_id:
+          description: ID of the instance that owns the port
+          examples:
+          - bc688791-f1b0-44eb-97d4-07697294b1e1
+          format: uuid4
+          title: Instance Id
+          type: string
+        instance_name:
+          description: Name of the instance that owns the port
+          examples:
+          - Virtual Machine 1
+          title: Instance Name
+          type: string
+        ip_assignments:
+          description: IP addresses assigned to this port
+          items:
+            $ref: '#/components/schemas/PortIpWithSubnetSerializer'
+          title: Ip Assignments
+          type: array
+        network:
+          $ref: '#/components/schemas/NetworkSerializer'
+          description: Network details
+        port_id:
+          description: Port ID that shares VIP
+          examples:
+          - 351b0dd7-ca09-431c-be53-935db3785067
+          format: uuid4
+          title: Port Id
+          type: string
+      required:
+      - port_id
+      - instance_id
+      - instance_name
+      - network
+      - ip_assignments
+      title: VIPAttachCandidateSerializer
+      type: object
+    ConnectedDevicesVIPCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ConnectedDevicesVIPSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ConnectedDevicesVIPCollectionSerializer
+      type: object
+    AllowedAddressPairsSerializer:
+      properties:
+        ip_address:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - format: ipvanynetwork
+            type: string
+          description: Subnet mask or IP address of the port specified in allowed_address_pairs
+          title: Ip Address
+        mac_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: MAC address of the port specified in allowed_address_pairs. Null when the pair has no explicit MAC.
+          title: Mac Address
+      required:
+      - ip_address
+      - mac_address
+      title: AllowedAddressPairsSerializer
+      type: object
+    NewReservedFixedIpAnySubnetSerializer:
+      properties:
+        ip_family:
+          anyOf:
+          - $ref: '#/components/schemas/InterfaceIPFamily'
+          - type: 'null'
+          description: 'Which subnets should be selected: IPv4, IPv6 or use dual stack.'
+          examples:
+          - ipv4
+        is_vip:
+          description: If reserved fixed IP is a VIP
+          examples:
+          - false
+          title: Is Vip
+          type: boolean
+        network_id:
+          description: Reserved fixed IP will be allocated in a subnet of this network
+          examples:
+          - e3c6ee77-48cb-416b-b204-11b492cc776e3
+          format: uuid4
+          title: Network Id
+          type: string
+        type:
+          const: any_subnet
+          description: Must be 'any_subnet'.
+          title: Type
+          type: string
+      required:
+      - type
+      - network_id
+      title: NewReservedFixedIpAnySubnetSerializer
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    CreateReservedFixedIpSerializer:
+      discriminator:
+        mapping:
+          any_subnet: '#/components/schemas/NewReservedFixedIpAnySubnetSerializer'
+          external: '#/components/schemas/NewReservedFixedIpExternalSerializer'
+          ip_address: '#/components/schemas/NewReservedFixedIpSpecificIpAddressSerializer'
+          port: '#/components/schemas/NewReservedFixedIpSpecificPortSerializer'
+          subnet: '#/components/schemas/NewReservedFixedIpSpecificSubnetSerializer'
+        propertyName: type
+      examples:
+      - type: external
+      oneOf:
+      - $ref: '#/components/schemas/NewReservedFixedIpExternalSerializer'
+      - $ref: '#/components/schemas/NewReservedFixedIpSpecificSubnetSerializer'
+      - $ref: '#/components/schemas/NewReservedFixedIpAnySubnetSerializer'
+      - $ref: '#/components/schemas/NewReservedFixedIpSpecificIpAddressSerializer'
+      - $ref: '#/components/schemas/NewReservedFixedIpSpecificPortSerializer'
+      title: CreateReservedFixedIpSerializer
+    TagSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      properties:
+        key:
+          description: Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag
+          title: Key
+          type: string
+        read_only:
+          description: If true, the tag is read-only and cannot be modified by the user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        value:
+          description: Tag value. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag-value
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      - read_only
+      title: TagSerializer
+      type: object
+    VIPAttachCandidateCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/VIPAttachCandidateSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: VIPAttachCandidateCollectionSerializer
+      type: object
+    ReservedFixedIPSerializer:
+      properties:
+        allowed_address_pairs:
+          description: Group of subnet masks and/or IP addresses that share the current IP as VIP
+          examples:
+          - - ip_address: 192.168.123.20
+              mac_address: 00:16:3e:f2:87:16
+            - ip_address: 192.168.0.2
+              mac_address: 00:16:3e:f2:87:89
+          items:
+            $ref: '#/components/schemas/AllowedAddressPairsSerializer'
+          title: Allowed Address Pairs
+          type: array
+        attachments:
+          description: Reserved fixed IP attachment entities
+          examples:
+          - - resource_id: e3c6ee77-48cb-416b-b204-11b492cc776e3
+              resource_type: instance
+            - resource_id: e73a4dbd-da04-4b6e-8ef9-07e8742001b7
+              resource_type: ai_cluster
+          items:
+            $ref: '#/components/schemas/AttachmentSerializer'
+          title: Attachments
+          type: array
+        created_at:
+          description: Datetime when the reserved fixed IP was created
+          examples:
+          - 2019-06-18T11:56:16+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity. Null when the reservation wasn't created via a tracked task.
+          examples:
+          - 30378aea-9343-4ff6-be38-9756094e05da
+          title: Creator Task Id
+        fixed_ip_address:
+          anyOf:
+          - format: ipv4
+            type: string
+          - type: 'null'
+          description: IPv4 address of the reserved fixed IP. Null when the reservation has no IPv4 address.
+          examples:
+          - 10.100.179.44
+          title: Fixed Ip Address
+        fixed_ipv6_address:
+          anyOf:
+          - format: ipv6
+            type: string
+          - type: 'null'
+          description: IPv6 address of the reserved fixed IP. Null when the reservation has no IPv6 address.
+          examples:
+          - null
+          title: Fixed Ipv6 Address
+        is_external:
+          description: If reserved fixed IP belongs to a public network
+          examples:
+          - false
+          title: Is External
+          type: boolean
+        is_vip:
+          description: If reserved fixed IP is a VIP
+          examples:
+          - false
+          title: Is Vip
+          type: boolean
+        name:
+          description: Reserved fixed IP name
+          examples:
+          - Reserved fixed ip 10.100.179.44
+          title: Name
+          type: string
+        network:
+          $ref: '#/components/schemas/NetworkSerializer'
+          description: Network details
+        network_id:
+          description: ID of the network the port is attached to
+          examples:
+          - eed97610-708d-43a5-a9a5-caebd2b7b4ee
+          format: uuid4
+          title: Network Id
+          type: string
+        port_id:
+          description: ID of the port underlying the reserved fixed IP
+          examples:
+          - 817c8a3d-bb67-4b88-a0d1-aec980318ff1
+          format: uuid4
+          title: Port Id
+          type: string
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Project ID. Null in an internal, project-less context.
+          examples:
+          - 1337
+          title: Project Id
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        reservation:
+          $ref: '#/components/schemas/ReservationSerializer'
+          description: Reserved fixed IP status with resource type and ID it is attached to
+        status:
+          description: Underlying port status
+          examples:
+          - DOWN
+          title: Status
+          type: string
+        subnet_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: ID of the subnet that owns the IP address. Null when the reservation has no IPv4 address.
+          examples:
+          - 747db04a-2aac-4fda-9492-d9b85a798c09
+          title: Subnet Id
+        subnet_v6_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: ID of the subnet that owns the IPv6 address. Null when the reservation has no IPv6 address.
+          examples:
+          - null
+          title: Subnet V6 Id
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        updated_at:
+          description: Datetime when the reserved fixed IP was last updated
+          examples:
+          - 2019-06-18T11:57:00+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - port_id
+      - name
+      - created_at
+      - updated_at
+      - status
+      - fixed_ip_address
+      - subnet_id
+      - fixed_ipv6_address
+      - subnet_v6_id
+      - network_id
+      - network
+      - creator_task_id
+      - task_id
+      - is_external
+      - is_vip
+      - reservation
+      - allowed_address_pairs
+      - attachments
+      title: ReservedFixedIPSerializer
+      type: object
+    NewReservedFixedIpExternalSerializer:
+      properties:
+        ip_family:
+          anyOf:
+          - $ref: '#/components/schemas/InterfaceIPFamily'
+          - type: 'null'
+          description: 'Which subnets should be selected: IPv4, IPv6 or use dual stack.'
+          examples:
+          - ipv4
+        is_vip:
+          description: If reserved fixed IP is a VIP
+          examples:
+          - false
+          title: Is Vip
+          type: boolean
+        type:
+          const: external
+          description: Must be 'external'
+          title: Type
+          type: string
+      required:
+      - type
+      title: NewReservedFixedIpExternalSerializer
+      type: object
+    RouteOutSerializer:
+      properties:
+        destination:
+          description: CIDR of destination IPv4 or IPv6 subnet.
+          examples:
+          - 10.0.3.0/24
+          format: ipvanynetwork
+          title: Destination
+          type: string
+        nexthop:
+          description: IPv4 or IPv6 address to forward traffic to if it's destination IP matches 'destination' CIDR.
+          examples:
+          - 10.0.0.13
+          format: ipvanyaddress
+          title: Nexthop
+          type: string
+      required:
+      - destination
+      - nexthop
+      title: RouteOutSerializer
+      type: object

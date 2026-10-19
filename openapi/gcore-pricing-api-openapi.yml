@@ -1,0 +1,177 @@
+openapi: 3.2.0
+info:
+  title: Cloud Pricing API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Pricing
+paths:
+  /public/v1/pricing/gpu:
+    get:
+      operationId: PublicGpuPricingViewSet.get
+      summary: List GPU prices
+      description: 'Returns list prices for GPUs, bare metal and virtual, in EUR and USD.
+
+
+        The response has no pagination. The catalog is small. The list sorts by
+
+        price per hour, from low to high.'
+      parameters: []
+      responses:
+        '200':
+          description: GPU prices
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpuPricingCatalogSerializer'
+      tags:
+      - Pricing
+components:
+  schemas:
+    GpuPricingDetailSerializer:
+      properties:
+        flavor_names:
+          description: Flavor names that share this SKU and price.
+          examples:
+          - - bm3-infrastructure-ai-h100-80-8
+            - noib-ai-h100-80-8
+          items:
+            type: string
+          title: Flavor Names
+          type: array
+        sku:
+          description: SKU id for this price row.
+          examples:
+          - h100-80-8
+          title: Sku
+          type: string
+        updated_at:
+          description: When this row was last refreshed.
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - sku
+      - flavor_names
+      - updated_at
+      title: GpuPricingDetailSerializer
+      type: object
+    GpuCurrency:
+      enum:
+      - EUR
+      - USD
+      title: GpuCurrency
+      type: string
+    GpuDeploymentType:
+      enum:
+      - baremetal
+      - virtual
+      title: GpuDeploymentType
+      type: string
+    GpuPricingCatalogSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        generated_at:
+          description: When this catalog snapshot was built.
+          format: date-time
+          title: Generated At
+          type: string
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/GpuPriceRowSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      - generated_at
+      title: GpuPricingCatalogSerializer
+      type: object
+    GpuPriceRowSerializer:
+      properties:
+        currency:
+          $ref: '#/components/schemas/GpuCurrency'
+          description: ISO 4217 currency code.
+          examples:
+          - EUR
+        deployment_type:
+          $ref: '#/components/schemas/GpuDeploymentType'
+          description: Baremetal or virtual.
+          examples:
+          - baremetal
+        gpu_count:
+          description: Number of GPU cards this price covers.
+          examples:
+          - 8
+          title: Gpu Count
+          type: integer
+        gpu_model:
+          description: GPU model.
+          examples:
+          - H100
+          title: Gpu Model
+          type: string
+        price_per_gpu_hour:
+          description: On-demand price per GPU per hour.
+          examples:
+          - '2.27250000'
+          title: Price Per Gpu Hour
+          type: string
+        price_per_hour:
+          description: On-demand price per node/instance per hour.
+          examples:
+          - '18.18000000'
+          title: Price Per Hour
+          type: string
+        pricing_detail:
+          $ref: '#/components/schemas/GpuPricingDetailSerializer'
+          description: Pricing-specific detail.
+        region_name:
+          description: Region this price applies to.
+          examples:
+          - Luxembourg-2
+          title: Region Name
+          type: string
+      required:
+      - gpu_model
+      - gpu_count
+      - deployment_type
+      - region_name
+      - currency
+      - price_per_gpu_hour
+      - price_per_hour
+      - pricing_detail
+      title: GpuPriceRowSerializer
+      type: object

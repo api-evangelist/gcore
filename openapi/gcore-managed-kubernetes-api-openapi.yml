@@ -1,0 +1,5293 @@
+openapi: 3.2.0
+info:
+  title: Cloud Managed Kubernetes API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Managed Kubernetes
+paths:
+  /v2/k8s/{project_id}/{region_id}/create_versions:
+    get:
+      operationId: K8sClusterCreateVersionViewSet.get
+      summary: List k8s cluster versions
+      description: List available k8s cluster versions for creation
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterVersionV2CollectionSerializer'
+      tags:
+      - Managed Kubernetes
+  /v1/k8s/{project_id}/{region_id}/flavors:
+    get:
+      operationId: K8sFlavorsViewSet.get
+      summary: List k8s cluster flavors
+      description: 'Retrieve a list of flavors for k8s pool.
+
+        When the include_prices query parameter is specified, the list shows prices.
+
+        A client in trial mode gets all price values as 0. If you get Pricing Error contact the support'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: query
+        name: exclude_gpu
+        required: false
+        description: Set to true to exclude GPU flavors. Default is false.
+        schema:
+          default: false
+          description: Set to true to exclude GPU flavors. Default is false.
+          examples:
+          - false
+          - true
+          title: Exclude Gpu
+          type: boolean
+      - in: query
+        name: include_capacity
+        required: false
+        description: Set to true to include flavor capacity. Default is False.
+        schema:
+          default: false
+          description: Set to true to include flavor capacity. Default is False.
+          examples:
+          - false
+          - true
+          title: Include Capacity
+          type: boolean
+      - in: query
+        name: include_prices
+        required: false
+        description: Set to true to include flavor prices. Default is False.
+        schema:
+          default: false
+          description: Set to true to include flavor prices. Default is False.
+          examples:
+          - false
+          - true
+          title: Include Prices
+          type: boolean
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BareMetalFlavorExtendedCollectionSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}:
+    post:
+      operationId: K8sClustersViewSetV2.post
+      summary: Create k8s cluster
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterCreateV2Serializer'
+      tags:
+      - Managed Kubernetes
+    get:
+      operationId: K8sClustersViewSetV2.get
+      summary: List k8s clusters
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterV2CollectionSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}:
+    get:
+      operationId: K8sClusterViewSetV2.get
+      summary: Get k8s cluster
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterV2Serializer'
+      tags:
+      - Managed Kubernetes
+    patch:
+      operationId: K8sClusterViewSetV2.patch
+      summary: Update k8s cluster
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterUpdateV2Serializer'
+      tags:
+      - Managed Kubernetes
+    delete:
+      operationId: K8sClusterViewSetV2.delete
+      summary: Delete k8s cluster
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: query
+        name: volumes
+        required: false
+        description: Comma separated list of volume IDs to be deleted with the cluster
+        schema:
+          description: Comma separated list of volume IDs to be deleted with the cluster
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+          title: Volumes
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/certificates:
+    get:
+      operationId: K8sClusterCertificateViewSetV2.get
+      summary: Get k8s cluster CA certificate
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterCertificateV2Serializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/config:
+    get:
+      operationId: K8sClusterConfigViewSetV2.get
+      summary: Get k8s cluster kubeconfig
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterConfigV2Serializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/instances:
+    get:
+      operationId: K8sClusterInstancesViewSetV2.get
+      summary: List k8s cluster nodes
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: with_ddos
+        required: false
+        description: Include DDoS profile information if set to true. Default is false.
+        schema:
+          default: false
+          description: Include DDoS profile information if set to true. Default is false.
+          examples:
+          - false
+          - true
+          title: With Ddos
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceCollectionSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/instances/{instance_id}:
+    delete:
+      operationId: K8sClusterInstanceViewSetV2.delete
+      summary: Delete k8s cluster node
+      description: After deletion, the node will be automatically recreated to maintain the desired pool size.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: path
+        name: instance_id
+        required: true
+        description: Instance ID
+        schema:
+          description: Instance ID
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+          title: Instance Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/pools:
+    post:
+      operationId: K8sClustersPoolViewSetV2.post
+      summary: Create k8s cluster pool
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterPoolCreateV2Serializer'
+      tags:
+      - Managed Kubernetes
+    get:
+      operationId: K8sClustersPoolViewSetV2.get
+      summary: List k8s cluster pools
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterPoolV2CollectionSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/pools/{pool_name}:
+    get:
+      operationId: K8sClusterPoolViewSetV2.get
+      summary: Get k8s cluster pool
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: path
+        name: pool_name
+        required: true
+        description: Pool name
+        schema:
+          description: Pool name
+          examples:
+          - my-pool
+          title: Pool Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterPoolV2Serializer'
+      tags:
+      - Managed Kubernetes
+    patch:
+      operationId: K8sClusterPoolViewSetV2.patch
+      summary: Update k8s cluster pool
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: path
+        name: pool_name
+        required: true
+        description: Pool name
+        schema:
+          description: Pool name
+          examples:
+          - my-pool
+          title: Pool Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterPoolV2Serializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterPoolUpdateV2Serializer'
+      tags:
+      - Managed Kubernetes
+    delete:
+      operationId: K8sClusterPoolViewSetV2.delete
+      summary: Delete k8s cluster pool
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: path
+        name: pool_name
+        required: true
+        description: Pool name
+        schema:
+          description: Pool name
+          examples:
+          - my-pool
+          title: Pool Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/pools/{pool_name}/instances:
+    get:
+      operationId: K8sClusterPoolInstancesViewSetV2.get
+      summary: List k8s cluster pool nodes
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: path
+        name: pool_name
+        required: true
+        description: Pool name
+        schema:
+          description: Pool name
+          examples:
+          - my-pool
+          title: Pool Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: with_ddos
+        required: false
+        description: Include DDoS profile information if set to true. Default is false.
+        schema:
+          default: false
+          description: Include DDoS profile information if set to true. Default is false.
+          examples:
+          - false
+          - true
+          title: With Ddos
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceCollectionSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/pools/{pool_name}/instances/{instance_id}:
+    delete:
+      operationId: K8sClusterPoolInstanceViewSetV2.delete
+      summary: Delete k8s cluster pool node
+      description: After deletion, the node will be automatically recreated to maintain the desired pool size.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: path
+        name: pool_name
+        required: true
+        description: Pool name
+        schema:
+          description: Pool name
+          examples:
+          - my-pool
+          title: Pool Name
+          type: string
+      - in: path
+        name: instance_id
+        required: true
+        description: Instance ID
+        schema:
+          description: Instance ID
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+          title: Instance Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/pools/{pool_name}/resize:
+    post:
+      operationId: K8sClusterResizeActionViewSetV2.post
+      summary: Resize k8s cluster pool
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: path
+        name: pool_name
+        required: true
+        description: Pool name
+        schema:
+          description: Pool name
+          examples:
+          - my-pool
+          title: Pool Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterPoolResizeV2Serializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/upgrade:
+    post:
+      operationId: K8sClusterUpgradeActionViewSetV2.post
+      summary: Upgrade k8s cluster
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterUpgradeV2Serializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/{cluster_name}/upgrade_versions:
+    get:
+      operationId: K8sClusterUpdateVersionViewSet.get
+      summary: List k8s cluster versions for upgrade
+      description: List available k8s cluster versions for upgrade
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterVersionV2CollectionSerializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/check_limits:
+    post:
+      operationId: K8sClusterCheckLimitsV2.post
+      summary: Check cluster quota
+      description: 'Calculate quota requirements for a new K8s cluster before creation.
+
+        Returns exceeded quotas if regional limits would be violated. Validates
+
+        requirements for all pools, logging, and cluster infrastructure (floating IPs,
+
+        external IPs for pools with is_public_ipv4, load balancers, security groups).
+
+        Use before cluster creation to validate resource availability.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterQuotaResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterCheckLimitsV2Serializer'
+      tags:
+      - Managed Kubernetes
+  /v2/k8s/clusters/{project_id}/{region_id}/pools/check_limits:
+    post:
+      operationId: K8sClusterPoolCheckLimitsV2.post
+      summary: Check cluster pool quota
+      description: 'Calculate quota requirements for a new cluster pool before creation.
+
+        Returns exceeded quotas if regional limits would be violated. Use before
+
+        pool creation to validate resource availability. Checks: CPU, RAM, volumes,
+
+        VMs, GPUs, external IPs (for pools with is_public_ipv4), and baremetal
+
+        quotas depending on flavor type.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/K8sClusterQuotaResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterCheckLimitsPoolV2Serializer'
+      tags:
+      - Managed Kubernetes
+  /v2/pricing/{project_id}/{region_id}/k8s/clusters:
+    post:
+      operationId: K8sClusterPricingPreviewHandlerV2.post
+      summary: Preview k8s cluster price
+      description: Preview the billing price for a cluster based on the provided configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcesPricingResponseV2Serializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/K8sClusterPricingRequestV2Serializer'
+      tags:
+      - Managed Kubernetes
+  /v2/pricing/{project_id}/{region_id}/k8s/clusters/{cluster_name}:
+    get:
+      operationId: K8sClusterPricingHandlerV2.get
+      summary: Get k8s cluster price
+      description: Get the billing price for a cluster
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          examples:
+          - my-cluster
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourcesPricingResponseV2Serializer'
+      tags:
+      - Managed Kubernetes
+components:
+  schemas:
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    InstanceSerializer:
+      properties:
+        addresses:
+          additionalProperties:
+            items:
+              anyOf:
+              - $ref: '#/components/schemas/InstanceFloatingAddressSerializer'
+              - $ref: '#/components/schemas/InstanceFixedAddressShortSerializer'
+              - $ref: '#/components/schemas/InstanceFixedAddressSerializer'
+            type: array
+          description: Map of network_name to list of addresses in that network
+          title: Addresses
+          type: object
+        blackhole_ports:
+          description: IP addresses of the instances that are blackholed by DDoS mitigation system
+          items:
+            $ref: '#/components/schemas/BlackholePortSerializer'
+          title: Blackhole Ports
+          type: array
+        created_at:
+          description: Datetime when instance was created
+          examples:
+          - '2023-11-29T10:56:49Z'
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Task that created this entity
+          title: Creator Task Id
+        ddos_profile:
+          anyOf:
+          - $ref: '#/components/schemas/GetClientProfileSerializer'
+          - type: 'null'
+          description: Advanced DDoS protection profile. It is always `null` if query parameter `with_ddos=true` is not set.
+        fixed_ip_assignments:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/IpAssignmentsSerializer'
+            type: array
+          - type: 'null'
+          description: Fixed IP assigned to instance
+          title: Fixed Ip Assignments
+        flavor:
+          anyOf:
+          - $ref: '#/components/schemas/InstanceFlavorSerializer'
+          - $ref: '#/components/schemas/BareMetalFlavorSerializer'
+          - $ref: '#/components/schemas/DeprecatedGpuClusterFlavorSerializer'
+          description: Flavor
+          title: Flavor
+        id:
+          description: Instance ID
+          examples:
+          - 6c6aa80f-7836-4dc2-a2ae-125e248be476
+          format: uuid4
+          title: Id
+          type: string
+        instance_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Instance description
+          examples:
+          - Instance description
+          title: Instance Description
+        instance_isolation:
+          anyOf:
+          - $ref: '#/components/schemas/IsolationSerializer'
+          - type: 'null'
+          description: Instance isolation information
+        name:
+          description: Instance name
+          examples:
+          - my-instance-1
+          title: Name
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 111
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+        security_groups:
+          description: Security groups
+          items:
+            $ref: '#/components/schemas/NameSerializerPydantic'
+          title: Security Groups
+          type: array
+        ssh_key_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: SSH key assigned to instance
+          title: Ssh Key Name
+        status:
+          $ref: '#/components/schemas/InstanceStatus'
+          description: Instance status
+          examples:
+          - ACTIVE
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        task_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Task state
+          title: Task State
+        vm_state:
+          $ref: '#/components/schemas/InstanceVMState'
+          description: Virtual machine state (active)
+          examples:
+          - active
+        volumes:
+          description: List of volumes
+          items:
+            $ref: '#/components/schemas/InstanceVolumeSerializer'
+          title: Volumes
+          type: array
+      required:
+      - id
+      - name
+      - created_at
+      - status
+      - vm_state
+      - volumes
+      - flavor
+      - tags
+      - instance_description
+      - addresses
+      - security_groups
+      - ssh_key_name
+      - creator_task_id
+      - task_state
+      - task_id
+      - blackhole_ports
+      - ddos_profile
+      - fixed_ip_assignments
+      - instance_isolation
+      - region
+      - region_id
+      - project_id
+      title: InstanceSerializer
+      type: object
+    ResourcesPricingResponseV2Serializer:
+      description: Pricing scheme for various resources
+      examples:
+      - instances:
+        - currency_code: USD
+          discount_percent: 0.16
+          price_per_hour: 1
+          price_per_month: 720
+          price_status: show
+          price_without_discount_per_month: 604.8
+          tax_percent: 17.0
+        publicips:
+        - currency_code: USD
+          discount_percent: 0.16
+          price_per_hour: 1
+          price_per_month: 720
+          price_status: show
+          price_without_discount_per_month: 604.8
+          tax_percent: 17.0
+        total_price:
+          currency_code: USD
+          discount_percent: 0.16
+          price_per_hour: 1
+          price_per_month: 720
+          price_status: show
+          price_without_discount_per_month: 604.8
+          tax_percent: 17.0
+        volumes:
+        - currency_code: USD
+          discount_percent: 0.16
+          price_per_hour: 1
+          price_per_month: 720
+          price_status: show
+          price_without_discount_per_month: 604.8
+          tax_percent: 17.0
+      properties:
+        instances:
+          items:
+            $ref: '#/components/schemas/ItemPriceResponseSerializer'
+          title: Instances
+          type: array
+        publicips:
+          items:
+            $ref: '#/components/schemas/ItemPriceResponseSerializer'
+          title: Publicips
+          type: array
+        total_price:
+          $ref: '#/components/schemas/ItemPriceResponseSerializer'
+        volumes:
+          items:
+            $ref: '#/components/schemas/ItemPriceResponseSerializer'
+          title: Volumes
+          type: array
+      required:
+      - instances
+      - volumes
+      - publicips
+      - total_price
+      title: ResourcesPricingResponseV2Serializer
+      type: object
+    LoggingOutSerializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: ID of the region in which the logs will be stored
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          description: Indicates if log streaming is enabled or disabled
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: Logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The topic name to stream logs to
+          examples:
+          - my-log-name
+          title: Topic Name
+      required:
+      - enabled
+      - destination_region_id
+      - topic_name
+      title: LoggingOutSerializer
+      type: object
+    K8sClusterLoggingUpdateV2Serializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Destination region id to which the logs will be written
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          default: false
+          description: Enable/disable forwarding logs to LaaS
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: The logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - maxLength: 223
+            minLength: 1
+            pattern: ^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9](?:[-a-z0-9]*[a-z0-9])*)*$
+            type: string
+          - type: 'null'
+          default: null
+          description: The topic name to which the logs will be written
+          examples:
+          - my-log-name
+          title: Topic Name
+      title: K8sClusterLoggingUpdateV2Serializer
+      type: object
+    K8sClusterPoolV2CollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/K8sClusterPoolV2Serializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: K8sClusterPoolV2CollectionSerializer
+      type: object
+    K8sClusterSlurmAddonV2Serializers:
+      discriminator:
+        mapping:
+          'false': '#/components/schemas/K8sClusterSlurmAddonDisableV2Serializer'
+          'true': '#/components/schemas/K8sClusterSlurmAddonEnableV2Serializer'
+        propertyName: enabled
+      oneOf:
+      - $ref: '#/components/schemas/K8sClusterSlurmAddonEnableV2Serializer'
+      - $ref: '#/components/schemas/K8sClusterSlurmAddonDisableV2Serializer'
+      title: K8sClusterSlurmAddonV2Serializers
+    K8sClusterAddonsV2Serializer:
+      properties:
+        slurm:
+          $ref: '#/components/schemas/K8sClusterSlurmAddonV2Serializer'
+          description: Slurm add-on configuration
+      required:
+      - slurm
+      title: K8sClusterAddonsV2Serializer
+      type: object
+    K8sClusterCSICreateV2Serializer:
+      properties:
+        nfs:
+          $ref: '#/components/schemas/K8sClusterNFSCreateV2Serializer'
+          description: NFS CSI driver settings
+          examples:
+          - ddn_enabled: false
+            vast_enabled: true
+      title: K8sClusterCSICreateV2Serializer
+      type: object
+    K8sClusterCNICreateV2Serializer:
+      properties:
+        cilium:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterCiliumV2Serializer'
+          - type: 'null'
+          default: null
+          description: Cilium settings
+        provider:
+          $ref: '#/components/schemas/K8sClusterCNI'
+          default: calico
+          description: CNI provider
+          examples:
+          - calico
+      title: K8sClusterCNICreateV2Serializer
+      type: object
+    K8sClusterLoggingCreateV2Serializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Destination region id to which the logs will be written
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          default: false
+          description: Enable/disable forwarding logs to LaaS
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: The logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - maxLength: 223
+            minLength: 1
+            pattern: ^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9](?:[-a-z0-9]*[a-z0-9])*)*$
+            type: string
+          - type: 'null'
+          default: null
+          description: The topic name to which the logs will be written
+          examples:
+          - my-log-name
+          title: Topic Name
+      title: K8sClusterLoggingCreateV2Serializer
+      type: object
+    K8sClusterPricingRequestV2Serializer:
+      examples:
+      - pools:
+        - flavor_id: g0-standard-1-2
+          node_count: 1
+      properties:
+        pools:
+          description: Cluster pools
+          items:
+            $ref: '#/components/schemas/K8sClusterPoolPricingRequestV2Serializer'
+          title: Pools
+          type: array
+      required:
+      - pools
+      title: K8sClusterPricingRequestV2Serializer
+      type: object
+    InstanceVolumeSerializer:
+      properties:
+        delete_on_termination:
+          description: Whether the volume is deleted together with the VM
+          title: Delete On Termination
+          type: boolean
+        id:
+          description: Volume ID
+          title: Id
+          type: string
+      required:
+      - id
+      - delete_on_termination
+      title: InstanceVolumeSerializer
+      type: object
+    K8sClusterV2Status:
+      enum:
+      - Deleting
+      - Failed
+      - Pending
+      - Provisioned
+      - Provisioning
+      - Unknown
+      title: K8sClusterV2Status
+      type: string
+    K8sClusterNFSV2Serializer:
+      properties:
+        ddn_enabled:
+          description: Whether DDN (Lustre) integration is enabled. When `true`, the DDN EXAScaler CSI driver is deployed in the cluster and each DDN file share defined in the cloud is exposed as a dedicated StorageClass.
+          examples:
+          - true
+          title: Ddn Enabled
+          type: boolean
+        vast_enabled:
+          description: Indicates the status of VAST NFS integration
+          examples:
+          - true
+          title: Vast Enabled
+          type: boolean
+      required:
+      - vast_enabled
+      - ddn_enabled
+      title: K8sClusterNFSV2Serializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    InstanceCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/InstanceSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: InstanceCollectionSerializer
+      type: object
+    K8sClusterCNIV2Serializer:
+      properties:
+        cilium:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterCiliumV2Serializer'
+          - type: 'null'
+          default: null
+          description: Cilium settings
+        provider:
+          $ref: '#/components/schemas/K8sClusterCNI'
+          default: calico
+          description: CNI provider
+          examples:
+          - calico
+      title: K8sClusterCNIV2Serializer
+      type: object
+    K8sClusterPoolCreateV2Serializer:
+      properties:
+        auto_healing_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          description: Enable auto healing
+          examples:
+          - true
+          - false
+          title: Auto Healing Enabled
+        boot_volume_size:
+          anyOf:
+          - maximum: 2000
+            minimum: 10
+            type: integer
+          - type: 'null'
+          default: null
+          description: Boot volume size
+          examples:
+          - 50
+          title: Boot Volume Size
+        boot_volume_type:
+          anyOf:
+          - $ref: '#/components/schemas/VolumeTypeName'
+          - type: 'null'
+          default: null
+          description: Boot volume type
+          examples:
+          - ssd_hiiops
+        crio_config:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: Cri-o configuration for pool nodes
+          examples:
+          - default-ulimits: nofile=1024:2048
+          title: Crio Config
+        flavor_id:
+          description: Flavor ID
+          examples:
+          - g1-standard-1-2
+          title: Flavor Id
+          type: string
+        is_public_ipv4:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          description: Enable public v4 address
+          examples:
+          - true
+          - false
+          title: Is Public Ipv4
+        kubelet_config:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: Kubelet configuration for pool nodes
+          examples:
+          - podMaxPids: '4096'
+          title: Kubelet Config
+        labels:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: {}
+          description: Labels applied to the cluster pool
+          examples:
+          - my-label: foo
+          title: Labels
+        max_node_count:
+          anyOf:
+          - maximum: 200
+            minimum: 1
+            type: integer
+          - type: 'null'
+          default: null
+          description: Maximum node count
+          examples:
+          - 5
+          title: Max Node Count
+        min_node_count:
+          description: Minimum node count
+          examples:
+          - 3
+          maximum: 200
+          minimum: 1
+          title: Min Node Count
+          type: integer
+        name:
+          description: Pool's name
+          examples:
+          - my-pool
+          maxLength: 20
+          minLength: 1
+          pattern: ^[a-z][a-z0-9\-]{0,18}[a-z0-9]$
+          title: Name
+          type: string
+        security_group_ids:
+          description: Security group IDs applied to the cluster pool nodes
+          examples:
+          - - e6ea8f35-82ce-4fb2-b51c-6a24a3a23bce
+          items:
+            format: uuid4
+            type: string
+          title: Security Group Ids
+          type: array
+        servergroup_policy:
+          anyOf:
+          - $ref: '#/components/schemas/ServerGroupPolicyEnum'
+          - type: 'null'
+          default: null
+          description: 'Placement group policy: anti-affinity, soft-anti-affinity or affinity'
+        taints:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: {}
+          description: Taints applied to the cluster pool
+          examples:
+          - my-taint: bar:NoSchedule
+          title: Taints
+      required:
+      - flavor_id
+      - min_node_count
+      - name
+      title: K8sClusterPoolCreateV2Serializer
+      type: object
+    InstanceFlavorSerializer:
+      description: Instances flavor schema embedded into instance schema
+      properties:
+        architecture:
+          description: CPU architecture
+          examples:
+          - x86_64
+          title: Architecture
+          type: string
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        hardware_description:
+          $ref: '#/components/schemas/InstanceFlavorHardwareDescriptionSerializer'
+          description: Additional hardware description
+        os_type:
+          description: Flavor operating system
+          examples:
+          - linux
+          title: Os Type
+          type: string
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      - hardware_description
+      - os_type
+      - architecture
+      title: Instance flavor
+      type: object
+    K8sClusterCNI:
+      enum:
+      - calico
+      - cilium
+      title: K8sClusterCNI
+      type: string
+    VolumeType:
+      enum:
+      - cold
+      - ssd_hiiops
+      - ssd_local
+      - ssd_lowlatency
+      - standard
+      - ultra
+      title: VolumeType
+      type: string
+    K8sClusterPoolPricingRequestV2Serializer:
+      examples:
+      - boot_volume_size: 10
+        boot_volume_type: ssd_hiiops
+        flavor_id: g0-standard-1-2
+        node_count: 1
+      properties:
+        boot_volume_size:
+          anyOf:
+          - maximum: 2000
+            minimum: 10
+            type: integer
+          - type: 'null'
+          default: null
+          description: Size (in GiB) of the boot volume. Required for virtual instances.
+          title: Boot Volume Size
+        boot_volume_type:
+          anyOf:
+          - $ref: '#/components/schemas/VolumeType'
+          - type: 'null'
+          default: null
+          description: Type of the boot volume. Required for virtual instances.
+        flavor_id:
+          description: Flavor ID.
+          title: Flavor Id
+          type: string
+        is_public_ipv4:
+          default: false
+          description: Enable public v4 address.
+          title: Is Public Ipv4
+          type: boolean
+        node_count:
+          default: 1
+          description: Minimum node count.
+          maximum: 200
+          minimum: 1
+          title: Node Count
+          type: integer
+      required:
+      - flavor_id
+      title: K8sClusterPoolPricingRequestV2Serializer
+      type: object
+    IpAssignmentsSerializer:
+      properties:
+        external:
+          description: Is network external
+          title: External
+          type: boolean
+        ip_address:
+          description: Ip address
+          examples:
+          - 123.123.123.1
+          title: Ip Address
+          type: string
+        subnet_id:
+          description: Interface subnet id
+          examples:
+          - eaafdc3c-f48b-4eb4-826f-057dfc7d6476
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      - ip_address
+      - external
+      title: IpAssignmentsSerializer
+      type: object
+    K8sClusterV2Serializer:
+      properties:
+        add_ons:
+          $ref: '#/components/schemas/K8sClusterAddonsV2Serializer'
+          description: Cluster add-ons configuration
+          examples:
+          - slurm:
+              enabled: true
+              file_share_id: cbc94d0e-06c6-4d12-9e86-9782ba14fc8c
+              ssh_key_ids:
+              - 25735292-bd97-44b0-a1af-d7eab876261d
+              - efc01f3a-35b9-4385-89f9-e38439093ee7
+              worker_count: 2
+        authentication:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterAuthenticationV2Serializer'
+          - type: 'null'
+          default: null
+          description: Cluster authentication settings
+          examples:
+          - kubeconfig_created_at: '2024-02-15T11:53:03Z'
+            kubeconfig_expires_at: '2026-02-15T11:53:03Z'
+            oidc:
+              client_id: kubernetes
+              groups_claim: groups
+              groups_prefix: 'oidc:'
+              issuer_url: https://accounts.provider.example
+              required_claims:
+                claim: value
+              signing_algs:
+              - RS256
+              - RS512
+              username_claim: sub
+              username_prefix: 'oidc:'
+        autoscaler_config:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: "Cluster autoscaler configuration.\n\n  It contains overrides to the default cluster-autoscaler parameters provided by the platform."
+          examples:
+          - scale-down-unneeded-time: 5m
+          title: Autoscaler Config
+        cni:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterCNIV2Serializer'
+          - type: 'null'
+          default: null
+          description: Cluster CNI settings
+        created_at:
+          description: Function creation date
+          examples:
+          - '2023-02-15T11:53:03Z'
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Task that created this entity
+          examples:
+          - 1772de21-f013-4b70-9f8f-a518985b3bc2
+          title: Creator Task Id
+        csi:
+          $ref: '#/components/schemas/K8sClusterCSIV2Serializer'
+          description: Cluster CSI settings
+        ddos_profile:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterDdosProfileV2Serializer'
+          - type: 'null'
+          default: null
+          description: Advanced DDoS Protection profile
+          examples:
+          - enabled: true
+            fields:
+            - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+            profile_template: 29
+        fixed_network:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: ''
+          description: Fixed network id
+          examples:
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          title: Fixed Network
+        fixed_subnet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: ''
+          description: Fixed subnet id
+          examples:
+          - 90729bc3-dd37-4761-ae09-b32f2f0a365b
+          title: Fixed Subnet
+        id:
+          description: Cluster pool uuid
+          examples:
+          - f01fd9a0-9548-48ba-82dc-a8c8b2d6f2f1
+          title: Id
+          type: string
+        is_ipv6:
+          default: false
+          description: Enable public v6 address
+          examples:
+          - true
+          - false
+          title: Is Ipv6
+          type: boolean
+        is_public:
+          description: Cluster is public
+          examples:
+          - false
+          title: Is Public
+          type: boolean
+        keypair:
+          description: Keypair
+          examples:
+          - mykeypair
+          title: Keypair
+          type: string
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingOutSerializer'
+          - type: 'null'
+          description: Logging configuration
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+        name:
+          description: Name
+          examples:
+          - test k8s
+          title: Name
+          type: string
+        pods_ip_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: 172.16.0.0/18
+          description: The IP pool for the pods
+          examples:
+          - 172.16.0.0/18
+          title: Pods Ip Pool
+        pods_ipv6_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The IPv6 pool for the pods
+          examples:
+          - 2a03:90c0:88:393::/64
+          title: Pods Ipv6 Pool
+        pools:
+          description: pools
+          items:
+            $ref: '#/components/schemas/K8sClusterPoolV2Serializer'
+          title: Pools
+          type: array
+        services_ip_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: 172.24.0.0/18
+          description: The IP pool for the services
+          examples:
+          - 172.24.0.0/18
+          title: Services Ip Pool
+        services_ipv6_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The IPv6 pool for the services
+          examples:
+          - 2a03:90c0:88:381::/108
+          title: Services Ipv6 Pool
+        status:
+          $ref: '#/components/schemas/K8sClusterV2Status'
+          description: Status
+          examples:
+          - Provisioned
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        version:
+          description: K8s version
+          examples:
+          - v1.28.1
+          title: Version
+          type: string
+      required:
+      - add_ons
+      - csi
+      - created_at
+      - id
+      - is_public
+      - keypair
+      - logging
+      - name
+      - pools
+      - status
+      - version
+      title: K8sClusterV2Serializer
+      type: object
+    IsolationSerializer:
+      properties:
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The reason of instance isolation if it is isolated from external internet.
+          examples:
+          - Suspicious activities
+          title: Reason
+      title: IsolationSerializer
+      type: object
+    BareMetalFlavorSerializer:
+      description: Bare metal flavor schema embedded into instance schema
+      properties:
+        architecture:
+          description: CPU architecture
+          examples:
+          - x86_64
+          title: Architecture
+          type: string
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        hardware_description:
+          $ref: '#/components/schemas/BareMetalFlavorHardwareDescriptionSerializer'
+          description: Additional hardware description
+        os_type:
+          description: Operating system
+          examples:
+          - linux
+          title: Os Type
+          type: string
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        resource_class:
+          description: Flavor resource class for mapping to hardware capacity
+          examples:
+          - bm2-hf-medium
+          title: Resource Class
+          type: string
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      - hardware_description
+      - os_type
+      - architecture
+      - resource_class
+      title: Bare metal flavor
+      type: object
+    K8sClusterCheckLimitsPoolV2Serializer:
+      properties:
+        boot_volume_size:
+          anyOf:
+          - maximum: 2000
+            minimum: 10
+            type: integer
+          - type: 'null'
+          default: null
+          description: Boot volume size
+          examples:
+          - 50
+          title: Boot Volume Size
+        flavor_id:
+          description: Flavor ID
+          examples:
+          - g1-standard-1-2
+          title: Flavor Id
+          type: string
+        is_public_ipv4:
+          default: false
+          description: Enable public IPv4 address for pool nodes. Each node consumes one external IP quota unit
+          examples:
+          - true
+          title: Is Public Ipv4
+          type: boolean
+        max_node_count:
+          anyOf:
+          - maximum: 200
+            minimum: 1
+            type: integer
+          - type: 'null'
+          default: null
+          description: Maximum node count
+          examples:
+          - 5
+          title: Max Node Count
+        min_node_count:
+          anyOf:
+          - maximum: 200
+            minimum: 1
+            type: integer
+          - type: 'null'
+          default: 1
+          description: Minimum node count
+          examples:
+          - 3
+          title: Min Node Count
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Name of the cluster pool
+          examples:
+          - test
+          title: Name
+        node_count:
+          anyOf:
+          - maximum: 200
+            minimum: 1
+            type: integer
+          - type: 'null'
+          default: 1
+          description: Maximum node count
+          examples:
+          - 5
+          title: Node Count
+        servergroup_policy:
+          anyOf:
+          - $ref: '#/components/schemas/ServerGroupPolicyEnum'
+          - type: 'null'
+          default: null
+          description: 'Placement group policy: anti-affinity, soft-anti-affinity or affinity'
+          examples:
+          - anti-affinity
+      required:
+      - flavor_id
+      title: K8sClusterCheckLimitsPoolV2Serializer
+      type: object
+    InstanceFlavorHardwareDescriptionSerializer:
+      properties:
+        ram:
+          description: RAM description
+          examples:
+          - '16384'
+          title: Ram
+          type: string
+        vcpus:
+          description: CPU description
+          examples:
+          - '16'
+          title: Vcpus
+          type: string
+      required:
+      - vcpus
+      - ram
+      title: InstanceFlavorHardwareDescriptionSchema hardware hints for a flavor
+      type: object
+    K8sClusterAuthenticationV2Serializer:
+      properties:
+        kubeconfig_created_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Kubeconfig creation date
+          examples:
+          - '2024-02-15T11:53:03Z'
+          title: Kubeconfig Created At
+        kubeconfig_expires_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Kubeconfig expiration date
+          examples:
+          - '2026-02-15T11:53:03Z'
+          title: Kubeconfig Expires At
+        oidc:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterOIDCV2Serializer'
+          - type: 'null'
+          default: null
+          description: OIDC authentication settings
+      title: K8sClusterAuthenticationV2Serializer
+      type: object
+    K8sClusterVersionV2CollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/K8sClusterVersionV2Serializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: K8sClusterVersionV2CollectionSerializer
+      type: object
+    TagSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      properties:
+        key:
+          description: Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag
+          title: Key
+          type: string
+        read_only:
+          description: If true, the tag is read-only and cannot be modified by the user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        value:
+          description: Tag value. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag-value
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      - read_only
+      title: TagSerializer
+      type: object
+    InstanceFixedAddressShortSerializer:
+      description: 'Schema for `fixed` addresses. This schema is used when listing instances.
+
+        It omits the `subnet_name` and `subnet_id` fields.'
+      properties:
+        addr:
+          description: IP address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        interface_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Interface name. This field will be `null` if `with_interfaces_name=true` is not set in the request when listing instances. It will also be `null` if the `interface_name` was not specified during instance creation or when attaching the interface.
+          examples:
+          - my-interface
+          title: Interface Name
+        type:
+          const: fixed
+          description: Type of the address
+          examples:
+          - fixed
+          title: Type
+          type: string
+      required:
+      - addr
+      - type
+      - interface_name
+      title: Fixed IP Address (short)
+      type: object
+    K8sClusterUpdateV2Serializer:
+      properties:
+        add_ons:
+          $ref: '#/components/schemas/K8sClusterAddonsUpdateV2Serializer'
+          description: Cluster add-ons configuration
+          examples:
+          - slurm:
+              enabled: true
+              file_share_id: cbc94d0e-06c6-4d12-9e86-9782ba14fc8c
+              ssh_key_ids:
+              - 25735292-bd97-44b0-a1af-d7eab876261d
+              - efc01f3a-35b9-4385-89f9-e38439093ee7
+              worker_count: 2
+        authentication:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterAuthenticationCreateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Authentication settings
+          examples:
+          - oidc:
+              client_id: kubernetes
+              groups_claim: groups
+              groups_prefix: 'oidc:'
+              issuer_url: https://accounts.provider.example
+              required_claims:
+                claim: value
+              signing_algs:
+              - RS256
+              - RS512
+              username_claim: sub
+              username_prefix: 'oidc:'
+        autoscaler_config:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: "Cluster autoscaler configuration.\n\n  It allows you to override the default cluster-autoscaler parameters provided by the platform with your preferred values.\n\n  Supported parameters (in alphabetical order):\n  - balance-similar-node-groups (boolean: true/false) - Detect similar node groups and balance the number of nodes between them.\n  - expander (string: random, most-pods, least-waste, price, priority, grpc) - Type of node group expander to be used in scale up. Specifying multiple values separated by commas will call the expanders in succession until there is only one option remaining.\n  - expendable-pods-priority-cutoff (float) - Pods with priority below cutoff will be expendable. They can be killed without any consideration during scale down and they don't cause scale up. Pods with null priority (PodPriority disabled) are non expendable.\n  - ignore-daemonsets-utilization (boolean: true/false) - Should CA ignore DaemonSet pods when calculating resource utilization for scaling down.\n  - max-empty-bulk-delete (integer) - Maximum number of empty nodes that can be deleted at the same time.\n  - max-graceful-termination-sec (integer) - Maximum number of seconds CA waits for pod termination when trying to scale down a node.\n  - max-node-provision-time (duration: e.g., '15m') - The default maximum time CA waits for node to be provisioned - the value can be overridden per node group.\n  - max-total-unready-percentage (float) - Maximum percentage of unready nodes in the cluster. After this is exceeded, CA halts operations.\n  - new-pod-scale-up-delay (duration: e.g., '10s') - Pods less than this old will not be considered for scale-up. Can be increased for individual pods through annotation.\n  - ok-total-unready-count (integer) - Number of allowed unready nodes, irrespective of max-total-unready-percentage.\n  - scale-down-delay-after-add (duration: e.g., '10m') - How long after scale up that scale down evaluation resumes.\n  - scale-down-delay-after-delete (duration: e.g., '10s') - How long after node deletion that scale down evaluation resumes.\n  - scale-down-delay-after-failure (duration: e.g., '3m') - How long after scale down failure that scale down evaluation resumes.\n  - scale-down-enabled (boolean: true/false) - Should CA scale down the cluster.\n  - scale-down-unneeded-time (duration: e.g., '10m') - How long a node should be unneeded before it is eligible for scale down.\n  - scale-down-unready-time (duration: e.g., '20m') - How long an unready node should be unneeded before it is eligible for scale down.\n  - scale-down-utilization-threshold (float) - The maximum value between the sum of cpu requests and sum of memory requests of all pods running on the node divided by node's corresponding allocatable resource, below which a node can be considered for scale down.\n  - scan-interval (duration: e.g., '10s') - How often cluster is reevaluated for scale up or down.\n  - skip-nodes-with-custom-controller-pods (boolean: true/false) - If true cluster autoscaler will never delete nodes with pods owned by custom controllers.\n  - skip-nodes-with-local-storage (boolean: true/false) - If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath.\n  - skip-nodes-with-system-pods (boolean: true/false) - If true cluster autoscaler will never delete nodes with pods from kube-system (except for DaemonSet or mirror pods)."
+          examples:
+          - scale-down-unneeded-time: 5m
+          title: Autoscaler Config
+        cni:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterCNICreateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Cluster CNI settings
+          examples:
+          - cilium:
+              cni_exclusive: true
+              encryption: true
+              hubble_relay: true
+              hubble_ui: true
+              lb_acceleration: true
+              lb_mode: snat
+              tunnel: geneve
+            provider: cilium
+        ddos_profile:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterDdosProfileUpdateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Advanced DDoS Protection profile
+          examples:
+          - enabled: true
+            fields:
+            - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+            profile_template: 29
+          - enabled: false
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterLoggingUpdateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+          - enabled: false
+          - null
+      title: K8sClusterUpdateV2Serializer
+      type: object
+    K8sClusterVersionV2Serializer:
+      properties:
+        version:
+          description: List of supported Kubernetes cluster versions
+          examples:
+          - v1.28.1
+          title: Version
+          type: string
+      required:
+      - version
+      title: K8sClusterVersionV2Serializer
+      type: object
+    K8sClusterDdosProfileFieldV2Serializer:
+      properties:
+        base_field:
+          description: ''
+          examples:
+          - 10
+          title: Base Field
+          type: integer
+        field_value:
+          anyOf:
+          - {}
+          - type: 'null'
+          default: null
+          description: Complex value for the DDoS profile field
+          examples:
+          - - 45046
+            - 45047
+          title: Field Value
+      required:
+      - base_field
+      title: K8sClusterDdosProfileFieldV2Serializer
+      type: object
+    K8sClusterCheckLimitsV2Serializer:
+      properties:
+        fixed_network:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Fixed network ID. When set, OVPN infrastructure quotas (LB, FIP) are checked.
+          title: Fixed Network
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterCheckLimitsLoggingV2Serializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            topic_name: my-log-name
+          - null
+        pools:
+          description: K8s pools to create
+          examples:
+          - - flavor_id: bm2-hf-medium
+              min_node_count: 1
+              name: test
+          items:
+            $ref: '#/components/schemas/K8sClusterCheckLimitsPoolV2Serializer'
+          title: Pools
+          type: array
+      required:
+      - pools
+      title: K8sClusterCheckLimitsV2Serializer
+      type: object
+    LaasIndexRetentionPolicyPydanticSerializer:
+      properties:
+        period:
+          anyOf:
+          - exclusiveMinimum: 0
+            maximum: 1825
+            type: integer
+          - type: 'null'
+          description: Duration of days for which logs must be kept.
+          examples:
+          - 45
+          title: Period
+      required:
+      - period
+      title: LaasIndexRetentionPolicyPydanticSerializer
+      type: object
+    K8sClusterDdosProfileV2Serializer:
+      properties:
+        enabled:
+          description: Enable advanced DDoS protection
+          examples:
+          - true
+          title: Enabled
+          type: boolean
+        fields:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/K8sClusterDdosProfileFieldV2Serializer'
+            type: array
+          - type: 'null'
+          default: null
+          description: DDoS profile parameters
+          examples:
+          - - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+          title: Fields
+        profile_template:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: DDoS profile template ID
+          examples:
+          - 29
+          title: Profile Template
+        profile_template_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: DDoS profile template name
+          examples: []
+          title: Profile Template Name
+      required:
+      - enabled
+      title: K8sClusterDdosProfileV2Serializer
+      type: object
+    K8sClusterSlurmAddonEnableV2Serializer:
+      properties:
+        enabled:
+          const: true
+          description: "The Slurm add-on will be enabled in the cluster.\n\n  This add-on is only supported in clusters running Kubernetes v1.31 and v1.32 with at least 1 GPU cluster pool and VAST NFS support enabled."
+          examples:
+          - true
+          title: Enabled
+          type: boolean
+        file_share_id:
+          description: "ID of a VAST file share to be used as Slurm storage.\n\n  The Slurm add-on will create separate Persistent Volume Claims for different purposes (controller spool, worker spool, jail) on that file share.\n\n  The file share must have `root_squash` disabled, while `path_length` and `allowed_characters` settings must be set to `NPL`."
+          examples:
+          - cbc94d0e-06c6-4d12-9e86-9782ba14fc8c
+          format: uuid4
+          title: File Share Id
+          type: string
+        ssh_key_ids:
+          description: IDs of SSH keys to authorize for SSH connection to Slurm login nodes.
+          examples:
+          - - 25735292-bd97-44b0-a1af-d7eab876261d
+            - efc01f3a-35b9-4385-89f9-e38439093ee7
+          items:
+            format: uuid4
+            type: string
+          minItems: 1
+          title: Ssh Key Ids
+          type: array
+        worker_count:
+          description: 'Size of the worker pool, i.e. the number of Slurm worker nodes.
+
+
+            Each Slurm worker node will be backed by a Pod scheduled on one of cluster''s GPU nodes.
+
+
+            Note: Downscaling (reducing worker count) is not supported.'
+          examples:
+          - 2
+          minimum: 1
+          title: Worker Count
+          type: integer
+      required:
+      - enabled
+      - file_share_id
+      - ssh_key_ids
+      - worker_count
+      title: K8sClusterSlurmAddonEnableV2Serializer
+      type: object
+    K8sClusterDdosProfileUpdateV2Serializer:
+      properties:
+        enabled:
+          description: Enable advanced DDoS protection
+          examples:
+          - true
+          title: Enabled
+          type: boolean
+        fields:
+          default: []
+          description: DDoS profile parameters
+          examples:
+          - - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+          items:
+            $ref: '#/components/schemas/K8sClusterDdosProfileFieldV2Serializer'
+          title: Fields
+          type: array
+        profile_template:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: DDoS profile template ID
+          examples:
+          - 29
+          title: Profile Template
+        profile_template_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: DDoS profile template name
+          examples: []
+          title: Profile Template Name
+      required:
+      - enabled
+      title: K8sClusterDdosProfileUpdateV2Serializer
+      type: object
+    DeprecatedGpuClusterFlavorSerializer:
+      description: GPU cluster flavor schema embedded into instance schema
+      properties:
+        architecture:
+          description: CPU architecture
+          examples:
+          - x86_64
+          title: Architecture
+          type: string
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        hardware_description:
+          $ref: '#/components/schemas/DeprecatedAIClusterServerFlavorHardwareDescriptionSerializer'
+          description: Additional hardware description
+        os_type:
+          description: Operating system
+          examples:
+          - linux
+          title: Os Type
+          type: string
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        resource_class:
+          description: Flavor resource class for mapping to hardware capacity
+          examples:
+          - bm2-hf-medium
+          title: Resource Class
+          type: string
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      - hardware_description
+      - os_type
+      - architecture
+      - resource_class
+      title: GPU cluster flavor
+      type: object
+    DeprecatedAIClusterServerFlavorHardwareDescriptionSerializer:
+      properties:
+        cpu:
+          description: Human-readable CPU description
+          examples:
+          - 1x Intel Xeon 4C/8T 3.7 GHz
+          title: Cpu
+          type: string
+        disk:
+          description: Human-readable disk description
+          examples:
+          - 2x 250GiB SSD
+          title: Disk
+          type: string
+        gpu:
+          description: Human-readable GPU description
+          examples:
+          - NVIDIA h100-8GPU (80GB)
+          title: Gpu
+          type: string
+        license:
+          description: If the flavor is licensed, this field contains the license type
+          examples:
+          - ''
+          title: License
+          type: string
+        network:
+          description: Human-readable NIC description
+          examples:
+          - 1x 500Mbps
+          title: Network
+          type: string
+        ram:
+          description: Human-readable RAM description
+          examples:
+          - 32 GiB
+          title: Ram
+          type: string
+      required:
+      - cpu
+      - ram
+      - disk
+      - license
+      - network
+      - gpu
+      title: Detailed flavor hardware description of GPU cluster server flavor
+      type: object
+    K8sClusterNFSCreateV2Serializer:
+      properties:
+        ddn_enabled:
+          default: false
+          description: Enable or disable DDN (Lustre) integration. The default value is `false`. When set to `true`, the DDN EXAScaler CSI driver will be deployed in the cluster with a dedicated StorageClass for each DDN file share defined in the cloud. At least one DDN file share must already exist in the project; otherwise cluster creation fails with a `400` validation error. Existing file shares are available immediately, while those created after the cluster may take a few minutes to appear.
+          examples:
+          - true
+          title: Ddn Enabled
+          type: boolean
+        vast_enabled:
+          default: false
+          description: Enable or disable VAST NFS integration. The default value is `false`. When set to `true`, a dedicated StorageClass will be created in the cluster for each VAST NFS file share defined in the cloud. All file shares created prior to cluster creation will be available immediately, while those created afterward may take a few minutes for to appear.
+          examples:
+          - true
+          title: Vast Enabled
+          type: boolean
+      title: K8sClusterNFSCreateV2Serializer
+      type: object
+    DdosProfileStatusSerializer:
+      properties:
+        error_description:
+          description: Detailed error message describing any issues with the profile operation
+          examples:
+          - An error occured while deleting profile
+          title: Error Description
+          type: string
+        status:
+          description: Current operational status of the DDoS protection profile
+          examples:
+          - Error Deleting
+          maxLength: 30
+          minLength: 3
+          title: Status
+          type: string
+      required:
+      - status
+      - error_description
+      title: DdosProfileStatusSerializer
+      type: object
+    K8sClusterCertificateV2Serializer:
+      properties:
+        certificate:
+          description: Cluster CA certificate
+          examples: []
+          title: Certificate
+          type: string
+        key:
+          description: Cluster CA private key
+          examples: []
+          title: Key
+          type: string
+      required:
+      - certificate
+      - key
+      title: K8sClusterCertificateV2Serializer
+      type: object
+    K8sClusterCiliumRoutingMode:
+      enum:
+      - native
+      - tunnel
+      title: K8sClusterCiliumRoutingMode
+      type: string
+    K8sClusterV2CollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/K8sClusterV2Serializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: K8sClusterV2CollectionSerializer
+      type: object
+    BareMetalFlavorExtendedCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/BareMetalFlavorExtendedSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: BareMetalFlavorExtendedCollectionSerializer
+      type: object
+    InstanceStatus:
+      enum:
+      - ACTIVE
+      - BUILD
+      - DELETED
+      - ERROR
+      - HARD_REBOOT
+      - MIGRATING
+      - PASSWORD
+      - PAUSED
+      - REBOOT
+      - REBUILD
+      - RESCUE
+      - RESIZE
+      - REVERT_RESIZE
+      - SHELVED
+      - SHELVED_OFFLOADED
+      - SHUTOFF
+      - SOFT_DELETED
+      - SUSPENDED
+      - UNKNOWN
+      - VERIFY_RESIZE
+      title: InstanceStatus
+      type: string
+    K8sClusterUpgradeV2Serializer:
+      properties:
+        version:
+          description: Target k8s cluster version
+          examples:
+          - v1.28.1
+          title: Version
+          type: string
+      required:
+      - version
+      title: K8sClusterUpgradeV2Serializer
+      type: object
+    K8sClusterPoolV2Serializer:
+      properties:
+        auto_healing_enabled:
+          description: Indicates the status of auto healing
+          examples:
+          - true
+          title: Auto Healing Enabled
+          type: boolean
+        boot_volume_size:
+          description: Size of the boot volume
+          examples:
+          - 50
+          title: Boot Volume Size
+          type: integer
+        boot_volume_type:
+          description: Type of the boot volume
+          examples:
+          - ssd_hiiops
+          title: Boot Volume Type
+          type: string
+        created_at:
+          description: Date of function creation
+          examples:
+          - '2023-02-15T11:53:03+03:00'
+          title: Created At
+          type: string
+        crio_config:
+          additionalProperties:
+            type: string
+          description: Crio configuration for pool nodes
+          examples:
+          - default-ulimits: nofile=1024:2048
+          title: Crio Config
+          type: object
+        flavor_id:
+          description: ID of the cluster pool flavor
+          examples:
+          - g1-standard-1-2
+          title: Flavor Id
+          type: string
+        id:
+          description: UUID of the cluster pool
+          examples:
+          - f01fd9a0-9548-48ba-82dc-a8c8b2d6f2f1
+          title: Id
+          type: string
+        is_public_ipv4:
+          description: Indicates if the pool is public
+          examples:
+          - true
+          title: Is Public Ipv4
+          type: boolean
+        kubelet_config:
+          additionalProperties:
+            type: string
+          description: Kubelet configuration for pool nodes
+          examples:
+          - podMaxPids: '4096'
+          title: Kubelet Config
+          type: object
+        labels:
+          additionalProperties:
+            type: string
+          description: Labels applied to the cluster pool
+          examples:
+          - my-label: foo
+          title: Labels
+          type: object
+        max_node_count:
+          description: Maximum node count in the cluster pool
+          examples:
+          - 10
+          title: Max Node Count
+          type: integer
+        min_node_count:
+          description: Minimum node count in the cluster pool
+          examples:
+          - 1
+          title: Min Node Count
+          type: integer
+        name:
+          description: Name of the cluster pool
+          examples:
+          - test
+          title: Name
+          type: string
+        node_count:
+          description: Node count in the cluster pool
+          examples:
+          - 2
+          title: Node Count
+          type: integer
+        security_group_ids:
+          description: Security group IDs applied to the cluster pool nodes
+          examples:
+          - - e6ea8f35-82ce-4fb2-b51c-6a24a3a23bce
+          items:
+            type: string
+          title: Security Group Ids
+          type: array
+        servergroup_id:
+          default: ''
+          description: Placement group ID
+          examples:
+          - 1772de21-f013-4b70-9f8f-a518985b3bc2
+          title: Servergroup Id
+          type: string
+        servergroup_name:
+          default: ''
+          description: Placement group name
+          examples:
+          - my-placement-group
+          title: Servergroup Name
+          type: string
+        servergroup_policy:
+          default: ''
+          description: Anti-affinity, affinity or soft-anti-affinity placement group policy
+          examples:
+          - anti-affinity
+          title: Servergroup Policy
+          type: string
+        status:
+          description: Status of the cluster pool
+          examples:
+          - Running
+          title: Status
+          type: string
+        taints:
+          additionalProperties:
+            type: string
+          description: Taints applied to the cluster pool
+          examples:
+          - my-taint: bar:NoSchedule
+          title: Taints
+          type: object
+      required:
+      - auto_healing_enabled
+      - boot_volume_size
+      - boot_volume_type
+      - created_at
+      - crio_config
+      - flavor_id
+      - id
+      - is_public_ipv4
+      - kubelet_config
+      - max_node_count
+      - min_node_count
+      - name
+      - node_count
+      - status
+      - labels
+      - taints
+      - security_group_ids
+      title: K8sClusterPoolV2Serializer
+      type: object
+    OIDCSigningAlgorithmEnum:
+      enum:
+      - ES256
+      - ES384
+      - ES512
+      - PS256
+      - PS384
+      - PS512
+      - RS256
+      - RS384
+      - RS512
+      title: OIDCSigningAlgorithmEnum
+      type: string
+    ProtocolsOnPortSerializer:
+      properties:
+        port:
+          description: Network port number for which protocols are configured
+          examples:
+          - '80'
+          title: Port
+          type: string
+        protocols:
+          description: List of network protocols enabled on the specified port
+          examples:
+          - - TCP
+            - HTTP
+          items:
+            type: string
+          title: Protocols
+          type: array
+      required:
+      - port
+      - protocols
+      title: ProtocolsOnPortSerializer
+      type: object
+    ProfileOptionsSerializer:
+      properties:
+        active:
+          description: Controls whether the DDoS protection profile is enabled and actively protecting the resource
+          examples:
+          - true
+          title: Active
+          type: boolean
+        bgp:
+          description: Enables Border Gateway Protocol (BGP) routing for DDoS protection traffic
+          examples:
+          - true
+          title: Bgp
+          type: boolean
+      required:
+      - active
+      - bgp
+      title: ProfileOptionsSerializer
+      type: object
+    K8sClusterAddonsUpdateV2Serializer:
+      properties:
+        slurm:
+          $ref: '#/components/schemas/K8sClusterSlurmAddonV2Serializers'
+          description: Slurm add-on configuration
+      title: K8sClusterAddonsUpdateV2Serializer
+      type: object
+    K8sClusterCiliumV2Serializer:
+      properties:
+        cni_exclusive:
+          default: true
+          description: Whether Cilium manages networking exclusively. Set to `false` to allow other CNI components to coexist with Cilium.
+          examples:
+          - true
+          title: Cni Exclusive
+          type: boolean
+        encryption:
+          default: false
+          description: Wireguard encryption
+          title: Encryption
+          type: boolean
+        hubble_relay:
+          default: false
+          description: Hubble Relay
+          title: Hubble Relay
+          type: boolean
+        hubble_ui:
+          default: false
+          description: Hubble UI
+          title: Hubble Ui
+          type: boolean
+        lb_acceleration:
+          default: false
+          description: LoadBalancer acceleration
+          title: Lb Acceleration
+          type: boolean
+        lb_mode:
+          $ref: '#/components/schemas/K8sClusterCiliumLBMode'
+          default: snat
+          description: LoadBalancer mode
+          examples:
+          - hybrid
+          - snat
+          - dsr
+        mask_size:
+          default: 24
+          description: Mask size for IPv4
+          examples:
+          - 24
+          title: Mask Size
+          type: integer
+        mask_size_v6:
+          default: 120
+          description: Mask size for IPv6
+          examples:
+          - 120
+          title: Mask Size V6
+          type: integer
+        routing_mode:
+          $ref: '#/components/schemas/K8sClusterCiliumRoutingMode'
+          default: tunnel
+          description: Routing mode
+          examples:
+          - tunnel
+        tunnel:
+          $ref: '#/components/schemas/K8sClusterCiliumTunnel'
+          default: geneve
+          description: CNI provider
+          examples:
+          - geneve
+      title: K8sClusterCiliumV2Serializer
+      type: object
+    K8sClusterCSIV2Serializer:
+      properties:
+        nfs:
+          $ref: '#/components/schemas/K8sClusterNFSV2Serializer'
+          description: NFS settings
+          examples:
+          - ddn_enabled: false
+            vast_enabled: true
+      required:
+      - nfs
+      title: K8sClusterCSIV2Serializer
+      type: object
+    K8sClusterCheckLimitsLoggingV2Serializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Destination region id to which the logs will be written
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          default: false
+          description: Enable/disable forwarding logs to LaaS
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: The logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - maxLength: 223
+            minLength: 1
+            pattern: ^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9](?:[-a-z0-9]*[a-z0-9])*)*$
+            type: string
+          - type: 'null'
+          default: null
+          description: The topic name to which the logs will be written
+          examples:
+          - my-log-name
+          title: Topic Name
+      title: K8sClusterCheckLimitsLoggingV2Serializer
+      type: object
+    K8sClusterAddonsCreateV2Serializer:
+      properties:
+        slurm:
+          $ref: '#/components/schemas/K8sClusterSlurmAddonEnableV2Serializer'
+          description: Slurm add-on configuration
+      title: K8sClusterAddonsCreateV2Serializer
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    K8sClusterPoolResizeV2Serializer:
+      properties:
+        node_count:
+          description: Target node count
+          examples:
+          - 2
+          maximum: 200
+          minimum: 1
+          title: Node Count
+          type: integer
+      required:
+      - node_count
+      title: K8sClusterPoolResizeV2Serializer
+      type: object
+    K8sClusterAuthenticationCreateV2Serializer:
+      properties:
+        oidc:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterOIDCV2Serializer'
+          - type: 'null'
+          default: null
+          description: OIDC authentication settings
+      title: K8sClusterAuthenticationCreateV2Serializer
+      type: object
+    VolumeTypeName:
+      enum:
+      - cold
+      - ssd_hiiops
+      - ssd_local
+      - ssd_lowlatency
+      - standard
+      - ultra
+      title: VolumeTypeName
+      type: string
+    BareMetalFlavorExtendedSerializer:
+      description: Bare metal flavor schema
+      properties:
+        architecture:
+          description: Flavor architecture type
+          examples:
+          - x86_64
+          title: Architecture
+          type: string
+        capacity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of available instances of given configuration
+          examples:
+          - 1
+          title: Capacity
+        currency_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Currency code. Shown if the include_prices query parameter if set to true
+          examples:
+          - USD
+          title: Currency Code
+        disabled:
+          description: Disabled flavor flag
+          examples:
+          - false
+          title: Disabled
+          type: boolean
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        hardware_description:
+          additionalProperties:
+            type: string
+          default: {}
+          description: Additional hardware description
+          title: Hardware Description
+          type: object
+        os_type:
+          description: Flavor operating system
+          examples:
+          - linux
+          title: Os Type
+          type: string
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Price per hour. Shown if the include_prices query parameter if set to true
+          examples:
+          - 1
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Price per month. Shown if the include_prices query parameter if set to true
+          examples:
+          - 720
+          title: Price Per Month
+        price_status:
+          anyOf:
+          - $ref: '#/components/schemas/PriceDisplayStatus'
+          - type: 'null'
+          default: null
+          description: Price status for the UI
+          examples:
+          - show
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        reserved_capacity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of available instances of given flavor from reservations
+          examples:
+          - 5
+          title: Reserved Capacity
+        resource_class:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Flavor resource class for mapping to hardware capacity
+          examples:
+          - bm1-ai-small
+          title: Resource Class
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      - disabled
+      - os_type
+      - architecture
+      - resource_class
+      title: Bare metal flavor schema
+      type: object
+    GetClientProfileSerializer:
+      properties:
+        fields:
+          description: List of configured field values for the protection profile
+          items:
+            $ref: '#/components/schemas/ClientProfileFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection profile
+          examples:
+          - 0
+          title: Id
+          type: integer
+        options:
+          $ref: '#/components/schemas/ProfileOptionsSerializer'
+          description: Configuration options controlling profile activation and BGP routing
+          examples:
+          - active: true
+            bgp: true
+        profile_template:
+          anyOf:
+          - $ref: '#/components/schemas/ClientProfileTemplateSerializer'
+          - type: 'null'
+          description: Complete template configuration data used for this profile
+        profile_template_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description of the protection template used for this profile
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Profile Template Description
+        protocols:
+          description: List of network protocols and ports configured for protection
+          examples:
+          - - port: '80'
+              protocols:
+              - TCP
+              - HTTP
+            - port: '53'
+              protocols:
+              - UDP
+          items:
+            $ref: '#/components/schemas/ProtocolsOnPortSerializer'
+          title: Protocols
+          type: array
+        site:
+          description: Geographic site identifier where the protection is deployed
+          examples:
+          - ED
+          maxLength: 50
+          title: Site
+          type: string
+        status:
+          $ref: '#/components/schemas/DdosProfileStatusSerializer'
+          description: Current operational status and any error information for the profile
+          examples:
+          - error_description: ''
+            status: Updated
+      required:
+      - id
+      - options
+      - site
+      - protocols
+      - status
+      - profile_template_description
+      - profile_template
+      - fields
+      title: GetClientProfileSerializer
+      type: object
+    ClientProfileTemplateFieldSerializer:
+      properties:
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      title: ClientProfileTemplateFieldSerializer
+      type: object
+    NameSerializerPydantic:
+      properties:
+        name:
+          description: Name.
+          examples:
+          - some_name
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+      required:
+      - name
+      title: NameSerializerPydantic
+      type: object
+    InstanceFixedAddressSerializer:
+      description: Schema for `fixed` addresses. This schema is used when fetching a single instance.
+      properties:
+        addr:
+          description: IP address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        interface_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Interface name. This field will be `null` if `with_interfaces_name=true` is not set in the request when listing instances. It will also be `null` if the `interface_name` was not specified during instance creation or when attaching the interface.
+          examples:
+          - my-interface
+          title: Interface Name
+        subnet_id:
+          description: The unique identifier of the subnet associated with this address. Included only in the response for a single-resource lookup (GET by ID). For the trunk subports, this field is always set.
+          examples:
+          - ba83aec4-7bc1-4979-b934-a11fc1d36cf3
+          title: Subnet Id
+          type: string
+        subnet_name:
+          description: The name of the subnet associated with this address. Included only in the response for a single-resource lookup (GET by ID). For the trunk subports, this field is always set.
+          examples:
+          - my-subnet
+          title: Subnet Name
+          type: string
+        type:
+          const: fixed
+          description: Type of the address
+          examples:
+          - fixed
+          title: Type
+          type: string
+      required:
+      - addr
+      - type
+      - interface_name
+      - subnet_name
+      - subnet_id
+      title: Fixed IP Address
+      type: object
+    K8sClusterConfigV2Serializer:
+      properties:
+        client_certificate:
+          description: String in base64 format. Cluster client certificate
+          examples: []
+          title: Client Certificate
+          type: string
+        client_key:
+          description: String in base64 format. Cluster client key
+          examples: []
+          title: Client Key
+          type: string
+        cluster_ca_certificate:
+          description: String in base64 format. Cluster ca certificate
+          examples: []
+          title: Cluster Ca Certificate
+          type: string
+        config:
+          description: Cluster kubeconfig
+          examples: []
+          title: Config
+          type: string
+        created_at:
+          description: Kubeconfig creation date
+          examples:
+          - '2024-02-15T11:53:03Z'
+          format: date-time
+          title: Created At
+          type: string
+        expires_at:
+          description: Kubeconfig expiration date
+          examples:
+          - '2026-02-15T11:53:03Z'
+          format: date-time
+          title: Expires At
+          type: string
+        host:
+          description: Cluster host
+          examples: []
+          title: Host
+          type: string
+      required:
+      - config
+      - host
+      - cluster_ca_certificate
+      - client_certificate
+      - client_key
+      - created_at
+      - expires_at
+      title: K8sClusterConfigV2Serializer
+      type: object
+    BlackholePortSerializer:
+      properties:
+        AlarmEnd:
+          description: A date-time string giving the time that the alarm ended. If not yet ended, time will be given as 0001-01-01T00:00:00Z
+          examples:
+          - '2025-02-05 12:04:30'
+          format: date-time
+          title: Alarmend
+          type: string
+        AlarmStart:
+          description: A date-time string giving the time that the alarm started
+          examples:
+          - '2025-02-05 12:04:11'
+          format: date-time
+          title: Alarmstart
+          type: string
+        AlarmState:
+          $ref: '#/components/schemas/BlackholePortAlarmState'
+          description: Current state of alarm
+          examples:
+          - alarm
+        AlertDuration:
+          description: Total alert duration
+          examples:
+          - 2 hours
+          title: Alertduration
+          type: string
+        DestinationIP:
+          description: Notification destination IP address
+          examples:
+          - 80.240.114.116
+          title: Destinationip
+          type: string
+        ID:
+          description: ''
+          title: Id
+          type: integer
+      required:
+      - ID
+      - AlarmState
+      - AlarmStart
+      - AlarmEnd
+      - AlertDuration
+      - DestinationIP
+      title: BlackholePortSerializer
+      type: object
+    ServerGroupPolicyEnum:
+      enum:
+      - affinity
+      - anti-affinity
+      - soft-anti-affinity
+      title: ServerGroupPolicyEnum
+      type: string
+    K8sClusterCiliumTunnel:
+      enum:
+      - ''
+      - geneve
+      - vxlan
+      title: K8sClusterCiliumTunnel
+      type: string
+    K8sClusterQuotaResponseSerializer:
+      description: 'Response schema for K8s cluster quota check.
+
+
+        Returns quota fields that are exceeded. Fields are only included when
+
+        regional limits would be violated. Empty response means no quotas exceeded.'
+      properties:
+        baremetal_gpu_a100_count_limit:
+          description: Bare metal A100 GPU server count limit
+          examples:
+          - 5
+          title: Baremetal Gpu A100 Count Limit
+          type: integer
+        baremetal_gpu_a100_count_requested:
+          description: Bare metal A100 GPU server count requested
+          examples:
+          - 10
+          title: Baremetal Gpu A100 Count Requested
+          type: integer
+        baremetal_gpu_a100_count_usage:
+          description: Bare metal A100 GPU server count usage
+          examples:
+          - 3
+          title: Baremetal Gpu A100 Count Usage
+          type: integer
+        baremetal_gpu_h100_count_limit:
+          description: Bare metal H100 GPU server count limit
+          examples:
+          - 5
+          title: Baremetal Gpu H100 Count Limit
+          type: integer
+        baremetal_gpu_h100_count_requested:
+          description: Bare metal H100 GPU server count requested
+          examples:
+          - 10
+          title: Baremetal Gpu H100 Count Requested
+          type: integer
+        baremetal_gpu_h100_count_usage:
+          description: Bare metal H100 GPU server count usage
+          examples:
+          - 3
+          title: Baremetal Gpu H100 Count Usage
+          type: integer
+        baremetal_gpu_h200_count_limit:
+          description: Bare metal H200 GPU server count limit
+          examples:
+          - 5
+          title: Baremetal Gpu H200 Count Limit
+          type: integer
+        baremetal_gpu_h200_count_requested:
+          description: Bare metal H200 GPU server count requested
+          examples:
+          - 10
+          title: Baremetal Gpu H200 Count Requested
+          type: integer
+        baremetal_gpu_h200_count_usage:
+          description: Bare metal H200 GPU server count usage
+          examples:
+          - 3
+          title: Baremetal Gpu H200 Count Usage
+          type: integer
+        baremetal_gpu_l40s_count_limit:
+          description: Bare metal L40S GPU server count limit
+          examples:
+          - 5
+          title: Baremetal Gpu L40S Count Limit
+          type: integer
+        baremetal_gpu_l40s_count_requested:
+          description: Bare metal L40S GPU server count requested
+          examples:
+          - 10
+          title: Baremetal Gpu L40S Count Requested
+          type: integer
+        baremetal_gpu_l40s_count_usage:
+          description: Bare metal L40S GPU server count usage
+          examples:
+          - 3
+          title: Baremetal Gpu L40S Count Usage
+          type: integer
+        baremetal_hf_count_limit:
+          description: High-frequency bare metal servers count limit
+          examples:
+          - 5
+          title: Baremetal Hf Count Limit
+          type: integer
+        baremetal_hf_count_requested:
+          description: High-frequency bare metal servers count requested
+          examples:
+          - 10
+          title: Baremetal Hf Count Requested
+          type: integer
+        baremetal_hf_count_usage:
+          description: High-frequency bare metal servers count usage
+          examples:
+          - 3
+          title: Baremetal Hf Count Usage
+          type: integer
+        cluster_count_limit:
+          description: K8s clusters count limit
+          examples:
+          - 5
+          title: Cluster Count Limit
+          type: integer
+        cluster_count_requested:
+          description: K8s clusters count requested
+          examples:
+          - 6
+          title: Cluster Count Requested
+          type: integer
+        cluster_count_usage:
+          description: K8s clusters count usage
+          examples:
+          - 4
+          title: Cluster Count Usage
+          type: integer
+        cpu_count_limit:
+          description: vCPU Count limit
+          examples:
+          - 10
+          title: Cpu Count Limit
+          type: integer
+        cpu_count_requested:
+          description: vCPU Count requested
+          examples:
+          - 20
+          title: Cpu Count Requested
+          type: integer
+        cpu_count_usage:
+          description: vCPU Count usage
+          examples:
+          - 5
+          title: Cpu Count Usage
+          type: integer
+        external_ip_count_limit:
+          description: External IP Count limit
+          examples:
+          - 5
+          title: External Ip Count Limit
+          type: integer
+        external_ip_count_requested:
+          description: External IP Count requested
+          examples:
+          - 6
+          title: External Ip Count Requested
+          type: integer
+        external_ip_count_usage:
+          description: External IP Count usage
+          examples:
+          - 4
+          title: External Ip Count Usage
+          type: integer
+        firewall_count_limit:
+          description: Firewalls Count limit
+          examples:
+          - 5
+          title: Firewall Count Limit
+          type: integer
+        firewall_count_requested:
+          description: Firewalls Count requested
+          examples:
+          - 6
+          title: Firewall Count Requested
+          type: integer
+        firewall_count_usage:
+          description: Firewalls Count usage
+          examples:
+          - 4
+          title: Firewall Count Usage
+          type: integer
+        floating_count_limit:
+          description: Floating IP Count limit
+          examples:
+          - 5
+          title: Floating Count Limit
+          type: integer
+        floating_count_requested:
+          description: Floating IP Count requested
+          examples:
+          - 6
+          title: Floating Count Requested
+          type: integer
+        floating_count_usage:
+          description: Floating IP Count usage
+          examples:
+          - 4
+          title: Floating Count Usage
+          type: integer
+        gpu_count_limit:
+          description: GPU Count limit
+          examples:
+          - 4
+          title: Gpu Count Limit
+          type: integer
+        gpu_count_requested:
+          description: GPU Count requested
+          examples:
+          - 8
+          title: Gpu Count Requested
+          type: integer
+        gpu_count_usage:
+          description: GPU Count usage
+          examples:
+          - 2
+          title: Gpu Count Usage
+          type: integer
+        gpu_virtual_a100_count_limit:
+          description: Virtual A100 GPU card count limit
+          examples:
+          - 4
+          title: Gpu Virtual A100 Count Limit
+          type: integer
+        gpu_virtual_a100_count_requested:
+          description: Virtual A100 GPU card count requested
+          examples:
+          - 8
+          title: Gpu Virtual A100 Count Requested
+          type: integer
+        gpu_virtual_a100_count_usage:
+          description: Virtual A100 GPU card count usage
+          examples:
+          - 2
+          title: Gpu Virtual A100 Count Usage
+          type: integer
+        gpu_virtual_h100_count_limit:
+          description: Virtual H100 GPU card count limit
+          examples:
+          - 4
+          title: Gpu Virtual H100 Count Limit
+          type: integer
+        gpu_virtual_h100_count_requested:
+          description: Virtual H100 GPU card count requested
+          examples:
+          - 8
+          title: Gpu Virtual H100 Count Requested
+          type: integer
+        gpu_virtual_h100_count_usage:
+          description: Virtual H100 GPU card count usage
+          examples:
+          - 2
+          title: Gpu Virtual H100 Count Usage
+          type: integer
+        gpu_virtual_h200_count_limit:
+          description: Virtual H200 GPU card count limit
+          examples:
+          - 4
+          title: Gpu Virtual H200 Count Limit
+          type: integer
+        gpu_virtual_h200_count_requested:
+          description: Virtual H200 GPU card count requested
+          examples:
+          - 8
+          title: Gpu Virtual H200 Count Requested
+          type: integer
+        gpu_virtual_h200_count_usage:
+          description: Virtual H200 GPU card count usage
+          examples:
+          - 2
+          title: Gpu Virtual H200 Count Usage
+          type: integer
+        gpu_virtual_l40s_count_limit:
+          description: Virtual L40S GPU card count limit
+          examples:
+          - 4
+          title: Gpu Virtual L40S Count Limit
+          type: integer
+        gpu_virtual_l40s_count_requested:
+          description: Virtual L40S GPU card count requested
+          examples:
+          - 8
+          title: Gpu Virtual L40S Count Requested
+          type: integer
+        gpu_virtual_l40s_count_usage:
+          description: Virtual L40S GPU card count usage
+          examples:
+          - 2
+          title: Gpu Virtual L40S Count Usage
+          type: integer
+        laas_topic_count_limit:
+          description: LaaS Topics Count limit
+          examples:
+          - 5
+          title: Laas Topic Count Limit
+          type: integer
+        laas_topic_count_requested:
+          description: LaaS Topics Count requested
+          examples:
+          - 6
+          title: Laas Topic Count Requested
+          type: integer
+        laas_topic_count_usage:
+          description: LaaS Topics Count usage
+          examples:
+          - 4
+          title: Laas Topic Count Usage
+          type: integer
+        loadbalancer_count_limit:
+          description: Load Balancers Count limit
+          examples:
+          - 5
+          title: Loadbalancer Count Limit
+          type: integer
+        loadbalancer_count_requested:
+          description: Load Balancers Count requested
+          examples:
+          - 6
+          title: Loadbalancer Count Requested
+          type: integer
+        loadbalancer_count_usage:
+          description: Load Balancers Count usage
+          examples:
+          - 4
+          title: Loadbalancer Count Usage
+          type: integer
+        ram_limit:
+          description: RAM Size, MiB limit
+          examples:
+          - 20480
+          title: Ram Limit
+          type: integer
+        ram_requested:
+          description: RAM Size, MiB requested
+          examples:
+          - 40960
+          title: Ram Requested
+          type: integer
+        ram_usage:
+          description: RAM Size, MiB usage
+          examples:
+          - 10240
+          title: Ram Usage
+          type: integer
+        servergroup_count_limit:
+          description: Placement Group Count limit
+          examples:
+          - 5
+          title: Servergroup Count Limit
+          type: integer
+        servergroup_count_requested:
+          description: Placement Group Count requested
+          examples:
+          - 10
+          title: Servergroup Count Requested
+          type: integer
+        servergroup_count_usage:
+          description: Placement Group Count usage
+          examples:
+          - 3
+          title: Servergroup Count Usage
+          type: integer
+        vm_count_limit:
+          description: VMs Count limit
+          examples:
+          - 5
+          title: Vm Count Limit
+          type: integer
+        vm_count_requested:
+          description: VMs Count requested
+          examples:
+          - 10
+          title: Vm Count Requested
+          type: integer
+        vm_count_usage:
+          description: VMs Count usage
+          examples:
+          - 3
+          title: Vm Count Usage
+          type: integer
+        volume_count_limit:
+          description: Volumes Count limit
+          examples:
+          - 5
+          title: Volume Count Limit
+          type: integer
+        volume_count_requested:
+          description: Volumes Count requested
+          examples:
+          - 10
+          title: Volume Count Requested
+          type: integer
+        volume_count_usage:
+          description: Volumes Count usage
+          examples:
+          - 3
+          title: Volume Count Usage
+          type: integer
+        volume_size_limit:
+          description: Volumes Size, GiB limit
+          examples:
+          - 400
+          title: Volume Size Limit
+          type: integer
+        volume_size_requested:
+          description: Volumes Size, GiB requested
+          examples:
+          - 800
+          title: Volume Size Requested
+          type: integer
+        volume_size_usage:
+          description: Volumes Size, GiB usage
+          examples:
+          - 200
+          title: Volume Size Usage
+          type: integer
+      title: K8sClusterQuotaResponseSerializer
+      type: object
+    BlackholePortAlarmState:
+      enum:
+      - ALARM
+      - CLEAR
+      - MANUAL_CLEAR
+      - MANUAL_START
+      title: BlackholePortAlarmState
+      type: string
+    K8sClusterDdosProfileCreateV2Serializer:
+      properties:
+        enabled:
+          description: Enable advanced DDoS protection
+          examples:
+          - true
+          title: Enabled
+          type: boolean
+        fields:
+          default: []
+          description: DDoS profile parameters
+          examples:
+          - - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+          items:
+            $ref: '#/components/schemas/K8sClusterDdosProfileFieldV2Serializer'
+          title: Fields
+          type: array
+        profile_template:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: DDoS profile template ID
+          examples:
+          - 29
+          title: Profile Template
+        profile_template_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: DDoS profile template name
+          examples: []
+          title: Profile Template Name
+      required:
+      - enabled
+      title: K8sClusterDdosProfileCreateV2Serializer
+      type: object
+    InstanceVMState:
+      enum:
+      - active
+      - building
+      - deleted
+      - error
+      - paused
+      - rescued
+      - resized
+      - shelved
+      - shelved_offloaded
+      - soft-deleted
+      - stopped
+      - suspended
+      title: InstanceVMState
+      type: string
+    K8sClusterOIDCV2Serializer:
+      properties:
+        client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Client ID
+          examples:
+          - kubernetes
+          title: Client Id
+        groups_claim:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: JWT claim to use as the user's group
+          examples:
+          - groups
+          title: Groups Claim
+        groups_prefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Prefix prepended to group claims
+          examples:
+          - 'oidc:'
+          title: Groups Prefix
+        issuer_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Issuer URL
+          examples:
+          - https://accounts.provider.example
+          title: Issuer Url
+        required_claims:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: Key-value pairs that describe required claims in the token
+          examples:
+          - claim: value
+          title: Required Claims
+        signing_algs:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/OIDCSigningAlgorithmEnum'
+            type: array
+          - type: 'null'
+          default: null
+          description: Accepted signing algorithms
+          examples:
+          - - RS512
+          title: Signing Algs
+        username_claim:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: JWT claim to use as the user name
+          examples:
+          - sub
+          title: Username Claim
+        username_prefix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Prefix prepended to username claims to prevent clashes
+          examples:
+          - 'oidc:'
+          title: Username Prefix
+      title: K8sClusterOIDCV2Serializer
+      type: object
+    ClientProfileTemplateSerializer:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description explaining the template's purpose and use cases
+          examples:
+          - description
+          title: Description
+        fields:
+          description: List of configurable fields that define the template's protection parameters
+          items:
+            $ref: '#/components/schemas/ClientProfileTemplateFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection template
+          examples:
+          - 123
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection template
+          examples:
+          - ICMP port
+          maxLength: 100
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - fields
+      title: ClientProfileTemplateSerializer
+      type: object
+    K8sClusterCiliumLBMode:
+      enum:
+      - dsr
+      - hybrid
+      - snat
+      title: K8sClusterCiliumLBMode
+      type: string
+    K8sClusterSlurmAddonV2Serializer:
+      properties:
+        enabled:
+          description: 'Indicates whether Slurm add-on is deployed in the cluster.
+
+
+            This add-on is only supported in clusters running Kubernetes v1.31 and v1.32 with at least 1 GPU cluster pool.'
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        file_share_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: 'ID of a VAST file share used as Slurm storage.
+
+
+            The Slurm add-on creates separate Persistent Volume Claims for different purposes (controller spool, worker spool, jail) on that file share.'
+          examples:
+          - cbc94d0e-06c6-4d12-9e86-9782ba14fc8c
+          title: File Share Id
+        ssh_key_ids:
+          anyOf:
+          - items:
+              format: uuid4
+              type: string
+            type: array
+          - type: 'null'
+          description: IDs of SSH keys authorized for SSH connection to Slurm login nodes.
+          examples:
+          - - 25735292-bd97-44b0-a1af-d7eab876261d
+            - efc01f3a-35b9-4385-89f9-e38439093ee7
+          title: Ssh Key Ids
+        worker_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: 'Size of the worker pool, i.e. number of worker nodes.
+
+
+            Each Slurm worker node is backed by a Pod scheduled on one of cluster''s GPU nodes.
+
+
+            Note: Downscaling (reducing worker count) is not supported.'
+          examples:
+          - 2
+          title: Worker Count
+      required:
+      - enabled
+      - file_share_id
+      - ssh_key_ids
+      - worker_count
+      title: K8sClusterSlurmAddonV2Serializer
+      type: object
+    K8sClusterCreateV2Serializer:
+      properties:
+        add_ons:
+          $ref: '#/components/schemas/K8sClusterAddonsCreateV2Serializer'
+          description: Cluster add-ons configuration
+          examples:
+          - slurm:
+              enabled: true
+              file_share_id: cbc94d0e-06c6-4d12-9e86-9782ba14fc8c
+              ssh_key_ids:
+              - 25735292-bd97-44b0-a1af-d7eab876261d
+              - efc01f3a-35b9-4385-89f9-e38439093ee7
+              worker_count: 2
+        authentication:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterAuthenticationCreateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Authentication settings
+          examples:
+          - oidc:
+              client_id: kubernetes
+              groups_claim: groups
+              groups_prefix: 'oidc:'
+              issuer_url: https://accounts.provider.example
+              required_claims:
+                claim: value
+              signing_algs:
+              - RS256
+              - RS512
+              username_claim: sub
+              username_prefix: 'oidc:'
+        autoscaler_config:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: "Cluster autoscaler configuration.\n\n  It allows you to override the default cluster-autoscaler parameters provided by the platform with your preferred values.\n\n  Supported parameters (in alphabetical order):\n  - balance-similar-node-groups (boolean: true/false) - Detect similar node groups and balance the number of nodes between them.\n  - expander (string: random, most-pods, least-waste, price, priority, grpc) - Type of node group expander to be used in scale up. Specifying multiple values separated by commas will call the expanders in succession until there is only one option remaining.\n  - expendable-pods-priority-cutoff (float) - Pods with priority below cutoff will be expendable. They can be killed without any consideration during scale down and they don't cause scale up. Pods with null priority (PodPriority disabled) are non expendable.\n  - ignore-daemonsets-utilization (boolean: true/false) - Should CA ignore DaemonSet pods when calculating resource utilization for scaling down.\n  - max-empty-bulk-delete (integer) - Maximum number of empty nodes that can be deleted at the same time.\n  - max-graceful-termination-sec (integer) - Maximum number of seconds CA waits for pod termination when trying to scale down a node.\n  - max-node-provision-time (duration: e.g., '15m') - The default maximum time CA waits for node to be provisioned - the value can be overridden per node group.\n  - max-total-unready-percentage (float) - Maximum percentage of unready nodes in the cluster. After this is exceeded, CA halts operations.\n  - new-pod-scale-up-delay (duration: e.g., '10s') - Pods less than this old will not be considered for scale-up. Can be increased for individual pods through annotation.\n  - ok-total-unready-count (integer) - Number of allowed unready nodes, irrespective of max-total-unready-percentage.\n  - scale-down-delay-after-add (duration: e.g., '10m') - How long after scale up that scale down evaluation resumes.\n  - scale-down-delay-after-delete (duration: e.g., '10s') - How long after node deletion that scale down evaluation resumes.\n  - scale-down-delay-after-failure (duration: e.g., '3m') - How long after scale down failure that scale down evaluation resumes.\n  - scale-down-enabled (boolean: true/false) - Should CA scale down the cluster.\n  - scale-down-unneeded-time (duration: e.g., '10m') - How long a node should be unneeded before it is eligible for scale down.\n  - scale-down-unready-time (duration: e.g., '20m') - How long an unready node should be unneeded before it is eligible for scale down.\n  - scale-down-utilization-threshold (float) - The maximum value between the sum of cpu requests and sum of memory requests of all pods running on the node divided by node's corresponding allocatable resource, below which a node can be considered for scale down.\n  - scan-interval (duration: e.g., '10s') - How often cluster is reevaluated for scale up or down.\n  - skip-nodes-with-custom-controller-pods (boolean: true/false) - If true cluster autoscaler will never delete nodes with pods owned by custom controllers.\n  - skip-nodes-with-local-storage (boolean: true/false) - If true cluster autoscaler will never delete nodes with pods with local storage, e.g. EmptyDir or HostPath.\n  - skip-nodes-with-system-pods (boolean: true/false) - If true cluster autoscaler will never delete nodes with pods from kube-system (except for DaemonSet or mirror pods)."
+          examples:
+          - scale-down-unneeded-time: 5m
+          title: Autoscaler Config
+        cni:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterCNICreateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Cluster CNI settings
+          examples:
+          - cilium:
+              cni_exclusive: true
+              encryption: true
+              hubble_relay: true
+              hubble_ui: true
+              lb_acceleration: true
+              lb_mode: snat
+              tunnel: geneve
+            provider: cilium
+        csi:
+          $ref: '#/components/schemas/K8sClusterCSICreateV2Serializer'
+          description: Container Storage Interface (CSI) driver settings
+          examples:
+          - nfs:
+              ddn_enabled: false
+              vast_enabled: true
+        ddos_profile:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterDdosProfileCreateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Advanced DDoS Protection profile
+          examples:
+          - enabled: true
+            fields:
+            - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+            profile_template: 29
+        fixed_network:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: ''
+          description: The network of the cluster
+          examples:
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          title: Fixed Network
+        fixed_subnet:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: ''
+          description: The subnet of the cluster
+          examples:
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          title: Fixed Subnet
+        is_ipv6:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: false
+          description: Enable public v6 address
+          examples:
+          - true
+          - false
+          title: Is Ipv6
+        keypair:
+          description: The keypair of the cluster
+          examples:
+          - some_keypair
+          maxLength: 255
+          minLength: 1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Keypair
+          type: string
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/K8sClusterLoggingCreateV2Serializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+          - null
+        name:
+          description: The name of the cluster
+          examples:
+          - string
+          maxLength: 20
+          minLength: 1
+          pattern: ^[a-z][a-z0-9\-]{0,18}[a-z0-9]$
+          title: Name
+          type: string
+        pods_ip_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The IP pool for the pods
+          examples:
+          - 172.16.0.0/18
+          title: Pods Ip Pool
+        pods_ipv6_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The IPv6 pool for the pods
+          examples:
+          - 2a03:90c0:88:393::/64
+          title: Pods Ipv6 Pool
+        pools:
+          description: The pools of the cluster
+          items:
+            $ref: '#/components/schemas/K8sClusterPoolCreateV2Serializer'
+          minItems: 1
+          title: Pools
+          type: array
+        services_ip_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The IP pool for the services
+          examples:
+          - 172.24.0.0/18
+          title: Services Ip Pool
+        services_ipv6_pool:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The IPv6 pool for the services
+          examples:
+          - 2a03:90c0:88:381::/108
+          title: Services Ipv6 Pool
+        version:
+          description: The version of the k8s cluster
+          examples:
+          - 1.28.1
+          title: Version
+          type: string
+      required:
+      - keypair
+      - name
+      - pools
+      - version
+      title: K8sClusterCreateV2Serializer
+      type: object
+    K8sClusterSlurmAddonDisableV2Serializer:
+      properties:
+        enabled:
+          const: false
+          description: The Slurm add-on will be disabled in the cluster.
+          examples:
+          - false
+          title: Enabled
+          type: boolean
+      required:
+      - enabled
+      title: K8sClusterSlurmAddonDisableV2Serializer
+      type: object
+    K8sClusterPoolUpdateV2Serializer:
+      properties:
+        auto_healing_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Enable/disable auto healing
+          examples:
+          - true
+          title: Auto Healing Enabled
+        labels:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: Labels applied to the cluster pool
+          examples:
+          - my-label: foo
+          title: Labels
+        max_node_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Maximum node count
+          examples:
+          - 3
+          title: Max Node Count
+        min_node_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Minimum node count
+          examples:
+          - 1
+          title: Min Node Count
+        node_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          deprecated: true
+          description: This field is deprecated. Please use the cluster pool resize handler instead.
+          examples:
+          - 2
+          title: Node Count
+        security_group_ids:
+          description: Security group IDs applied to the cluster pool nodes. Omit the field to leave unchanged; pass an empty list to clear.
+          examples:
+          - - e6ea8f35-82ce-4fb2-b51c-6a24a3a23bce
+          items:
+            format: uuid4
+            type: string
+          title: Security Group Ids
+          type: array
+        taints:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: Taints applied to the cluster pool
+          examples:
+          - my-taint: bar:NoSchedule
+          title: Taints
+      title: K8sClusterPoolUpdateV2Serializer
+      type: object
+    InstanceFloatingAddressSerializer:
+      description: Schema for `floating` addresses.
+      properties:
+        addr:
+          description: Address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        type:
+          const: floating
+          description: Type of the address
+          examples:
+          - fixed
+          title: Type
+          type: string
+      required:
+      - addr
+      - type
+      title: Floating IP Address
+      type: object
+    BareMetalFlavorHardwareDescriptionSerializer:
+      properties:
+        cpu:
+          description: Human-readable CPU description
+          examples:
+          - 1x Intel Xeon 4C/8T 3.7 GHz
+          title: Cpu
+          type: string
+        disk:
+          description: Human-readable disk description
+          examples:
+          - 2x 250GiB SSD
+          title: Disk
+          type: string
+        license:
+          description: If the flavor is licensed, this field contains the license type
+          examples:
+          - Windows License
+          title: License
+          type: string
+        network:
+          description: Human-readable NIC description
+          examples:
+          - 1x 500Mbps
+          title: Network
+          type: string
+        ram:
+          description: Human-readable RAM description
+          examples:
+          - 32 GiB
+          title: Ram
+          type: string
+      required:
+      - cpu
+      - ram
+      - disk
+      - license
+      - network
+      title: Detailed flavor hardware description of bare metal server flavor
+      type: object
+    ClientProfileFieldSerializer:
+      properties:
+        base_field:
+          description: ID of DDoS profile field
+          examples:
+          - 10
+          title: Base Field
+          type: integer
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        field_value:
+          description: Complex value for the DDoS profile field
+          examples:
+          - 45046
+          - 45047
+          title: Field Value
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      - field_value
+      - base_field
+      title: ClientProfileFieldSerializer
+      type: object

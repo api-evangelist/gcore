@@ -1,0 +1,1632 @@
+openapi: 3.2.0
+info:
+  title: Cloud Registry API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Registry
+paths:
+  /v1/registries/{project_id}/{region_id}:
+    post:
+      operationId: RegistriesHandler.post
+      summary: Create registry
+      description: Create a new container registry with the specified configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryCreateSerializer'
+      tags:
+      - Registry
+    get:
+      operationId: RegistriesHandler.get
+      summary: List registries
+      description: List all container registries in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryCollectionSerializer'
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}:
+    get:
+      operationId: RegistryHandler.get
+      summary: Get registry
+      description: Get detailed information about a specific container registry.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrySerializer'
+      tags:
+      - Registry
+    delete:
+      operationId: RegistryHandler.delete
+      summary: Delete registry
+      description: Delete a specific container registry and all its associated resources.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/repositories:
+    get:
+      operationId: RegistryRepositoriesHandler.get
+      summary: List registry repositories
+      description: List all repositories in the container registry.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryRepositoryCollectionSerializer'
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/repositories/{repository_name}:
+    delete:
+      operationId: RegistryRepositoryHandler.delete
+      summary: Delete registry repository
+      description: Delete a specific repository from the container registry.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: path
+        name: repository_name
+        required: true
+        description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+        schema:
+          description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+          examples:
+          - nginx
+          title: Repository Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/repositories/{repository_name}/artifacts:
+    get:
+      operationId: RegistryArtifactsHandler.get
+      summary: List registry artifacts
+      description: List all artifacts in a specific repository.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: path
+        name: repository_name
+        required: true
+        description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+        schema:
+          description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+          examples:
+          - nginx
+          title: Repository Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryArtifactCollectionSerializer'
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/repositories/{repository_name}/artifacts/{digest}:
+    delete:
+      operationId: RegistryArtifactHandler.delete
+      summary: Delete registry artifact
+      description: Delete a specific artifact from a repository.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: path
+        name: repository_name
+        required: true
+        description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+        schema:
+          description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+          examples:
+          - nginx
+          title: Repository Name
+          type: string
+      - in: path
+        name: digest
+        required: true
+        description: Artifact digest
+        schema:
+          description: Artifact digest
+          examples:
+          - sha256:5414002a0c147f8e41da0d0764b5074480012852d5d9a0ef8bd2fec904e62b7c
+          title: Digest
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/repositories/{repository_name}/artifacts/{digest}/tags/{tag_name}:
+    delete:
+      operationId: RegistryTagHandler.delete
+      summary: Delete registry tag
+      description: Delete a specific tag from an artifact.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: path
+        name: repository_name
+        required: true
+        description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+        schema:
+          description: Repository name. If it contains a slash, encode it with URL encoding, e.g. a/b -> a%252Fb
+          examples:
+          - nginx
+          title: Repository Name
+          type: string
+      - in: path
+        name: digest
+        required: true
+        description: Artifact digest
+        schema:
+          description: Artifact digest
+          examples:
+          - sha256:5414002a0c147f8e41da0d0764b5074480012852d5d9a0ef8bd2fec904e62b7c
+          title: Digest
+          type: string
+      - in: path
+        name: tag_name
+        required: true
+        description: Tag name
+        schema:
+          description: Tag name
+          examples:
+          - latest
+          title: Tag Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/resize:
+    patch:
+      operationId: RegistryResizeHandler.patch
+      summary: Resize registry
+      description: Update the size of a container registry.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryResizeSerializer'
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/users:
+    post:
+      operationId: RegistryUsersHandler.post
+      summary: Create registry user
+      description: Create a new user for accessing the container registry.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryUserCreateResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryUserCreateSerializer'
+      tags:
+      - Registry
+    get:
+      operationId: RegistryUsersHandler.get
+      summary: List registry users
+      description: List all users with access to the container registry.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryUserCollectionSerializer'
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/users/{user_id}:
+    patch:
+      operationId: RegistryUserHandler.patch
+      summary: Update registry user
+      description: Update the configuration of a specific registry user.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: path
+        name: user_id
+        required: true
+        description: User ID
+        schema:
+          description: User ID
+          examples:
+          - 1
+          title: User Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryUserSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryUserUpdateSerializer'
+      tags:
+      - Registry
+    delete:
+      operationId: RegistryUserHandler.delete
+      summary: Delete registry user
+      description: Delete a specific user from the container registry.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: path
+        name: user_id
+        required: true
+        description: User ID
+        schema:
+          description: User ID
+          examples:
+          - 1
+          title: User Id
+          type: integer
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/users/{user_id}/refresh_secret:
+    post:
+      operationId: RegistryRefreshSecretHandler.post
+      summary: Refresh registry user secret
+      description: Generate a new secret for a specific registry user.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      - in: path
+        name: user_id
+        required: true
+        description: User ID
+        schema:
+          description: User ID
+          examples:
+          - 1
+          title: User Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryUserUpdateResponseSerializer'
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/{registry_id}/users/batch:
+    post:
+      operationId: RegistryBatchUsersHandler.post
+      summary: Batch create registry users
+      description: Create multiple users for accessing the container registry in a single request.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: registry_id
+        required: true
+        description: Registry ID
+        schema:
+          description: Registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryUserCreateResponseCollectionSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistryBatchUsersCreateSerializer'
+      tags:
+      - Registry
+  /v1/registries/{project_id}/{region_id}/check_limits:
+    post:
+      operationId: RegistryCheckLimitsHandler.post
+      summary: Check registry quota
+      description: Check if the registry creation request exceeds any quotas.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistryQuotaCheckSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckQuotasBeforeRegistryCreation'
+      tags:
+      - Registry
+components:
+  schemas:
+    RegistryUserUpdateSerializer:
+      properties:
+        duration:
+          description: User account operating time, days
+          examples:
+          - 14
+          maximum: 365
+          minimum: -1
+          title: Duration
+          type: integer
+        read_only:
+          default: false
+          description: Read-only user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+      required:
+      - duration
+      title: RegistryUserUpdateSerializer
+      type: object
+    RegistryCreateSerializer:
+      properties:
+        name:
+          description: "A name for the container registry. \n\n  Should be in lowercase, consisting only of numbers, letters and -, \n\n  with maximum length of 24 characters"
+          examples:
+          - reg-home1
+          pattern: ^[a-z][-a-z0-9]{0,22}[a-z0-9]$
+          title: Name
+          type: string
+        storage_limit:
+          default: 5
+          description: Registry storage limit, GiB
+          examples:
+          - 5
+          maximum: 1000
+          minimum: 1
+          title: Storage Limit
+          type: integer
+      required:
+      - name
+      title: RegistryCreateSerializer
+      type: object
+    RegistryBatchUsersCreateSerializer:
+      properties:
+        users:
+          description: Set of users
+          examples:
+          - - duration: -1
+              name: user1
+              read_only: false
+          items:
+            $ref: '#/components/schemas/RegistryUserCreateSerializer'
+          title: Users
+          type: array
+      required:
+      - users
+      title: RegistryBatchUsersCreateSerializer
+      type: object
+    RegistryQuotaCheckSerializer:
+      properties:
+        registry_count_limit:
+          description: Registries count limit
+          examples:
+          - 5
+          title: Registry Count Limit
+          type: integer
+        registry_count_requested:
+          description: Registries count requested
+          examples:
+          - 1
+          title: Registry Count Requested
+          type: integer
+        registry_count_usage:
+          description: Registries count usage
+          examples:
+          - 5
+          title: Registry Count Usage
+          type: integer
+        registry_storage_limit:
+          description: Registries storage limit, GiB
+          examples:
+          - 500
+          title: Registry Storage Limit
+          type: integer
+        registry_storage_requested:
+          description: Registries storage requested, GiB
+          examples:
+          - 100
+          title: Registry Storage Requested
+          type: integer
+        registry_storage_usage:
+          description: Registries storage usage, GiB
+          examples:
+          - 450
+          title: Registry Storage Usage
+          type: integer
+      title: RegistryQuotaCheckSerializer
+      type: object
+    RegistryRepositorySerializer:
+      properties:
+        artifact_count:
+          description: Number of artifacts in the repository
+          examples:
+          - 1
+          title: Artifact Count
+          type: integer
+        created_at:
+          description: Repository creation date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          description: Repository ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        name:
+          description: Repository name
+          examples:
+          - nginx
+          title: Name
+          type: string
+        pull_count:
+          description: Number of pools from the repository
+          examples:
+          - 1
+          title: Pull Count
+          type: integer
+        registry_id:
+          description: Repository registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+        updated_at:
+          description: Repository modification date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - registry_id
+      - name
+      - artifact_count
+      - pull_count
+      - created_at
+      - updated_at
+      title: RegistryRepositorySerializer
+      type: object
+    RegistryUserCreateResponseSerializer:
+      properties:
+        created_at:
+          description: User creation date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Created At
+          type: string
+        duration:
+          description: User account operating time, days
+          examples:
+          - 14
+          title: Duration
+          type: integer
+        expires_at:
+          description: User operation end date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Expires At
+          type: string
+        id:
+          description: User ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        name:
+          description: User name
+          examples:
+          - user1
+          title: Name
+          type: string
+        read_only:
+          description: Read-only user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        secret:
+          description: User secret
+          title: Secret
+          type: string
+      required:
+      - id
+      - name
+      - read_only
+      - duration
+      - created_at
+      - expires_at
+      - secret
+      title: RegistryUserCreateResponseSerializer
+      type: object
+    RegistryCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RegistrySerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RegistryCollectionSerializer
+      type: object
+    RegistryUserCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RegistryUserSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RegistryUserCollectionSerializer
+      type: object
+    RegistryUserUpdateResponseSerializer:
+      properties:
+        created_at:
+          description: User creation date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Created At
+          type: string
+        duration:
+          description: User account operating time, days
+          examples:
+          - 14
+          title: Duration
+          type: integer
+        expires_at:
+          description: User operation end date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Expires At
+          type: string
+        id:
+          description: User ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        name:
+          description: User name
+          examples:
+          - user1
+          title: Name
+          type: string
+        read_only:
+          description: Read-only user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        secret:
+          description: User secret
+          title: Secret
+          type: string
+      required:
+      - id
+      - name
+      - read_only
+      - duration
+      - created_at
+      - expires_at
+      - secret
+      title: RegistryUserUpdateResponseSerializer
+      type: object
+    RegistryUserCreateSerializer:
+      properties:
+        duration:
+          description: User account operating time, days
+          examples:
+          - 14
+          maximum: 365
+          minimum: -1
+          title: Duration
+          type: integer
+        name:
+          description: "A name for the registry user. \n\n  Should be in lowercase, consisting only of numbers and letters, \n\n  with maximum length of 16 characters"
+          examples:
+          - user1
+          pattern: ^[a-z0-9]{0,16}$
+          title: Name
+          type: string
+        read_only:
+          default: false
+          description: Read-only user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        secret:
+          default: ''
+          description: User secret
+          title: Secret
+          type: string
+      required:
+      - name
+      - duration
+      title: RegistryUserCreateSerializer
+      type: object
+    RegistryArtifactSerializer:
+      properties:
+        digest:
+          description: Artifact digest
+          examples:
+          - sha256:5414002a0c147f8e41da0d0764b5074480012852d5d9a0ef8bd2fec904e62b7c
+          title: Digest
+          type: string
+        id:
+          description: Repository ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        pulled_at:
+          description: Artifact last pull date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Pulled At
+          type: string
+        pushed_at:
+          description: Artifact push date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Pushed At
+          type: string
+        registry_id:
+          description: Artifact registry ID
+          examples:
+          - 1
+          title: Registry Id
+          type: integer
+        repository_id:
+          description: Artifact repository ID
+          examples:
+          - 1
+          title: Repository Id
+          type: integer
+        size:
+          description: Artifact size, bytes
+          examples:
+          - 1
+          title: Size
+          type: integer
+        tags:
+          description: Artifact tags
+          examples:
+          - - artifact_id: 1
+              id: 1
+              name: v0.0.1
+              pulled_at: '2024-06-18T09:36:53.335000Z'
+              pushed_at: '2024-06-18T09:36:53.335000Z'
+              repository_id: 5
+            - artifact_id: 1
+              id: 2
+              name: latest
+              pulled_at: '2024-06-18T09:36:53.335000Z'
+              pushed_at: '2024-06-18T09:36:53.335000Z'
+              repository_id: 5
+          items:
+            $ref: '#/components/schemas/RegistryTagSerializer'
+          title: Tags
+          type: array
+      required:
+      - id
+      - registry_id
+      - repository_id
+      - digest
+      - size
+      - pushed_at
+      - pulled_at
+      - tags
+      title: RegistryArtifactSerializer
+      type: object
+    RegistryTagSerializer:
+      properties:
+        artifact_id:
+          description: Artifact ID
+          examples:
+          - 1
+          title: Artifact Id
+          type: integer
+        id:
+          description: Tag ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        name:
+          description: Tag name
+          examples:
+          - 0.0.1
+          title: Name
+          type: string
+        pulled_at:
+          description: Tag last pull date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Pulled At
+          type: string
+        pushed_at:
+          description: Tag push date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Pushed At
+          type: string
+        repository_id:
+          description: Repository ID
+          examples:
+          - 1
+          title: Repository Id
+          type: integer
+      required:
+      - id
+      - artifact_id
+      - repository_id
+      - name
+      - pushed_at
+      - pulled_at
+      title: RegistryTagSerializer
+      type: object
+    CheckQuotasBeforeRegistryCreation:
+      properties:
+        storage_limit:
+          default: 0
+          description: Registry storage limit, GiB
+          examples:
+          - 5
+          title: Storage Limit
+          type: integer
+      title: CheckQuotasBeforeRegistryCreation
+      type: object
+    RegistryArtifactCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RegistryArtifactSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RegistryArtifactCollectionSerializer
+      type: object
+    RegistryResizeSerializer:
+      properties:
+        storage_limit:
+          default: 5
+          description: Registry storage limit, GiB
+          examples:
+          - 5
+          maximum: 1000
+          minimum: 1
+          title: Storage Limit
+          type: integer
+      title: RegistryResizeSerializer
+      type: object
+    RegistrySerializer:
+      properties:
+        created_at:
+          description: Registry creation date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          description: Registry ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        name:
+          description: Registry name
+          examples:
+          - company-name
+          title: Name
+          type: string
+        repo_count:
+          description: Number of repositories in the registry
+          examples:
+          - 1
+          title: Repo Count
+          type: integer
+        storage_limit:
+          description: Registry storage limit, GiB
+          examples:
+          - 5
+          title: Storage Limit
+          type: integer
+        storage_used:
+          description: Registry storage used, bytes
+          examples:
+          - 1000000000
+          title: Storage Used
+          type: integer
+        updated_at:
+          description: Registry modification date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Updated At
+          type: string
+        url:
+          description: Registry url
+          title: Url
+          type: string
+      required:
+      - id
+      - name
+      - storage_limit
+      - storage_used
+      - url
+      - created_at
+      - updated_at
+      - repo_count
+      title: RegistrySerializer
+      type: object
+    RegistryUserSerializer:
+      properties:
+        created_at:
+          description: User creation date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Created At
+          type: string
+        duration:
+          description: User account operating time, days
+          examples:
+          - 14
+          title: Duration
+          type: integer
+        expires_at:
+          description: User operation end date-time
+          examples:
+          - '2024-06-18T09:36:53.335000Z'
+          format: date-time
+          title: Expires At
+          type: string
+        id:
+          description: User ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        name:
+          description: User name
+          examples:
+          - user1
+          title: Name
+          type: string
+        read_only:
+          description: Read-only user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+      required:
+      - id
+      - name
+      - read_only
+      - duration
+      - created_at
+      - expires_at
+      title: RegistryUserSerializer
+      type: object
+    RegistryUserCreateResponseCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RegistryUserCreateResponseSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RegistryUserCreateResponseCollectionSerializer
+      type: object
+    RegistryRepositoryCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RegistryRepositorySerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RegistryRepositoryCollectionSerializer
+      type: object

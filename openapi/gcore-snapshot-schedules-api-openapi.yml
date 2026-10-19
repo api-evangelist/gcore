@@ -1,0 +1,1807 @@
+openapi: 3.2.0
+info:
+  title: Cloud Snapshot Schedules API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Snapshot Schedules
+paths:
+  /v1/lifecycle_policy/{project_id}/{region_id}:
+    post:
+      operationId: PoliciesViewSet.post
+      summary: Create snapshot policy
+      description: Create a new snapshot policy with the specified configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLifecyclePolicySerializer'
+      tags:
+      - Snapshot Schedules
+    get:
+      operationId: PoliciesViewSet.get
+      summary: List snapshot policies
+      description: List all snapshot policies in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicyCollectionSerializer'
+      tags:
+      - Snapshot Schedules
+  /v1/lifecycle_policy/{project_id}/{region_id}/{policy_id}:
+    get:
+      operationId: PolicyViewSet.get
+      summary: Get snapshot policy
+      description: Get detailed information about a specific snapshot policy.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: policy_id
+        required: true
+        description: Lifecycle policy ID.
+        schema:
+          description: Lifecycle policy ID.
+          examples:
+          - 1
+          title: Policy Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicySerializer'
+      tags:
+      - Snapshot Schedules
+    patch:
+      operationId: PolicyViewSet.patch
+      summary: Update snapshot policy
+      description: Update the configuration of an existing snapshot policy.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: policy_id
+        required: true
+        description: Lifecycle policy ID.
+        schema:
+          description: Lifecycle policy ID.
+          examples:
+          - 1
+          title: Policy Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLifecyclePolicySerializer'
+      tags:
+      - Snapshot Schedules
+    delete:
+      operationId: PolicyViewSet.delete
+      summary: Delete snapshot policy
+      description: Delete a specific snapshot policy and all its associated schedules.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: policy_id
+        required: true
+        description: Lifecycle policy ID.
+        schema:
+          description: Lifecycle policy ID.
+          examples:
+          - 1
+          title: Policy Id
+          type: integer
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Snapshot Schedules
+  /v1/lifecycle_policy/{project_id}/{region_id}/{policy_id}/add_schedules:
+    post:
+      operationId: AddSchedulesToPolicyViewSet.post
+      summary: Add schedules to policy
+      description: Add new schedules to an existing snapshot policy.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: policy_id
+        required: true
+        description: Lifecycle policy ID.
+        schema:
+          description: Lifecycle policy ID.
+          examples:
+          - 1
+          title: Policy Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddSchedulesSerializer'
+      tags:
+      - Snapshot Schedules
+  /v1/lifecycle_policy/{project_id}/{region_id}/{policy_id}/add_volumes_to_policy:
+    put:
+      operationId: AddVolumesInPolicyViewSet.put
+      summary: Add volumes to policy
+      description: Add volumes to an existing snapshot policy.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: policy_id
+        required: true
+        description: Lifecycle policy ID.
+        schema:
+          description: Lifecycle policy ID.
+          examples:
+          - 1
+          title: Policy Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VolumeIdsSerializer'
+      tags:
+      - Snapshot Schedules
+  /v1/lifecycle_policy/{project_id}/{region_id}/{policy_id}/remove_schedules:
+    post:
+      operationId: RemoveSchedulesFromPolicyViewSet.post
+      summary: Remove schedules from policy
+      description: Remove schedules from an existing snapshot policy.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: policy_id
+        required: true
+        description: Lifecycle policy ID.
+        schema:
+          description: Lifecycle policy ID.
+          examples:
+          - 1
+          title: Policy Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveScheduleSerializer'
+      tags:
+      - Snapshot Schedules
+  /v1/lifecycle_policy/{project_id}/{region_id}/{policy_id}/remove_volumes_from_policy:
+    put:
+      operationId: RemoveVolumesFromPolicyViewSet.put
+      summary: Remove volumes from policy
+      description: Remove volumes from an existing snapshot policy.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: policy_id
+        required: true
+        description: Lifecycle policy ID.
+        schema:
+          description: Lifecycle policy ID.
+          examples:
+          - 1
+          title: Policy Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VolumeIdsSerializer'
+      tags:
+      - Snapshot Schedules
+  /v1/lifecycle_policy/{project_id}/{region_id}/estimate_max_policy_usage:
+    post:
+      operationId: PolicyCostViewSet.post
+      summary: Check snapshot policy quota
+      description: Calculate the maximum resource usage if all snapshots are created by the policy.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifecyclePolicyUsageSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLifecyclePolicySerializer'
+      tags:
+      - Snapshot Schedules
+  /v2/pricing/{project_id}/{region_id}/lifecycle_policy:
+    post:
+      operationId: LifecyclePolicyPricingV2ViewSet.post
+      summary: Preview snapshot policy price
+      description: Get the maximum usage cost for resources if the policy creates all snapshots.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LifeCyclePolicyV2ResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingLifecyclePolicyV2Serializer'
+      tags:
+      - Snapshot Schedules
+  /v1/schedule/{project_id}/{region_id}/{schedule_id}:
+    get:
+      operationId: SnapshotScheduleViewSet.get
+      summary: Get schedule
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: schedule_id
+        required: true
+        description: Schedule ID
+        schema:
+          description: Schedule ID
+          examples:
+          - 1488e2ce-f906-47fb-ba32-c25a3f63df4f
+          title: Schedule Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleSerializer'
+      tags:
+      - Snapshot Schedules
+    patch:
+      operationId: SnapshotScheduleViewSet.patch
+      summary: Update schedule
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: schedule_id
+        required: true
+        description: Schedule ID
+        schema:
+          description: Schedule ID
+          examples:
+          - 1488e2ce-f906-47fb-ba32-c25a3f63df4f
+          title: Schedule Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScheduleSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchScheduleSerializer'
+      tags:
+      - Snapshot Schedules
+  /v1/pricing/{project_id}/{region_id}/lifecycle_policy:
+    post:
+      operationId: MaxLifecyclePolicyPricingViewSet.post
+      summary: Preview snapshot policy price
+      description: Get maximum usage cost of resources if all snapshots are created by the policy
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLifecyclePolicySerializer'
+      tags:
+      - Snapshot Schedules
+components:
+  schemas:
+    RemoveScheduleSerializer:
+      properties:
+        schedule_ids:
+          description: List of schedule IDs.
+          examples:
+          - - 1488e2ce-f906-47fb-ba32-c25a3f63df4f
+          items:
+            type: string
+          title: Schedule Ids
+          type: array
+      required:
+      - schedule_ids
+      title: RemoveScheduleSerializer
+      type: object
+    PricingLifecyclePolicyV2Serializer:
+      properties:
+        schedules:
+          default: []
+          description: List of schedules associated with the policy.
+          items:
+            $ref: '#/components/schemas/CreateScheduleSerializer'
+          maxItems: 10
+          title: Schedules
+          type: array
+        volume_ids:
+          description: List of volume IDs.
+          examples:
+          - - 3ed9e2ce-f906-47fb-ba32-c25a3f63df4f
+          items:
+            format: uuid4
+            type: string
+          maxItems: 100
+          minItems: 1
+          title: Volume Ids
+          type: array
+          uniqueItems: true
+      required:
+      - volume_ids
+      title: PricingLifecyclePolicyV2Serializer
+      type: object
+    UpdateLifecyclePolicySerializer:
+      properties:
+        name:
+          description: Name of the lifecycle policy.
+          examples:
+          - schedule_1
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        status:
+          $ref: '#/components/schemas/LifecyclePolicyStatusesEnum'
+          description: Status of the lifecycle policy.
+          examples:
+          - paused
+      title: UpdateLifecyclePolicySerializer
+      type: object
+    VolumeIdsSerializer:
+      properties:
+        volume_ids:
+          description: List of volume IDs.
+          examples:
+          - - 1488e2ce-f906-47fb-ba32-c25a3f63df4f
+          items:
+            type: string
+          title: Volume Ids
+          type: array
+      required:
+      - volume_ids
+      title: VolumeIdsSerializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    PatchScheduleSerializer:
+      properties:
+        day:
+          description: Day of the month (1-31, '*') or a comma-separated list of days
+          examples:
+          - '5'
+          title: Day
+          type: string
+        day_of_week:
+          description: Weekday or a comma-separated list of weekdays (mon,tue,wed,thu,fri,sat,sun,*)
+          examples:
+          - mon,fri
+          title: Day Of Week
+          type: string
+        days:
+          description: Number of days to wait
+          examples:
+          - 0
+          title: Days
+          type: integer
+        hour:
+          description: Hour (0-23, '*') or a comma-separated list of hours
+          examples:
+          - '0'
+          - 0, 20
+          title: Hour
+          type: string
+        hours:
+          description: Number of hours to wait
+          examples:
+          - 2
+          title: Hours
+          type: integer
+        max_quantity:
+          description: Number of stored resources.
+          examples:
+          - 2
+          exclusiveMinimum: 0
+          maximum: 10000
+          title: Max Quantity
+          type: integer
+        minute:
+          description: Minute (0-59, '*') or a comma-separated list of minutes
+          examples:
+          - '30'
+          title: Minute
+          type: string
+        minutes:
+          description: Number of minutes to wait
+          examples:
+          - 1
+          title: Minutes
+          type: integer
+        month:
+          description: Month (1-12, '*') or a comma-separated list of months
+          examples:
+          - '1'
+          - 1,6
+          title: Month
+          type: string
+        resource_name_template:
+          description: Template for resource names.
+          examples:
+          - Snapshot of volume {volume_id} created by policy {lifecycle_policy_id}
+          title: Resource Name Template
+          type: string
+        retention_time:
+          $ref: '#/components/schemas/CreateIntervalTimeSerializer'
+          description: Time after which the resource will be deleted
+        timezone:
+          description: A pytz timezone. Defaults to UTC.
+          examples:
+          - UTC
+          title: Timezone
+          type: string
+        type:
+          description: Type of the schedule.
+          enum:
+          - cron
+          - interval
+          examples:
+          - cron
+          title: Type
+          type: string
+        week:
+          description: ISO week (1-53, '*') or a comma-separated list of weeks
+          examples:
+          - '1'
+          title: Week
+          type: string
+        weeks:
+          description: Number of weeks to wait
+          examples:
+          - 0
+          title: Weeks
+          type: integer
+      title: PatchScheduleSerializer
+      type: object
+    CreateLifecyclePolicySerializer:
+      properties:
+        action:
+          $ref: '#/components/schemas/LifecyclePolicyActionEnum'
+          description: Action that the policy will perform.
+          examples:
+          - volume_snapshot
+        name:
+          description: Name of the lifecycle policy.
+          examples:
+          - schedule_1
+          title: Name
+          type: string
+        schedules:
+          default: []
+          description: List of schedules associated with the policy.
+          items:
+            $ref: '#/components/schemas/CreateScheduleSerializer'
+          maxItems: 10
+          title: Schedules
+          type: array
+        status:
+          $ref: '#/components/schemas/LifecyclePolicyStatusesEnum'
+          default: active
+          description: Current status of the lifecycle policy.
+          examples:
+          - active
+        volume_ids:
+          default: []
+          description: List of volume IDs.
+          examples:
+          - - 3ed9e2ce-f906-47fb-ba32-c25a3f63df4f
+          items:
+            format: uuid4
+            type: string
+          title: Volume Ids
+          type: array
+      required:
+      - action
+      - name
+      title: CreateLifecyclePolicySerializer
+      type: object
+    LifecyclePolicyCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/LifecyclePolicySerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: LifecyclePolicyCollectionSerializer
+      type: object
+    CreateCronScheduleSerializer:
+      properties:
+        day:
+          description: Day of the month (1-31, '*') or a comma-separated list of days
+          examples:
+          - '5'
+          title: Day
+          type: string
+        day_of_week:
+          description: Weekday or a comma-separated list of weekdays (mon,tue,wed,thu,fri,sat,sun,*)
+          examples:
+          - mon,fri
+          title: Day Of Week
+          type: string
+        hour:
+          description: Hour (0-23, '*') or a comma-separated list of hours
+          examples:
+          - '0'
+          - 0, 20
+          title: Hour
+          type: string
+        max_quantity:
+          default: 2
+          description: Number of stored resources.
+          examples:
+          - 2
+          exclusiveMinimum: 0
+          maximum: 10000
+          title: Max Quantity
+          type: integer
+        minute:
+          description: Minute (0-59, '*') or a comma-separated list of minutes
+          examples:
+          - '30'
+          title: Minute
+          type: string
+        month:
+          description: Month (1-12, '*') or a comma-separated list of months
+          examples:
+          - '1'
+          - 1,6
+          title: Month
+          type: string
+        resource_name_template:
+          default: Snapshot of volume {volume_id} created by policy {lifecycle_policy_id}
+          description: Template for resource names.
+          examples:
+          - Snapshot of volume {volume_id} created by policy {lifecycle_policy_id}
+          title: Resource Name Template
+          type: string
+        retention_time:
+          $ref: '#/components/schemas/CreateIntervalTimeSerializer'
+          description: Time after which the resource will be deleted
+        timezone:
+          description: A pytz timezone. Defaults to UTC.
+          examples:
+          - UTC
+          title: Timezone
+          type: string
+        type:
+          const: cron
+          description: Schedule type
+          examples:
+          - cron
+          title: Type
+          type: string
+        week:
+          description: ISO week (1-53, '*') or a comma-separated list of weeks
+          examples:
+          - '1'
+          title: Week
+          type: string
+      required:
+      - type
+      title: CreateCronScheduleSerializer
+      type: object
+    AddSchedulesSerializer:
+      properties:
+        schedules:
+          description: List of schedules associated with the policy.
+          examples:
+          - - day_of_week: fri, tue
+              hour: 0, 20
+              max_quantity: 2
+              minute: '30'
+              resource_name_template: CRON reserve snap of the volume {volume_id}
+              retention_time:
+                weeks: 2
+              timezone: UTC
+              type: cron
+            - days: 0
+              hours: 2
+              max_quantity: 2
+              minutes: 1
+              resource_name_template: INTERVAL reserve snap of the volume {volume_id}
+              retention_time:
+                days: 1
+              type: interval
+              weeks: 0
+          items:
+            $ref: '#/components/schemas/CreateScheduleSerializer'
+          title: Schedules
+          type: array
+      required:
+      - schedules
+      title: AddSchedulesSerializer
+      type: object
+    GetIntervalScheduleSerializer:
+      properties:
+        days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of days to wait
+          examples:
+          - 0
+          title: Days
+        hours:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of hours to wait
+          examples:
+          - 2
+          title: Hours
+        id:
+          description: Schedule ID
+          examples:
+          - 1488e2ce-f906-47fb-ba32-c25a3f63df4f
+          title: Id
+          type: string
+        max_quantity:
+          description: Number of stored resources.
+          examples:
+          - 2
+          exclusiveMinimum: 0
+          maximum: 10000
+          title: Max Quantity
+          type: integer
+        minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of minutes to wait
+          examples:
+          - 1
+          title: Minutes
+        owner:
+          description: Schedule owner
+          examples:
+          - lifecycle_policy
+          title: Owner
+          type: string
+        owner_id:
+          description: Owner ID
+          examples:
+          - 1
+          title: Owner Id
+          type: integer
+        resource_name_template:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Template for resource names
+          examples:
+          - reserve snap of the volume {volume_id}
+          title: Resource Name Template
+        retention_time:
+          anyOf:
+          - $ref: '#/components/schemas/RetentionTimeSerializer'
+          - type: 'null'
+          description: Time after which the resource will be deleted
+        type:
+          const: interval
+          description: Schedule type
+          examples:
+          - interval
+          title: Type
+          type: string
+        user_id:
+          description: User ID
+          examples:
+          - 12
+          title: User Id
+          type: integer
+        weeks:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of weeks to wait
+          examples:
+          - 0
+          title: Weeks
+      required:
+      - id
+      - owner
+      - owner_id
+      - user_id
+      - max_quantity
+      - retention_time
+      - type
+      title: GetIntervalScheduleSerializer
+      type: object
+    CreateIntervalScheduleSerializer:
+      properties:
+        days:
+          description: Number of days to wait
+          examples:
+          - 0
+          title: Days
+          type: integer
+        hours:
+          description: Number of hours to wait
+          examples:
+          - 2
+          title: Hours
+          type: integer
+        max_quantity:
+          default: 2
+          description: Number of stored resources.
+          examples:
+          - 2
+          exclusiveMinimum: 0
+          maximum: 10000
+          title: Max Quantity
+          type: integer
+        minutes:
+          description: Number of minutes to wait
+          examples:
+          - 1
+          title: Minutes
+          type: integer
+        resource_name_template:
+          default: Snapshot of volume {volume_id} created by policy {lifecycle_policy_id}
+          description: Template for resource names.
+          examples:
+          - Snapshot of volume {volume_id} created by policy {lifecycle_policy_id}
+          title: Resource Name Template
+          type: string
+        retention_time:
+          $ref: '#/components/schemas/CreateIntervalTimeSerializer'
+          description: Time after which the resource will be deleted
+        type:
+          const: interval
+          description: Schedule type
+          examples:
+          - interval
+          title: Type
+          type: string
+        weeks:
+          description: Number of weeks to wait
+          examples:
+          - 0
+          title: Weeks
+          type: integer
+      required:
+      - type
+      title: CreateIntervalScheduleSerializer
+      type: object
+    LifecyclePolicySerializer:
+      properties:
+        action:
+          description: Action associated with the lifecycle policy.
+          examples:
+          - volume_snapshot
+          title: Action
+          type: string
+        id:
+          description: Unique identifier for the policy.
+          examples:
+          - 1
+          title: Id
+          type: integer
+        name:
+          description: Name of the policy.
+          examples:
+          - schedule_1
+          title: Name
+          type: string
+        project_id:
+          description: Project ID associated with the policy.
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+        region_id:
+          description: Region ID where the policy is applied.
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+        schedules:
+          description: List of schedules within the policy.
+          examples:
+          - - day_of_week: '*'
+              hour: 0, 10, 20
+              id: 1488e2ce-f906-47fb-ba32-c25a3f63df4f
+              max_quantity: 2
+              minute: '30'
+              owner: lifecycle_policy
+              owner_id: 1
+              resource_name_template: reserve snap of the volume {volume_id}
+              type: cron
+              user_id: 12
+          items:
+            $ref: '#/components/schemas/ScheduleSerializer'
+          title: Schedules
+          type: array
+        status:
+          $ref: '#/components/schemas/LifecyclePolicyStatusesEnum'
+          description: Status of the lifecycle policy.
+          examples:
+          - active
+        user_id:
+          description: User ID of the creator of the policy.
+          examples:
+          - 11
+          title: User Id
+          type: integer
+        volumes:
+          description: Data of volumes that should be reserved. Displayed only when the query parameter is specified.
+          examples:
+          - - volume_id: 3ed9e2ce-f906-47fb-ba32-c25a3f63df4f
+              volume_name: test schedule
+          items:
+            $ref: '#/components/schemas/VolumeDataForLifecyclePolicySerializer'
+          title: Volumes
+          type: array
+      required:
+      - action
+      - id
+      - name
+      - project_id
+      - region_id
+      - schedules
+      - status
+      - user_id
+      - volumes
+      title: LifecyclePolicySerializer
+      type: object
+    VolumePricingWithDiscountPerPeriodSerializer:
+      properties:
+        volumes:
+          description: Prices of volumes per type over the specified period of time.
+          examples:
+          - discount: 0.1
+            price: 78.0
+            type: cold
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/VolumePriceWithDiscountSerializer'
+            - type: 'null'
+          title: Volumes
+          type: array
+      required:
+      - volumes
+      title: VolumePricingWithDiscountPerPeriodSerializer
+      type: object
+    RetentionTimeSerializer:
+      properties:
+        days:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of days to wait
+          examples:
+          - 0
+          title: Days
+        hours:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of hours to wait
+          examples:
+          - 2
+          title: Hours
+        minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of minutes to wait
+          examples:
+          - 1
+          title: Minutes
+        weeks:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of weeks to wait
+          examples:
+          - 0
+          title: Weeks
+      title: RetentionTimeSerializer
+      type: object
+    GetCronScheduleSerializer:
+      properties:
+        day:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Day of the month (1-31, '*') or a comma-separated list of days
+          examples:
+          - '5'
+          title: Day
+        day_of_week:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Weekday or a comma-separated list of weekdays (mon,tue,wed,thu,fri,sat,sun,*)
+          examples:
+          - mon,fri
+          title: Day Of Week
+        hour:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Hour (0-23, '*') or a comma-separated list of hours
+          examples:
+          - 0, 20
+          title: Hour
+        id:
+          description: Schedule ID
+          examples:
+          - 1488e2ce-f906-47fb-ba32-c25a3f63df4f
+          title: Id
+          type: string
+        max_quantity:
+          description: Number of stored resources.
+          examples:
+          - 2
+          exclusiveMinimum: 0
+          maximum: 10000
+          title: Max Quantity
+          type: integer
+        minute:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Minute (0-59, '*') or a comma-separated list of minutes
+          examples:
+          - '30'
+          title: Minute
+        month:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Month (1-12, '*') or a comma-separated list of months
+          examples:
+          - 1,6
+          title: Month
+        owner:
+          description: Schedule owner
+          examples:
+          - lifecycle_policy
+          title: Owner
+          type: string
+        owner_id:
+          description: Owner ID
+          examples:
+          - 1
+          title: Owner Id
+          type: integer
+        resource_name_template:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Template for resource names
+          examples:
+          - reserve snap of the volume {volume_id}
+          title: Resource Name Template
+        retention_time:
+          anyOf:
+          - $ref: '#/components/schemas/RetentionTimeSerializer'
+          - type: 'null'
+          description: Time after which the resource will be deleted
+        timezone:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: A pytz timezone. Defaults to UTC.
+          examples:
+          - UTC
+          title: Timezone
+        type:
+          const: cron
+          description: Schedule type
+          examples:
+          - cron
+          title: Type
+          type: string
+        user_id:
+          description: User ID
+          examples:
+          - 12
+          title: User Id
+          type: integer
+        week:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: ISO week (1-53, '*') or a comma-separated list of weeks
+          examples:
+          - '1'
+          title: Week
+      required:
+      - id
+      - owner
+      - owner_id
+      - user_id
+      - max_quantity
+      - retention_time
+      - type
+      title: GetCronScheduleSerializer
+      type: object
+    VolumePriceWithDiscountSerializer:
+      properties:
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Discount value within range [0..1] where 1 is 100%.
+          examples:
+          - 0.1
+          - 0.02
+          - 0.99
+          - 0.0
+          title: Discount
+        price:
+          description: Price for specified category.
+          examples:
+          - 78.0
+          title: Price
+          type: number
+        type:
+          $ref: '#/components/schemas/AllVolumeTypeEnum'
+          description: Type of volume.
+          examples:
+          - ultra
+          - ssd_lowlatency
+          - cold
+          - ssd_hiiops
+      required:
+      - type
+      - discount
+      - price
+      title: VolumePriceWithDiscountSerializer
+      type: object
+    LifecyclePolicyActionEnum:
+      enum:
+      - volume_snapshot
+      title: LifecyclePolicyActionEnum
+      type: string
+    LifeCyclePolicyV2ResponseSerializer:
+      description: Billing response preview schema for server instance.
+      examples:
+      - currency_code: USD
+        discount: 0.0
+        per_hour:
+          volumes:
+          - discount: 0.1
+            price: 78.0
+            type: cold
+          - discount: 0.0
+            price: 78.0
+            type: ssd_hiiops
+          - discount: 0.1
+            price: 78.0
+            type: standard
+        per_month:
+          volumes:
+          - discount: 0.1
+            price: 178.0
+            type: cold
+          - discount: 0.0
+            price: 178.0
+            type: ssd_hiiops
+          - discount: 0.1
+            price: 178.0
+            type: standard
+        price_status: show
+        price_without_discount_per_month: 734.4
+        tax_percent: 17.0
+        total_price_per_hour: 1.02
+        total_price_per_month: 734.4
+      properties:
+        currency_code:
+          description: Currency code (3-letter code per ISO 4217).
+          enum:
+          - AZN
+          - EUR
+          - USD
+          examples:
+          - USD
+          - EUR
+          - AZN
+          title: Currency Code
+          type: string
+        discount:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Discount value within range [0..1] where 1 is 100%.
+          examples:
+          - 0.1
+          - 0.02
+          - 0.99
+          title: Discount
+        per_hour:
+          $ref: '#/components/schemas/VolumePricingWithDiscountPerPeriodSerializer'
+          description: Prices per category charged per hour.
+          examples:
+          - volumes:
+            - discount: 0.1
+              price: 78.0
+              type: cold
+            - discount: 0.0
+              price: 78.0
+              type: ssd_hiiops
+            - discount: 0.1
+              price: 78.0
+              type: standard
+        per_month:
+          $ref: '#/components/schemas/VolumePricingWithDiscountPerPeriodSerializer'
+          description: Prices per category charged per month.
+          examples:
+          - volumes:
+            - discount: 0.1
+              price: 178.0
+              type: cold
+            - discount: 0.0
+              price: 178.0
+              type: ssd_hiiops
+            - discount: 0.1
+              price: 178.0
+              type: standard
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI.
+          examples:
+          - show
+          - hide
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount.
+          examples:
+          - 800.0
+          - 1000.5
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+        total_price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per hour.
+          examples:
+          - 1.02
+          - 2.5
+          title: Total Price Per Hour
+        total_price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month.
+          examples:
+          - 734.4
+          - 1200.0
+          title: Total Price Per Month
+      required:
+      - currency_code
+      - discount
+      - per_hour
+      - per_month
+      - price_status
+      - price_without_discount_per_month
+      - total_price_per_hour
+      - total_price_per_month
+      - tax_percent
+      title: LifeCyclePolicyV2ResponseSerializer
+      type: object
+    LifecyclePolicyStatusesEnum:
+      enum:
+      - active
+      - paused
+      title: LifecyclePolicyStatusesEnum
+      type: string
+    ScheduleSerializer:
+      discriminator:
+        mapping:
+          cron: '#/components/schemas/GetCronScheduleSerializer'
+          interval: '#/components/schemas/GetIntervalScheduleSerializer'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/GetCronScheduleSerializer'
+      - $ref: '#/components/schemas/GetIntervalScheduleSerializer'
+      title: ScheduleSerializer
+    VolumeDataForLifecyclePolicySerializer:
+      properties:
+        volume_id:
+          description: Unique identifier of the volume.
+          examples:
+          - 3ed9e2ce-f906-47fb-ba32-c25a3f63df4f
+          title: Volume Id
+          type: string
+        volume_name:
+          description: Name of the volume.
+          examples:
+          - Volume-1
+          title: Volume Name
+          type: string
+      required:
+      - volume_id
+      - volume_name
+      title: VolumeDataForLifecyclePolicySerializer
+      type: object
+    LifecyclePolicyUsageSerializer:
+      properties:
+        max_cost:
+          $ref: '#/components/schemas/ItemPriceResponseSerializer'
+          description: Total billed cost of all snapshots that can be created by the schedule. Cost of max_volume_snapshot_count_usage snapshots.
+          examples:
+          - currency_code: USD
+            price_per_hour: 0.01
+            price_per_month: 7.2
+            price_status: show
+        max_volume_snapshot_count_usage:
+          description: Count of snapshots that can be created if the schedule creates the maximum possible number of snapshots.
+          examples:
+          - 2
+          title: Max Volume Snapshot Count Usage
+          type: integer
+        max_volume_snapshot_sequence_length:
+          description: Maximum volume snapshot sequence length.
+          examples:
+          - 2
+          title: Max Volume Snapshot Sequence Length
+          type: integer
+        max_volume_snapshot_size_usage:
+          description: The amount of memory in GiB that snapshots will take up if the schedule creates the maximum possible number of them.
+          examples:
+          - 20
+          title: Max Volume Snapshot Size Usage
+          type: integer
+      required:
+      - max_cost
+      - max_volume_snapshot_count_usage
+      - max_volume_snapshot_sequence_length
+      - max_volume_snapshot_size_usage
+      title: LifecyclePolicyUsageSerializer
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    CreateIntervalTimeSerializer:
+      properties:
+        days:
+          description: Number of days to wait
+          examples:
+          - 0
+          title: Days
+          type: integer
+        hours:
+          description: Number of hours to wait
+          examples:
+          - 2
+          title: Hours
+          type: integer
+        minutes:
+          description: Number of minutes to wait
+          examples:
+          - 1
+          title: Minutes
+          type: integer
+        weeks:
+          description: Number of weeks to wait
+          examples:
+          - 0
+          title: Weeks
+          type: integer
+      title: CreateIntervalTimeSerializer
+      type: object
+    AllVolumeTypeEnum:
+      enum:
+      - cold
+      - ssd_hiiops
+      - ssd_local
+      - ssd_lowlatency
+      - standard
+      - ultra
+      title: AllVolumeTypeEnum
+      type: string
+    CreateScheduleSerializer:
+      description: 'List of schedules associated with the policy. If the schedule made ''max_quantity'' snapshots, a new snapshot will be created in time, but the oldest from the schedule`s snapshots will be deleted. If ''retention_time''  was set and the schedule`s snapshots will be delete after the specified period of time. In resource_name_template you can use such forms that will then be automatically filled in with values: ''{volume_id}'', ''{schedule_id}'', ''{lifecycle_policy_id}'', ''{datetime_utc}'', ''{local_datetime}''.'
+      discriminator:
+        mapping:
+          cron: '#/components/schemas/CreateCronScheduleSerializer'
+          interval: '#/components/schemas/CreateIntervalScheduleSerializer'
+        propertyName: type
+      examples:
+      - day_of_week: fri
+        hour: 0, 20
+        max_quantity: 2
+        minute: '30'
+        resource_name_template: snapshot of volume {volume_id}
+        timezone: UTC
+        type: cron
+      oneOf:
+      - $ref: '#/components/schemas/CreateCronScheduleSerializer'
+      - $ref: '#/components/schemas/CreateIntervalScheduleSerializer'
+      title: CreateScheduleSerializer

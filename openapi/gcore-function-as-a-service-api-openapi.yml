@@ -1,0 +1,2157 @@
+openapi: 3.2.0
+info:
+  title: Cloud Function as a Service API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Function as a Service
+paths:
+  /v1/faas/flavors/{project_id}/{region_id}:
+    get:
+      operationId: FaaSFlavorsHandler.get
+      summary: List flavors
+      description: 'Retrieve a list of available compute flavors for functions.
+
+        Flavors define CPU and memory resources for function execution.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Function name
+        schema:
+          anyOf:
+          - pattern: ^[0-9]{0,12}mCPU-[0-9]{0,12}MB$
+            type: string
+          - type: 'null'
+          default: null
+          description: Function name
+          examples:
+          - function-name
+          title: Name
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaasFlavorsListSerializer'
+      tags:
+      - Function as a Service
+  /v1/faas/keys/{project_id}/{region_id}:
+    post:
+      operationId: FaaSAuthKeysHandler.post
+      summary: Create API key
+      description: 'Create a new API key for function authentication.
+
+        The key can be configured with an expiration time and permissions.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedApiKeySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaasCreateApiKeySerializer'
+      tags:
+      - Function as a Service
+    get:
+      operationId: FaaSAuthKeysHandler.get
+      summary: List API keys
+      description: 'Retrieve a list of API keys for function authentication.
+
+        Keys can be filtered by name and expiration status.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: expire_in
+        required: false
+        description: Days to expire
+        schema:
+          description: Days to expire
+          examples:
+          - 5
+          minimum: 1
+          title: Expire In
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Ordering fields and directions.
+        schema:
+          $ref: '#/components/schemas/ApiKeysOrderByChoices'
+          default: created_at.desc
+          description: Ordering fields and directions.
+          examples:
+          - created_at.desc
+      - in: query
+        name: search
+        required: false
+        description: Search through which value
+        schema:
+          description: Search through which value
+          examples:
+          - search-value
+          pattern: ^[-a-z0-9]{0,25}[-a-z0-9]$
+          title: Search
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaasApiKeyListSerializer'
+      tags:
+      - Function as a Service
+  /v1/faas/keys/{project_id}/{region_id}/{key_name}:
+    get:
+      operationId: FaaSAuthKeyHandler.get
+      summary: Get API key
+      description: 'Retrieve detailed information about a specific API key.
+
+        Includes key permissions and expiration status.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: key_name
+        required: true
+        description: Key name
+        schema:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Key Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaasApiKeySerializer'
+      tags:
+      - Function as a Service
+    patch:
+      operationId: FaaSAuthKeyHandler.patch
+      summary: Update API key
+      description: 'Update the configuration of an existing API key.
+
+        Only specified fields will be modified.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: key_name
+        required: true
+        description: Key name
+        schema:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Key Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaasApiKeySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaasApiKeyPatchSerializer'
+      tags:
+      - Function as a Service
+    delete:
+      operationId: FaaSAuthKeyHandler.delete
+      summary: Delete API key
+      description: 'Delete a specific API key.
+
+        The key will be immediately invalidated.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: key_name
+        required: true
+        description: Key name
+        schema:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Key Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Function as a Service
+  /v1/faas/namespaces/{project_id}/{region_id}:
+    post:
+      operationId: NamespacesHandler.post
+      summary: Create namespace
+      description: 'Create a new namespace for serverless functions.
+
+        The namespace will be created in the specified project and region.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNamespaceSerializer'
+      tags:
+      - Function as a Service
+    get:
+      operationId: NamespacesHandler.get
+      summary: List namespaces
+      description: 'Retrieve a list of namespaces in the project and region.
+
+        Each namespace includes its associated functions and their deployment status.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Ordering fields and directions.
+        schema:
+          $ref: '#/components/schemas/FunctionsOrderByChoices'
+          default: created_at.desc
+          description: Ordering fields and directions.
+          examples:
+          - created_at.desc
+      - in: query
+        name: search
+        required: false
+        description: Search through which value
+        schema:
+          description: Search through which value
+          examples:
+          - search-value
+          pattern: ^[-a-z0-9]{0,25}[-a-z0-9]$
+          title: Search
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamespaceListSerializer'
+      tags:
+      - Function as a Service
+  /v1/faas/namespaces/{project_id}/{region_id}/{namespace_name}:
+    get:
+      operationId: NamespaceHandler.get
+      summary: Get namespace
+      description: 'Retrieve detailed information about a specific namespace.
+
+        Includes all functions associated with the namespace.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamespaceSerializer'
+      tags:
+      - Function as a Service
+    patch:
+      operationId: NamespaceHandler.patch
+      summary: Update namespace
+      description: 'Update the configuration of an existing namespace.
+
+        Only specified fields will be modified.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeNamespaceSerializer'
+      tags:
+      - Function as a Service
+    delete:
+      operationId: NamespaceHandler.delete
+      summary: Delete namespace
+      description: 'Delete a namespace and all its associated functions.
+
+        The namespace must be empty before it can be deleted.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Function as a Service
+  /v1/faas/namespaces/{project_id}/{region_id}/{namespace_name}/functions:
+    post:
+      operationId: FunctionsHandler.post
+      summary: Create function
+      description: 'Create a new serverless function in the specified namespace.
+
+        The function can be configured with code, dependencies, and runtime settings.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFunctionSerializer'
+      tags:
+      - Function as a Service
+    get:
+      operationId: FunctionsHandler.get
+      summary: List functions
+      description: 'Retrieve a list of functions in the specified namespace.
+
+        Includes function configuration and deployment status.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Ordering fields and directions.
+        schema:
+          $ref: '#/components/schemas/FunctionsOrderByChoices'
+          default: created_at.desc
+          description: Ordering fields and directions.
+          examples:
+          - created_at.desc
+      - in: query
+        name: search
+        required: false
+        description: Search through which value
+        schema:
+          description: Search through which value
+          examples:
+          - search-value
+          pattern: ^[-a-z0-9]{0,25}[-a-z0-9]$
+          title: Search
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FunctionListSerializer'
+      tags:
+      - Function as a Service
+  /v1/faas/namespaces/{project_id}/{region_id}/{namespace_name}/functions/{function_name}:
+    get:
+      operationId: FunctionHandler.get
+      summary: Get function
+      description: 'Retrieve detailed information about a specific function.
+
+        Includes function code, configuration, and deployment status.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      - in: path
+        name: function_name
+        required: true
+        description: Function name
+        schema:
+          description: Function name
+          examples:
+          - function-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Function Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FunctionSerializer'
+      tags:
+      - Function as a Service
+    patch:
+      operationId: FunctionHandler.patch
+      summary: Update function
+      description: 'Update the configuration of an existing function.
+
+        Only specified fields will be modified.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      - in: path
+        name: function_name
+        required: true
+        description: Function name
+        schema:
+          description: Function name
+          examples:
+          - function-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Function Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeFunctionSerializer'
+      tags:
+      - Function as a Service
+    delete:
+      operationId: FunctionHandler.delete
+      summary: Delete function
+      description: 'Delete a specific function from its namespace.
+
+        The function must be in a state that allows deletion.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      - in: path
+        name: function_name
+        required: true
+        description: Function name
+        schema:
+          description: Function name
+          examples:
+          - function-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Function Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Function as a Service
+  /v1/faas/namespaces/{project_id}/{region_id}/{namespace_name}/functions/{function_name}/logs:
+    get:
+      operationId: LogsFunctionHandler.get
+      summary: Get function logs
+      description: 'Retrieve execution logs for a specific function.
+
+        Logs can be filtered by time range and limit.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Namespace name
+        schema:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace Name
+          type: string
+      - in: path
+        name: function_name
+        required: true
+        description: Function name
+        schema:
+          description: Function name
+          examples:
+          - function-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Function Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Limit the number of logs lines
+        schema:
+          default: 1000
+          description: Limit the number of logs lines
+          examples:
+          - 10
+          maximum: 100000
+          minimum: 1
+          title: Limit
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsSerializer'
+      tags:
+      - Function as a Service
+  /v1/faas/runtimes/{project_id}/{region_id}:
+    get:
+      operationId: RuntimesHandler.get
+      summary: List runtimes
+      description: 'Retrieve a list of available runtime environments for functions.
+
+        Each runtime includes its version and supported features.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuntimesSerializer'
+      tags:
+      - Function as a Service
+  /v1/pricing/{project_id}/{region_id}/faas/functions:
+    post:
+      operationId: FaasFunctionPricingHandler.post
+      summary: Preview function price
+      description: Preview the billing price for the FaaS function.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FunctionPriceRequestSerializer'
+      tags:
+      - Function as a Service
+components:
+  schemas:
+    NamespaceListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/NamespaceSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: NamespaceListSerializer
+      type: object
+    FaasFlavorSerializer:
+      properties:
+        cpu:
+          description: The number of millicpus allocated to the flavor.
+          examples:
+          - 128
+          maximum: 2000
+          minimum: 1
+          title: Cpu
+          type: integer
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The generated name of the flavor.
+          examples:
+          - 128m-128MB
+          title: Name
+        ram:
+          description: The amount of RAM (in megabytes) allocated to the flavor.
+          examples:
+          - 128
+          maximum: 2000
+          minimum: 1
+          title: Ram
+          type: integer
+      required:
+      - cpu
+      - ram
+      title: FaaS Flavor
+      type: object
+    FaasCreateApiKeySerializer:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Optional key description
+          examples:
+          - key-description
+          title: Description
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Key expires at
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Expire
+        functions:
+          description: List of functions using key
+          items:
+            $ref: '#/components/schemas/NamespacedName'
+          title: Functions
+          type: array
+        name:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+      required:
+      - name
+      - functions
+      title: FaasCreateApiKeySerializer
+      type: object
+    NamespacedName:
+      properties:
+        name:
+          description: Function name
+          examples:
+          - function-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+        namespace:
+          description: Namespace name
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Namespace
+          type: string
+      required:
+      - name
+      - namespace
+      title: NamespacedName
+      type: object
+    FaasApiKeySerializer:
+      properties:
+        created_at:
+          description: Key starts to work
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Created At
+          type: string
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Optional key description
+          examples:
+          - key-description
+          title: Description
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Key expires at
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Expire
+        functions:
+          description: List of functions using key
+          items:
+            $ref: '#/components/schemas/NamespacedName'
+          title: Functions
+          type: array
+        name:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+        status:
+          description: Key status
+          examples:
+          - Expired
+          title: Status
+          type: string
+      required:
+      - functions
+      - name
+      - created_at
+      - status
+      title: FaasApiKeySerializer
+      type: object
+    FunctionSerializer:
+      properties:
+        autoscaling:
+          $ref: '#/components/schemas/FaasAutoscalingSerializer'
+          description: Autoscaling configuration for the function. Keys must be 'min_instances' or 'max_instances', and values must be integers between 0 and 50.
+          examples:
+          - max_instances: 2
+            min_instances: 1
+        build_message:
+          description: Function build message.
+          examples:
+          - Building
+          title: Build Message
+          type: string
+        build_status:
+          description: Function build status.
+          examples:
+          - Building
+          title: Build Status
+          type: string
+        code_text:
+          description: Function code text.
+          examples:
+          - "def main():\n    return 'Hello World'"
+          maxLength: 100000
+          minLength: 1
+          title: Code Text
+          type: string
+        created_at:
+          description: Function creation date.
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Created At
+          type: string
+        dependencies:
+          description: Dependencies for the function to install.
+          examples:
+          - 'numpy==1.21.0
+
+            pandas==1.3.0'
+          maxLength: 100000
+          title: Dependencies
+          type: string
+        deploy_status:
+          additionalProperties:
+            type: integer
+          description: Function deploy status.
+          examples:
+          - deployed: 1
+          title: Deploy Status
+          type: object
+        description:
+          description: Description of the function.
+          examples:
+          - This is a sample function.
+          maxLength: 255
+          minLength: 0
+          title: Description
+          type: string
+        enable_api_key:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Enable or disable API key authentication.
+          examples:
+          - true
+          title: Enable Api Key
+        endpoint:
+          description: Function endpoint.
+          examples:
+          - https://example.com/function-name
+          title: Endpoint
+          type: string
+        envs:
+          anyOf:
+          - propertyNames:
+              maxLength: 255
+              minLength: 1
+              pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+            type: object
+            additionalProperties:
+              maxLength: 255
+              minLength: 0
+              type: string
+          - type: 'null'
+          default: null
+          description: Environment variables for the function. Keys must match a specific regex pattern and be 1-255 characters long, and values must be 0-255 characters long.
+          examples:
+          - ENV_VAR: value
+          title: Envs
+        flavor:
+          description: The name of the flavor associated with the function.
+          examples:
+          - 64m-64MB
+          title: Flavor
+          type: string
+        id:
+          description: Function ID.
+          examples:
+          - c8a920ad-b5a4-47d5-b8b9-0e6c35cd800f
+          title: Id
+          type: string
+        main_method:
+          description: The main startup method name.
+          examples:
+          - run
+          maxLength: 100
+          minLength: 1
+          title: Main Method
+          type: string
+        name:
+          description: Function name.
+          examples:
+          - function-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+        runtime:
+          description: Function runtime.
+          examples:
+          - python3.7.12
+          title: Runtime
+          type: string
+        status:
+          description: Function status.
+          examples:
+          - Running
+          title: Status
+          type: string
+        timeout:
+          description: Function timeout in seconds.
+          examples:
+          - 5
+          maximum: 180
+          minimum: 0
+          title: Timeout
+          type: integer
+      required:
+      - id
+      - name
+      - runtime
+      - timeout
+      - flavor
+      - autoscaling
+      - code_text
+      - main_method
+      - endpoint
+      - build_status
+      - build_message
+      - status
+      - created_at
+      - deploy_status
+      - dependencies
+      - description
+      title: FunctionSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    FaasFlavorsListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/FaasFlavorSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: FaasFlavorsListSerializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    ChangeNamespaceSerializer:
+      properties:
+        description:
+          anyOf:
+          - maxLength: 255
+            minLength: 0
+            type: string
+          - type: 'null'
+          default: null
+          description: Namespace description.
+          examples:
+          - This is a sample namespace.
+          title: Description
+        envs:
+          anyOf:
+          - propertyNames:
+              maxLength: 255
+              minLength: 1
+              pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+            type: object
+            additionalProperties:
+              maxLength: 255
+              minLength: 0
+              type: string
+          - type: 'null'
+          default: null
+          description: Namespace environment variables. Keys must match a specific regex pattern and be 1-255 characters long, and values must be 0-255 characters long.
+          examples:
+          - ENV_VAR: value
+          title: Envs
+      title: ChangeNamespaceSerializer
+      type: object
+    FaasApiKeyListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/FaasApiKeySerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: FaasApiKeyListSerializer
+      type: object
+    NamespaceSerializer:
+      properties:
+        created_at:
+          description: Namespace creation date.
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Created At
+          type: string
+        description:
+          anyOf:
+          - maxLength: 255
+            minLength: 0
+            type: string
+          - type: 'null'
+          default: null
+          description: Namespace description.
+          examples:
+          - This is a sample namespace.
+          title: Description
+        envs:
+          anyOf:
+          - propertyNames:
+              maxLength: 255
+              minLength: 1
+              pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+            type: object
+            additionalProperties:
+              maxLength: 255
+              minLength: 0
+              type: string
+          - type: 'null'
+          default: null
+          description: Namespace environment variables. Keys must match a specific regex pattern and be 1-255 characters long, and values must be 0-255 characters long.
+          examples:
+          - ENV_VAR: value
+          title: Envs
+        functions:
+          description: Namespace functions.
+          examples:
+          - - name: function-name
+          items:
+            $ref: '#/components/schemas/FunctionSerializer'
+          title: Functions
+          type: array
+        functions_deploy_status:
+          additionalProperties:
+            type: integer
+          description: Deploy status of namespace functions.
+          examples:
+          - deployed: 1
+          title: Functions Deploy Status
+          type: object
+        name:
+          description: Namespace name.
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+        status:
+          description: Namespace status.
+          examples:
+          - Active
+          title: Status
+          type: string
+      required:
+      - name
+      - functions
+      - status
+      - created_at
+      - functions_deploy_status
+      title: NamespaceSerializer
+      type: object
+    CreateFunctionSerializer:
+      properties:
+        autoscaling:
+          $ref: '#/components/schemas/FaasAutoscalingSerializer'
+          description: Autoscaling configuration for the function. Keys must be 'min_instances' or 'max_instances', and values must be integers between 0 and 50.
+          examples:
+          - max_instances: 2
+            min_instances: 1
+        code_text:
+          description: Function code text.
+          examples:
+          - "def main():\n    return 'Hello World'"
+          maxLength: 100000
+          minLength: 1
+          title: Code Text
+          type: string
+        dependencies:
+          default: ''
+          description: Dependencies for the function to install.
+          examples:
+          - 'numpy==1.21.0
+
+            pandas==1.3.0'
+          maxLength: 100000
+          title: Dependencies
+          type: string
+        description:
+          default: ''
+          description: Description of the function.
+          examples:
+          - This is a sample function.
+          maxLength: 255
+          minLength: 0
+          title: Description
+          type: string
+        enable_api_key:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Enable or disable API key authentication. Enable api key is temporarily disabled. As a result, using Functions with authorization is currently not supported.
+          examples:
+          - true
+          title: Enable Api Key
+        envs:
+          default: {}
+          description: Environment variables for the function. Keys must match a specific regex pattern and be 1-255 characters long, and values must be 0-255 characters long.
+          examples:
+          - ENV_VAR: value
+          propertyNames:
+            maxLength: 255
+            minLength: 1
+            pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+          title: Envs
+          type: object
+          additionalProperties:
+            maxLength: 255
+            minLength: 0
+            type: string
+        flavor:
+          description: The name of the flavor associated with the function.
+          examples:
+          - 64m-64MB
+          title: Flavor
+          type: string
+        main_method:
+          description: The main startup method name.
+          examples:
+          - handler
+          maxLength: 100
+          minLength: 1
+          title: Main Method
+          type: string
+        name:
+          description: Function name.
+          examples:
+          - function-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+        runtime:
+          description: Function runtime.
+          examples:
+          - python3.7.12
+          title: Runtime
+          type: string
+        timeout:
+          description: Function timeout in seconds.
+          examples:
+          - 5
+          maximum: 180
+          minimum: 0
+          title: Timeout
+          type: integer
+      required:
+      - name
+      - runtime
+      - timeout
+      - flavor
+      - autoscaling
+      - code_text
+      - main_method
+      title: CreateFunctionSerializer
+      type: object
+    RuntimesSerializer:
+      properties:
+        runtimes:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          description: FaaS runtimes.
+          examples:
+          - go:
+            - go1.16.6
+            python:
+            - python2.7.18
+            - python3.7.12
+          title: Runtimes
+          type: object
+      required:
+      - runtimes
+      title: RuntimesSerializer
+      type: object
+    ChangeFunctionSerializer:
+      properties:
+        autoscaling:
+          anyOf:
+          - $ref: '#/components/schemas/FaasAutoscalingSerializer'
+          - type: 'null'
+          default: null
+          description: Autoscaling configuration for the function. Keys must be 'min_instances' or 'max_instances', and values must be integers between 0 and 50.
+          examples:
+          - max_instances: 5
+            min_instances: 1
+        code_text:
+          anyOf:
+          - maxLength: 100000
+            minLength: 1
+            type: string
+          - type: 'null'
+          default: null
+          description: Function code text.
+          examples:
+          - "def main():\n    return 'Hello World'"
+          title: Code Text
+        dependencies:
+          anyOf:
+          - maxLength: 100000
+            type: string
+          - type: 'null'
+          default: null
+          description: Dependencies for the function to install.
+          examples:
+          - 'numpy==1.21.0
+
+            pandas==1.3.0'
+          title: Dependencies
+        description:
+          anyOf:
+          - maxLength: 255
+            minLength: 0
+            type: string
+          - type: 'null'
+          default: null
+          description: Description of the function.
+          examples:
+          - This is a sample function.
+          title: Description
+        disabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Set to true if the function is disabled.
+          examples:
+          - false
+          title: Disabled
+        enable_api_key:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Enable or disable API key authentication. Enable api key is temporarily disabled. As a result, using Functions with authorization is currently not supported.
+          examples:
+          - true
+          title: Enable Api Key
+        envs:
+          anyOf:
+          - propertyNames:
+              maxLength: 255
+              minLength: 1
+              pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+            type: object
+            additionalProperties:
+              maxLength: 255
+              minLength: 0
+              type: string
+          - type: 'null'
+          default: null
+          description: Environment variables for the function. Keys must match a specific regex pattern and be 1-255 characters long, and values must be 0-255 characters long.
+          examples:
+          - ENV_VAR: value
+          title: Envs
+        flavor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The name of the flavor associated with the function.
+          examples:
+          - 128m-128MB
+          title: Flavor
+        keys:
+          anyOf:
+          - items:
+              pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          description: List of used authentication API keys, matching a specific regex pattern.
+          examples:
+          - - key1
+            - key2
+          title: Keys
+        main_method:
+          anyOf:
+          - maxLength: 100
+            minLength: 1
+            type: string
+          - type: 'null'
+          default: null
+          description: The main startup method name.
+          examples:
+          - run
+          title: Main Method
+        timeout:
+          anyOf:
+          - maximum: 180
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: Function timeout in seconds.
+          examples:
+          - 60
+          title: Timeout
+      title: ChangeFunctionSerializer
+      type: object
+    FunctionPriceRequestSerializer:
+      properties:
+        autoscaling:
+          $ref: '#/components/schemas/FaasAutoscalingSerializer'
+          description: Autoscaling configuration for the function. Keys must be 'min_instances' or 'max_instances', and values must be integers between 0 and 50.
+          examples:
+          - max_instances: 2
+            min_instances: 1
+        flavor:
+          description: The name of the flavor associated with the function.
+          examples:
+          - 64m-64MB
+          title: Flavor
+          type: string
+      required:
+      - autoscaling
+      - flavor
+      title: FunctionPriceRequestSerializer
+      type: object
+    FaasApiKeyPatchSerializer:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Optional key description
+          examples:
+          - key-description
+          title: Description
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Key expires at
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Expire
+        functions:
+          description: List of functions using key
+          items:
+            $ref: '#/components/schemas/NamespacedName'
+          title: Functions
+          type: array
+      required:
+      - functions
+      title: FaasApiKeyPatchSerializer
+      type: object
+    CreateNamespaceSerializer:
+      properties:
+        description:
+          anyOf:
+          - maxLength: 255
+            minLength: 0
+            type: string
+          - type: 'null'
+          default: null
+          description: Namespace description.
+          examples:
+          - This is a sample namespace.
+          title: Description
+        envs:
+          anyOf:
+          - propertyNames:
+              maxLength: 255
+              minLength: 1
+              pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+            type: object
+            additionalProperties:
+              maxLength: 255
+              minLength: 0
+              type: string
+          - type: 'null'
+          default: null
+          description: Namespace environment variables. Keys must match a specific regex pattern and be 1-255 characters long, and values must be 0-255 characters long.
+          examples:
+          - ENV_VAR: value
+          title: Envs
+        name:
+          description: Namespace name.
+          examples:
+          - namespace-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateNamespaceSerializer
+      type: object
+    FunctionListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/FunctionSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: FunctionListSerializer
+      type: object
+    ApiKeysOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - expire.asc
+      - expire.desc
+      - name.asc
+      - name.desc
+      title: ApiKeysOrderByChoices
+      type: string
+    FaasAutoscalingSerializer:
+      properties:
+        max_instances:
+          description: The maximum number of instances to run.
+          examples:
+          - 5
+          maximum: 50
+          minimum: 1
+          title: Max Instances
+          type: integer
+        min_instances:
+          description: The minimum number of instances to run.
+          examples:
+          - 1
+          maximum: 50
+          minimum: 0
+          title: Min Instances
+          type: integer
+      required:
+      - min_instances
+      - max_instances
+      title: FaasAutoscalingSerializer
+      type: object
+    CreatedApiKeySerializer:
+      properties:
+        created_at:
+          description: Key starts to work
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Created At
+          type: string
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Optional key description
+          examples:
+          - key-description
+          title: Description
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Key expires at
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Expire
+        functions:
+          description: List of functions using key
+          items:
+            $ref: '#/components/schemas/NamespacedName'
+          title: Functions
+          type: array
+        name:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+        secret:
+          description: Secret api key
+          examples:
+          - secret-key
+          title: Secret
+          type: string
+        status:
+          description: Key status
+          examples:
+          - Expired
+          title: Status
+          type: string
+      required:
+      - functions
+      - name
+      - created_at
+      - status
+      - secret
+      title: CreatedApiKeySerializer
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    FunctionsOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - name.asc
+      - name.desc
+      title: FunctionsOrderByChoices
+      type: string
+    LogsSerializer:
+      properties:
+        logs:
+          description: Function logs.
+          examples:
+          - - Message: ' 2022/03/02 15:04:03 192.168.171.79:41386 "GET / HTTP/1.1" 200 python-requests/2.25.1'
+              Pod: function-78-5f5ddf5454-n6s94
+              Time: '2022-03-02T15:04:03.208677349Z'
+            - Message: ' 2022/03/02 15:04:05 192.168.171.79:41386 "GET / HTTP/1.1" 200 python-requests/2.25.1'
+              Pod: function-78-5f5ddf5454-n6s94
+              Time: '2022-03-02T15:04:05.208677349Z'
+          items:
+            additionalProperties:
+              type: string
+            type: object
+          title: Logs
+          type: array
+      required:
+      - logs
+      title: LogsSerializer
+      type: object

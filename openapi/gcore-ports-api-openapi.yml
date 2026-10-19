@@ -1,0 +1,770 @@
+openapi: 3.2.0
+info:
+  title: Cloud Ports API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Ports
+paths:
+  /v1/ports/{project_id}/{region_id}:
+    get:
+      operationId: PortListView.get
+      summary: List ports
+      description: 'List all ports in the specified project and region.
+
+        Results can be filtered by network, subnet, IP address, port ID, attachment,
+
+        trunk parent, or `managed_by` value, and sorted by `created_at` or `network_id`.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: attached
+        required: false
+        description: Filter attached (true) or standalone (false) ports.
+        schema:
+          description: Filter attached (true) or standalone (false) ports.
+          title: Attached
+          type: boolean
+      - in: query
+        name: ids
+        required: false
+        description: Filter by port ID(s). Exact match.
+        schema:
+          description: Filter by port ID(s). Exact match.
+          items:
+            format: uuid4
+            type: string
+          title: Ids
+          type: array
+      - in: query
+        name: ip_addresses
+        required: false
+        description: Filter by IP address(es). Exact match.
+        schema:
+          description: Filter by IP address(es). Exact match.
+          items:
+            format: ipvanyaddress
+            type: string
+          title: Ip Addresses
+          type: array
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 100
+          description: Optional. Limit the number of returned items
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: managed_by
+        required: false
+        description: Filter ports managed by the user or system.
+        schema:
+          $ref: '#/components/schemas/PortManagedBy'
+          description: Filter ports managed by the user or system.
+      - in: query
+        name: network_ids
+        required: false
+        description: Filter by network ID(s). Exact match.
+        schema:
+          description: Filter by network ID(s). Exact match.
+          items:
+            format: uuid4
+            type: string
+          title: Network Ids
+          type: array
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Sort field and direction, e.g. created_at.desc or network_id.asc
+        schema:
+          $ref: '#/components/schemas/PortListOrderByChoices'
+          default: created_at.desc
+          description: Sort field and direction, e.g. created_at.desc or network_id.asc
+      - in: query
+        name: parent_port_id
+        required: false
+        description: Filter trunk sub-ports by their parent port ID.
+        schema:
+          description: Filter trunk sub-ports by their parent port ID.
+          format: uuid4
+          title: Parent Port Id
+          type: string
+      - in: query
+        name: resource_id
+        required: false
+        description: Filter by attached compute resource ID.
+        schema:
+          description: Filter by attached compute resource ID.
+          format: uuid4
+          title: Resource Id
+          type: string
+      - in: query
+        name: resource_type
+        required: false
+        description: Filter by attachment resource type.
+        schema:
+          $ref: '#/components/schemas/PortResourceType'
+          description: Filter by attachment resource type.
+      - in: query
+        name: subnet_ids
+        required: false
+        description: Filter by subnet ID(s). Exact match.
+        schema:
+          description: Filter by subnet ID(s). Exact match.
+          items:
+            format: uuid4
+            type: string
+          title: Subnet Ids
+          type: array
+      responses:
+        '200':
+          description: Ports
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortListSerializer'
+      tags:
+      - Ports
+  /v1/ports/{project_id}/{region_id}/{port_id}:
+    get:
+      operationId: PortDetailView.get
+      summary: Get port
+      description: 'Returns detailed information about a specific port, including computed fields
+
+        (`managed_by`, `capabilities`).'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - 1f0ca628-a73b-42c0-bdac-7b10d023e097
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Port
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortDetailSerializer'
+      tags:
+      - Ports
+    patch:
+      operationId: PortDetailView.patch
+      summary: Update port
+      description: 'Updates port security, security groups, allowed address pairs, tags and IP assignments.
+
+
+        **Behavior:**
+
+        - Undefined fields remain unchanged; list fields replace the whole set, so send the full desired list
+
+        (`[]` to clear, `ip_assignments` must keep at least one entry)
+
+        - Tags are merged per key; a `null` value removes the key, and `tags: null` removes all user tags
+
+        - If no changes are detected, no task is created and an empty task list is returned
+
+
+        **Supported ports:** all compute types (instances, basic VMs, bare metal servers, GPU virtual servers,
+
+        GPU bare metal servers), as long as the port `capabilities` report `true` for the field being changed.
+
+        System-managed ports (DHCP, router, load balancer) and unattached ports are rejected.
+
+
+        **Typical uses:**
+
+        - Per-port firewall: `security_group_ids` applies to this port only, so ports on the same server can
+
+        differ. While port security is enabled, an empty list permits no traffic
+
+        - VIP failover (VRRP/keepalived): add the VIP address to `allowed_address_pairs` of every port allowed
+
+        to claim it, all on the VIP''s network
+
+        - Routing and NAT appliances: `port_security_enabled: false` permits forwarding traffic with foreign
+
+        source addresses; clear security groups and allowed address pairs in the same request
+
+        - Additional addresses: `ip_assignments` adds or releases IPs (dual-stack, extra service IPs) without
+
+        detaching the port; the guest OS must be configured for the extra ones. Send an entry with only
+
+        `subnet_id` to get any free address of that subnet, which is the only option on a shared subnet
+
+        whose free addresses the caller does not know. Such an entry keeps an address the port already has
+
+        in that subnet, in the order the port reports them, so a shorter list releases the addresses at the
+
+        end of that order. A request can replace all current addresses. A port an instance holds takes its
+
+        addresses from one subnet per IP version, because the guest reaches one address range per version
+
+
+        **Public network:** port security and allowed address pairs cannot be changed on ports in the
+
+        region''s public network. IP assignments can. Each IPv4 address there counts against the external IP
+
+        quota, so a request that allocates one fails when the limit is full, and a request that releases one
+
+        gives the quota back. IPv6 addresses in that network are not counted.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: port_id
+        required: true
+        description: Port ID
+        schema:
+          description: Port ID
+          examples:
+          - 1f0ca628-a73b-42c0-bdac-7b10d023e097
+          format: uuid4
+          title: Port Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPortSerializer'
+      tags:
+      - Ports
+components:
+  schemas:
+    IpAssignmentSerializer:
+      properties:
+        ip_address:
+          anyOf:
+          - format: ipv4
+            type: string
+          - format: ipv6
+            type: string
+          description: IP address assigned to the port
+          examples:
+          - 192.168.123.20
+          title: Ip Address
+        subnet_id:
+          description: ID of the subnet
+          examples:
+          - 351b0dd7-ca09-431c-be53-935db3785067
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      - ip_address
+      title: IpAssignmentSerializer
+      type: object
+    PortManagedBy:
+      enum:
+      - system
+      - user
+      title: PortManagedBy
+      type: string
+    PortAttachmentSerializer:
+      properties:
+        resource_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: ID of the compute resource the port is attached to. null for DHCP attachments.
+          examples:
+          - a1b2c3d4-e5f6-4000-8000-000000000001
+          title: Resource Id
+        resource_type:
+          anyOf:
+          - $ref: '#/components/schemas/PortResourceType'
+          - type: 'null'
+          description: Type of resource the port is attached to. null when the compute resource's type is not yet known.
+          examples:
+          - instance
+        trunk:
+          anyOf:
+          - discriminator:
+              mapping:
+                parent: '#/components/schemas/PortAttachmentTrunkParentSerializer'
+                sub_port: '#/components/schemas/PortAttachmentTrunkSubPortSerializer'
+              propertyName: role
+            oneOf:
+            - $ref: '#/components/schemas/PortAttachmentTrunkParentSerializer'
+            - $ref: '#/components/schemas/PortAttachmentTrunkSubPortSerializer'
+          - type: 'null'
+          description: 'Trunk info: present when port is a trunk parent or sub_port. null otherwise.'
+          title: Trunk
+      required:
+      - resource_id
+      - resource_type
+      - trunk
+      title: PortAttachmentSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    PortListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/PortDetailSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: PortListSerializer
+      type: object
+    PortResourceType:
+      enum:
+      - baremetal_server
+      - basic_vm
+      - dhcp
+      - gpu_baremetal_server
+      - gpu_virtual_server
+      - instance
+      - load_balancer
+      - router
+      title: PortResourceType
+      type: string
+    PortAttachmentTrunkSubPortSerializer:
+      properties:
+        parent_port_id:
+          description: ID of the trunk parent port this sub-port belongs to.
+          examples:
+          - bc688791-f1b0-44eb-97d4-07697294b1e1
+          format: uuid4
+          title: Parent Port Id
+          type: string
+        role:
+          const: sub_port
+          description: Trunk role. 'sub_port' means this port is a sub-port of a trunk.
+          examples:
+          - sub_port
+          title: Role
+          type: string
+      required:
+      - role
+      - parent_port_id
+      title: PortAttachmentTrunkSubPortSerializer
+      type: object
+    PortAttachmentTrunkParentSerializer:
+      properties:
+        role:
+          const: parent
+          description: Trunk role. 'parent' means this port is a trunk parent.
+          examples:
+          - parent
+          title: Role
+          type: string
+      required:
+      - role
+      title: PortAttachmentTrunkParentSerializer
+      type: object
+    PortCapabilitiesSerializer:
+      properties:
+        allowed_address_pairs:
+          description: Whether the driver enforces allowed address pairs on this port
+          title: Allowed Address Pairs
+          type: boolean
+        port_security:
+          description: Whether the driver enforces port security on this port
+          title: Port Security
+          type: boolean
+        security_groups:
+          description: Whether the driver enforces security groups on this port
+          title: Security Groups
+          type: boolean
+      required:
+      - security_groups
+      - port_security
+      - allowed_address_pairs
+      title: PortCapabilitiesSerializer
+      type: object
+    PortListOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - network_id.asc
+      - network_id.desc
+      title: PortListOrderByChoices
+      type: string
+    PatchPortSerializer:
+      properties:
+        allowed_address_pairs:
+          description: A set of zero or more allowed port address pair and/or subnet masks. Replaces the full set of allowed address pairs. Send `[]` to clear; omit the field to leave existing pairs unchanged.
+          examples:
+          - - ip_address: 192.168.123.20
+            - ip_address: 192.168.0.0/17
+          items:
+            $ref: '#/components/schemas/PatchAllowedAddressPairsSerializer'
+          maxItems: 10
+          title: Allowed Address Pairs
+          type: array
+        ip_assignments:
+          description: IP assignments on the port. Replaces the full set. Subnets must belong to the port's network, and a port an instance holds supports one subnet per IP version. An entry without `ip_address` keeps an address the port already has in that subnet, in the order the port reports them, or takes a free one when the port has none. Addresses that no entry keeps are released.
+          items:
+            $ref: '#/components/schemas/IpAssignmentRequestSerializer'
+          maxItems: 64
+          title: Ip Assignments
+          type: array
+        port_security_enabled:
+          description: When true, the network driver enforces port security on this port (anti-spoofing checks and security-group filtering apply). When false, all traffic is allowed and security groups are not applied.
+          title: Port Security Enabled
+          type: boolean
+        security_group_ids:
+          description: List of security group IDs. Replaces the full set of security groups attached to the port. Send `[]` to detach all groups; omit the field to leave existing groups unchanged.
+          examples:
+          - - 351b0dd7-ca09-431c-be53-935db3785067
+          items:
+            format: uuid4
+            type: string
+          maxItems: 10
+          title: Security Group Ids
+          type: array
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: PatchPortSerializer
+      type: object
+    UpdateTagsSerializer:
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: UpdateTagsSerializer
+      type: object
+      additionalProperties:
+        anyOf:
+        - maxLength: 255
+          minLength: 1
+          pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+          type: string
+        - type: 'null'
+        description: Tag value. Maximum 255 characters. Cannot contain tabs, newlines, empty string or start/end with whitespace. Trailing or leading whitespaces will be stripped. Set to `null` in order to delete this tag.
+        examples:
+        - my-tag-value
+    PortDetailSerializer:
+      properties:
+        allowed_address_pairs:
+          description: List of allowed address pairs. Sorted by ip_address for stable client refreshes.
+          items:
+            $ref: '#/components/schemas/AllowedAddressPairsResponseSerializer'
+          title: Allowed Address Pairs
+          type: array
+        attached_to:
+          anyOf:
+          - $ref: '#/components/schemas/PortAttachmentSerializer'
+          - type: 'null'
+          description: The compute resource this port is attached to, including trunk role for trunk parents and sub-ports. null when the port is standalone (unattached).
+        capabilities:
+          anyOf:
+          - $ref: '#/components/schemas/PortCapabilitiesSerializer'
+          - type: 'null'
+          description: What the driver enforces. null when the port is unattached (driver unknown).
+        created_at:
+          description: Datetime when the port was created.
+          examples:
+          - '2024-01-15T10:30:00Z'
+          format: date-time
+          title: Created At
+          type: string
+        id:
+          description: Port ID
+          examples:
+          - 1f0ca628-a73b-42c0-bdac-7b10d023e097
+          format: uuid4
+          title: Id
+          type: string
+        ip_assignments:
+          description: List of IP addresses assigned to the port.
+          items:
+            $ref: '#/components/schemas/IpAssignmentSerializer'
+          title: Ip Assignments
+          type: array
+        mac_address:
+          description: MAC address of the port
+          examples:
+          - fa:16:3e:f2:87:16
+          title: Mac Address
+          type: string
+        managed_by:
+          $ref: '#/components/schemas/PortManagedBy'
+          description: 'Who manages this port: ''user'' (full CRUD allowed) or ''system'' (read-only)'
+          examples:
+          - user
+        network_id:
+          description: ID of the network the port belongs to
+          examples:
+          - bc688791-f1b0-44eb-97d4-07697294b1e1
+          format: uuid4
+          title: Network Id
+          type: string
+        port_security_enabled:
+          description: When true, the driver enforces port security on this port (anti-spoofing checks and security-group filtering apply). When false, all traffic is allowed and security groups are not applied.
+          examples:
+          - true
+          title: Port Security Enabled
+          type: boolean
+        security_group_ids:
+          description: List of security group IDs applied to the port. Sorted lexicographically for stable client refreshes.
+          examples:
+          - - bc688791-f1b0-44eb-97d4-07697294b1e1
+          items:
+            format: uuid4
+            type: string
+          title: Security Group Ids
+          type: array
+        system_tags:
+          additionalProperties:
+            type: string
+          description: Read-only key-value tags on the port, set by the platform and not modifiable by the user
+          examples:
+          - image_name: ubuntu-22.04
+            os_type: linux
+          title: System Tags
+          type: object
+        tags:
+          additionalProperties:
+            type: string
+          description: Key-value tags on the port
+          examples:
+          - env: prod
+            team: platform
+          title: Tags
+          type: object
+        updated_at:
+          description: Datetime when the port was last updated.
+          examples:
+          - '2025-11-18T10:22:00Z'
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - mac_address
+      - network_id
+      - ip_assignments
+      - port_security_enabled
+      - security_group_ids
+      - allowed_address_pairs
+      - tags
+      - system_tags
+      - managed_by
+      - capabilities
+      - attached_to
+      - created_at
+      - updated_at
+      title: PortDetailSerializer
+      type: object
+    IpAssignmentRequestSerializer:
+      properties:
+        ip_address:
+          anyOf:
+          - format: ipv4
+            type: string
+          - format: ipv6
+            type: string
+          description: IP address to assign. Omit it to get any free address of the subnet, which is the only option when the subnet's free addresses are not known to the caller.
+          examples:
+          - 192.168.123.20
+          title: Ip Address
+        subnet_id:
+          description: ID of the subnet
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      title: IpAssignmentRequestSerializer
+      type: object
+    AllowedAddressPairsResponseSerializer:
+      properties:
+        ip_address:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - format: ipvanynetwork
+            type: string
+          description: Subnet mask or IP address of the allowed address pair
+          examples:
+          - 192.168.123.20
+          title: Ip Address
+      required:
+      - ip_address
+      title: AllowedAddressPairsResponseSerializer
+      type: object
+    PatchAllowedAddressPairsSerializer:
+      properties:
+        ip_address:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - format: ipvanynetwork
+            type: string
+          description: IP address or subnet of the allowed address pair
+          title: Ip Address
+      required:
+      - ip_address
+      title: PatchAllowedAddressPairsSerializer
+      type: object

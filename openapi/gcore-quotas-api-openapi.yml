@@ -1,0 +1,2070 @@
+openapi: 3.2.0
+info:
+  title: Cloud Quotas API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Quotas
+paths:
+  /v2/client_quotas:
+    get:
+      operationId: ClientQuotasHandler.get
+      summary: Get all quotas
+      description: Get combined client quotas, including both regional and global quotas.
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllClientQuotasSerializer'
+      tags:
+      - Quotas
+  /v2/client_quotas/{client_id}/notification_threshold:
+    get:
+      operationId: QuotaNotificationThresholdByClientIdHandler.get
+      summary: Get quota notification threshold
+      description: 'Get a client''s quota notification threshold. This threshold is used to send warning notifications to the client
+
+        when their quota usage reaches the specified percentage. Defaults to 80% if not set.'
+      parameters:
+      - in: path
+        name: client_id
+        required: true
+        description: Client ID
+        schema:
+          description: Client ID
+          examples:
+          - 3
+          title: Client Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotaNotificationThresholdSerializer'
+      tags:
+      - Quotas
+    put:
+      operationId: QuotaNotificationThresholdByClientIdHandler.put
+      summary: Update quota notification threshold
+      description: 'Update or create a client''s quota notification threshold. This threshold is used to send warning notifications
+
+        to the client when their quota usage reaches the specified percentage. Defaults to 80%.'
+      parameters:
+      - in: path
+        name: client_id
+        required: true
+        description: Client ID
+        schema:
+          description: Client ID
+          examples:
+          - 3
+          title: Client Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotaNotificationThresholdSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuotaThresholdSerializer'
+      tags:
+      - Quotas
+    delete:
+      operationId: QuotaNotificationThresholdByClientIdHandler.delete
+      summary: Delete quota notification threshold
+      description: Delete a client's quota notification threshold. After deletion, the default threshold of 80% will be used.
+      parameters:
+      - in: path
+        name: client_id
+        required: true
+        description: Client ID
+        schema:
+          description: Client ID
+          examples:
+          - 3
+          title: Client Id
+          type: integer
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Quotas
+  /v2/global_quotas/{client_id}:
+    get:
+      operationId: GlobalClientQuotasViewSet.get
+      summary: Get global quotas
+      description: Get global quotas for a specific client.
+      parameters:
+      - in: path
+        name: client_id
+        required: true
+        description: Client ID
+        schema:
+          description: Client ID
+          examples:
+          - 3
+          title: Client Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GlobalQuotasSerializer'
+      tags:
+      - Quotas
+  /v2/limits_request:
+    post:
+      operationId: CreateQuotaLimitsRequestViewSet.post
+      summary: Create quota limit request
+      description: Create a request to change current quotas.
+      parameters: []
+      responses:
+        '201':
+          description: Created
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LimitsRequestCreateSerializer'
+      tags:
+      - Quotas
+    get:
+      operationId: CreateQuotaLimitsRequestViewSet.get
+      summary: List quota limit requests
+      description: Get a list of sent requests to change current quotas and their statuses.
+      parameters:
+      - in: query
+        name: created_from
+        required: false
+        description: Filter limit requests created at or after this datetime (inclusive)
+        schema:
+          description: Filter limit requests created at or after this datetime (inclusive)
+          examples:
+          - '2024-01-01T00:00:00Z'
+          format: date-time
+          title: Created From
+          type: string
+      - in: query
+        name: created_to
+        required: false
+        description: Filter limit requests created at or before this datetime (inclusive)
+        schema:
+          description: Filter limit requests created at or before this datetime (inclusive)
+          examples:
+          - '2024-12-31T23:59:59Z'
+          format: date-time
+          title: Created To
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: request_ids
+        required: false
+        description: List of limit request IDs for filtering
+        schema:
+          description: List of limit request IDs for filtering
+          examples:
+          - - 1
+            - 2
+            - 3
+          items:
+            format: int64
+            type: integer
+          title: Request Ids
+          type: array
+      - in: query
+        name: status
+        required: false
+        description: List of limit requests statuses for filtering
+        schema:
+          description: List of limit requests statuses for filtering
+          examples:
+          - - done
+            - in progress
+          items:
+            $ref: '#/components/schemas/LimitsRequestStatus'
+          title: Status
+          type: array
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitsRequestCollectionSerializer'
+      tags:
+      - Quotas
+  /v2/limits_request/{request_id}:
+    get:
+      operationId: ShowQuotaLimitsRequestViewSet.get
+      summary: Get quota limit request
+      description: Get detailed information about a specific quota limit request.
+      parameters:
+      - in: path
+        name: request_id
+        required: true
+        description: LimitRequest ID
+        schema:
+          description: LimitRequest ID
+          examples:
+          - 3
+          format: int64
+          title: Request Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LimitsRequestSerializer'
+      tags:
+      - Quotas
+    delete:
+      operationId: ShowQuotaLimitsRequestViewSet.delete
+      summary: Delete quota limit request
+      description: Delete a specific quota limit request.
+      parameters:
+      - in: path
+        name: request_id
+        required: true
+        description: LimitRequest ID
+        schema:
+          description: LimitRequest ID
+          examples:
+          - 3
+          format: int64
+          title: Request Id
+          type: integer
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Quotas
+  /v2/regional_quotas/{client_id}/{region_id}:
+    get:
+      operationId: ClientUpdateRegionalQuotasViewSet.get
+      summary: Get regional quotas
+      description: Get quotas for a specific region and client.
+      parameters:
+      - in: path
+        name: client_id
+        required: true
+        description: Client ID
+        schema:
+          description: Client ID
+          examples:
+          - 3
+          title: Client Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionalQuotasSerializer'
+      tags:
+      - Quotas
+components:
+  schemas:
+    QuotaThresholdSerializer:
+      properties:
+        last_message:
+          anyOf:
+          - $ref: '#/components/schemas/QuotasThresholdSerializer'
+          - type: 'null'
+          description: A message data
+        last_sending:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Time of last successful email sending
+          examples:
+          - null
+          title: Last Sending
+        threshold:
+          description: Quota notification threshold in percentage
+          examples:
+          - 95
+          maximum: 100
+          minimum: 60
+          title: Threshold
+          type: integer
+      required:
+      - threshold
+      title: QuotaThresholdSerializer
+      type: object
+    QuotasThresholdSerializer:
+      properties:
+        global_quotas:
+          $ref: '#/components/schemas/GlobalQuotasThresholdSerializer'
+          description: Global quota that exceed the threshold
+        regional_quotas:
+          description: Regional quota that exceed the threshold
+          items:
+            $ref: '#/components/schemas/RegionalQuotasThresholdSerializer'
+          title: Regional Quotas
+          type: array
+      required:
+      - global_quotas
+      - regional_quotas
+      title: QuotasThresholdSerializer
+      type: object
+    RegionalQuotasThresholdSerializer:
+      properties:
+        baremetal_basic_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Basic bare metal servers count limit
+        baremetal_basic_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Basic bare metal servers count usage
+        baremetal_gpu_a100_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal A100 GPU server count limit
+        baremetal_gpu_a100_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal A100 GPU server count usage
+        baremetal_gpu_h100_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal H100 GPU server count limit
+        baremetal_gpu_h100_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal H100 GPU server count usage
+        baremetal_gpu_h200_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal H200 GPU server count limit
+        baremetal_gpu_h200_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal H200 GPU server count usage
+        baremetal_gpu_l40s_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal L40S GPU server count limit
+        baremetal_gpu_l40s_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal L40S GPU server count usage
+        baremetal_hf_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: High-frequency bare metal servers count limit
+        baremetal_hf_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: High-frequency bare metal servers count usage
+        baremetal_infrastructure_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Infrastructure bare metal servers count limit
+        baremetal_infrastructure_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Infrastructure bare metal servers count usage
+        baremetal_network_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal Network Count limit
+        baremetal_network_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Bare metal Network Count usage
+        baremetal_storage_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Storage bare metal servers count limit
+        baremetal_storage_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Storage bare metal servers count usage
+        caas_container_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Containers count limit
+        caas_container_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Containers count usage
+        caas_cpu_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: mCPU count for containers limit
+        caas_cpu_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: mCPU count for containers usage
+        caas_gpu_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Containers gpu count limit
+        caas_gpu_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Containers gpu count usage
+        caas_ram_size_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: MiB memory count for containers limit
+        caas_ram_size_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: MiB memory count for containers usage
+        cluster_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: K8s clusters count limit
+        cluster_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: K8s clusters count usage
+        cpu_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: vCPU Count limit
+        cpu_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: vCPU Count usage
+        dbaas_postgres_cluster_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: DBaaS cluster count limit
+        dbaas_postgres_cluster_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: DBaaS cluster count usage
+        external_ip_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: External IP Count limit
+        external_ip_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: External IP Count usage
+        faas_cpu_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: mCPU count for functions limit
+        faas_cpu_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: mCPU count for functions usage
+        faas_function_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Functions count limit
+        faas_function_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Functions count usage
+        faas_namespace_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Functions namespace count limit
+        faas_namespace_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Functions namespace count usage
+        faas_ram_size_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: MiB memory count for functions limit
+        faas_ram_size_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: MiB memory count for functions usage
+        firewall_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Firewalls Count limit
+        firewall_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Firewalls Count usage
+        floating_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Floating IP Count limit
+        floating_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Floating IP Count usage
+        gpu_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: GPU Count limit
+        gpu_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: GPU Count usage
+        gpu_virtual_a100_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual A100 GPU card count limit
+        gpu_virtual_a100_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual A100 GPU card count usage
+        gpu_virtual_h100_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual H100 GPU card count limit
+        gpu_virtual_h100_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual H100 GPU card count usage
+        gpu_virtual_h200_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual H200 GPU card count limit
+        gpu_virtual_h200_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual H200 GPU card count usage
+        gpu_virtual_l40s_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual L40S GPU card count limit
+        gpu_virtual_l40s_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Virtual L40S GPU card count usage
+        image_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Images Count limit
+        image_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Images Count usage
+        image_size_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Images Size, bytes limit
+        image_size_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Images Size, bytes usage
+        ipu_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: IPU Count limit
+        ipu_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: IPU Count usage
+        laas_topic_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: LaaS Topics Count limit
+        laas_topic_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: LaaS Topics Count usage
+        loadbalancer_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Load Balancers Count limit
+        loadbalancer_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Load Balancers Count usage
+        network_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Networks Count limit
+        network_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Networks Count usage
+        ram_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: RAM Size, MiB limit
+        ram_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: RAM Size, MiB usage
+        region_id:
+          description: Region id
+          examples:
+          - 2
+          title: Region Id
+          type: integer
+        region_name:
+          description: Region name
+          examples:
+          - Luxembourg
+          title: Region Name
+          type: string
+        registry_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Registries count limit
+        registry_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Registries count usage
+        registry_storage_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Registries volume usage, GiB limit
+        registry_storage_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Registries volume usage, GiB usage
+        router_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Routers Count limit
+        router_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Routers Count usage
+        secret_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Secret Count limit
+        secret_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Secret Count usage
+        servergroup_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Placement Group Count limit
+        servergroup_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Placement Group Count usage
+        sfs_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Shared file system Count limit
+        sfs_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Shared file system Count usage
+        sfs_size_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Shared file system Size, GiB limit
+        sfs_size_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Shared file system Size, GiB usage
+        shared_vm_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Basic VMs Count limit
+        shared_vm_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Basic VMs Count usage
+        slurm_cluster_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Slurm cluster count limit for this region. 0 disables Slurm in this region.
+        slurm_cluster_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Slurm cluster count usage
+        snapshot_schedule_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Snapshot Schedules Count limit
+        snapshot_schedule_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Snapshot Schedules Count usage
+        subnet_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Subnets Count limit
+        subnet_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Subnets Count usage
+        vm_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Instances Dedicated Count limit
+        vm_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Instances Dedicated Count usage
+        volume_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Volumes Count limit
+        volume_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Volumes Count usage
+        volume_size_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Volumes Size, GiB limit
+        volume_size_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Volumes Size, GiB usage
+        volume_snapshots_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Snapshots Count limit
+        volume_snapshots_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Snapshots Count usage
+        volume_snapshots_size_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Snapshots Size, GiB limit
+        volume_snapshots_size_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Snapshots Size, GiB usage
+      required:
+      - region_id
+      - region_name
+      title: RegionalQuotasThresholdSerializer
+      type: object
+    QuotaCountForThresholdSerializer:
+      properties:
+        limit:
+          description: Current quota limit
+          examples:
+          - 10
+          maximum: 9223372036854775807
+          minimum: 0
+          title: Limit
+          type: integer
+        usage:
+          description: Current amount of resource used
+          examples:
+          - 8
+          minimum: 0
+          title: Usage
+          type: integer
+      required:
+      - usage
+      - limit
+      title: QuotaCountForThresholdSerializer
+      type: object
+    ClientMixedQuotasLimitsSerializer:
+      properties:
+        global_limits:
+          $ref: '#/components/schemas/CreateGlobalQuotasLimitsSerializer'
+          description: Global entity quota limits
+        regional_limits:
+          description: Regions and their quota limits
+          items:
+            $ref: '#/components/schemas/RegionalQuotasLimitsSerializer'
+          title: Regional Limits
+          type: array
+      title: ClientMixedQuotasLimitsSerializer
+      type: object
+    LimitsRequestSerializer:
+      properties:
+        client_id:
+          description: Client ID
+          examples:
+          - 1
+          title: Client Id
+          type: integer
+        created_at:
+          description: Datetime when the request was created.
+          examples:
+          - '2019-07-26T13:25:03'
+          format: date-time
+          title: Created At
+          type: string
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Describe the reason, in general terms.
+          examples:
+          - Scale up mysql cluster
+          title: Description
+        id:
+          description: Request ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        requested_limits:
+          $ref: '#/components/schemas/AllClientQuotasLimitsSerializer'
+          description: Requested limits.
+        status:
+          description: Request status
+          examples:
+          - in progress
+          title: Status
+          type: string
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Datetime when the request was updated.
+          examples:
+          - '2019-07-26T13:25:03'
+          title: Updated At
+      required:
+      - id
+      - client_id
+      - requested_limits
+      - status
+      title: LimitsRequest object
+      type: object
+    AllClientQuotasLimitsSerializer:
+      properties:
+        global_limits:
+          $ref: '#/components/schemas/CreateGlobalQuotasLimitsSerializer'
+          description: Global entity quota limits
+        regional_limits:
+          description: Regions and their quota limits
+          items:
+            $ref: '#/components/schemas/RegionalQuotasLimitsSerializer'
+          title: Regional Limits
+          type: array
+      title: Global and regional quota limits of the client.
+      type: object
+    LimitsRequestCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/LimitsRequestSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: LimitsRequestCollectionSerializer
+      type: object
+    CreateGlobalQuotasLimitsSerializer:
+      additionalProperties: false
+      properties:
+        inference_cpu_millicore_count_limit:
+          description: Inference CPU millicore count limit
+          examples:
+          - 0
+          title: Inference Cpu Millicore Count Limit
+          type: integer
+        inference_gpu_a100_count_limit:
+          description: Inference GPU A100 Count limit
+          examples:
+          - 0
+          title: Inference Gpu A100 Count Limit
+          type: integer
+        inference_gpu_h100_count_limit:
+          description: Inference GPU H100 Count limit
+          examples:
+          - 0
+          title: Inference Gpu H100 Count Limit
+          type: integer
+        inference_gpu_l40s_count_limit:
+          description: Inference GPU L40s Count limit
+          examples:
+          - 0
+          title: Inference Gpu L40S Count Limit
+          type: integer
+        inference_instance_count_limit:
+          description: Inference instance count limit
+          examples:
+          - 0
+          title: Inference Instance Count Limit
+          type: integer
+        inference_public_model_api_key_count_limit:
+          description: Public model API keys count limit
+          examples:
+          - 0
+          title: Inference Public Model Api Key Count Limit
+          type: integer
+        keypair_count_limit:
+          description: SSH Keys Count limit
+          examples:
+          - 100
+          title: Keypair Count Limit
+          type: integer
+        project_count_limit:
+          description: Projects Count limit
+          examples:
+          - 2
+          title: Project Count Limit
+          type: integer
+      title: Scheme for create GlobalQuotaLimits
+      type: object
+    LimitsRequestStatus:
+      enum:
+      - done
+      - in progress
+      - rejected
+      title: LimitsRequestStatus
+      type: string
+    LimitsRequestCreateSerializer:
+      properties:
+        description:
+          description: Describe the reason, in general terms.
+          examples:
+          - Scale up mysql cluster
+          maxLength: 1000
+          title: Description
+          type: string
+        requested_limits:
+          $ref: '#/components/schemas/ClientMixedQuotasLimitsSerializer'
+          description: Limits you want to increase.
+      required:
+      - description
+      - requested_limits
+      title: Request to create LimitsRequest.
+      type: object
+    GlobalQuotasThresholdSerializer:
+      properties:
+        inference_cpu_millicore_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference CPU millicore count limit
+        inference_cpu_millicore_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference CPU millicore count usage
+        inference_gpu_a100_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference GPU A100 Count limit
+        inference_gpu_a100_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference GPU A100 Count usage
+        inference_gpu_h100_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference GPU H100 Count limit
+        inference_gpu_h100_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference GPU H100 Count usage
+        inference_gpu_l40s_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference GPU L40s Count limit
+        inference_gpu_l40s_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference GPU L40s Count usage
+        inference_instance_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference instance count limit
+        inference_instance_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Inference instance count usage
+        inference_public_model_api_key_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Public model API keys count limit
+        inference_public_model_api_key_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Public model API keys count usage
+        keypair_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: SSH Keys Count limit
+        keypair_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: SSH Keys Count usage
+        project_count_limit:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Projects Count limit
+        project_count_usage:
+          $ref: '#/components/schemas/QuotaCountForThresholdSerializer'
+          description: Projects Count usage
+      title: GlobalQuotasThreshold object
+      type: object
+    QuotaNotificationThresholdSerializer:
+      properties:
+        client_id:
+          description: Client id
+          examples:
+          - 2
+          title: Client Id
+          type: integer
+        last_message:
+          anyOf:
+          - $ref: '#/components/schemas/QuotasThresholdSerializer'
+          - type: 'null'
+          description: A message data
+        last_sending:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Time of last successful email sending
+          examples:
+          - null
+          title: Last Sending
+        threshold:
+          description: Quota notification threshold in percentage
+          examples:
+          - 95
+          maximum: 100
+          minimum: 60
+          title: Threshold
+          type: integer
+      required:
+      - threshold
+      - client_id
+      - last_sending
+      - last_message
+      title: QuotaNotificationThresholdSerializer
+      type: object
+    GlobalQuotasSerializer:
+      properties:
+        inference_cpu_millicore_count_limit:
+          description: Inference CPU millicore count limit
+          examples:
+          - 0
+          title: Inference Cpu Millicore Count Limit
+          type: integer
+        inference_cpu_millicore_count_usage:
+          description: Inference CPU millicore count usage
+          examples:
+          - 0
+          title: Inference Cpu Millicore Count Usage
+          type: integer
+        inference_gpu_a100_count_limit:
+          description: Inference GPU A100 Count limit
+          examples:
+          - 0
+          title: Inference Gpu A100 Count Limit
+          type: integer
+        inference_gpu_a100_count_usage:
+          description: Inference GPU A100 Count usage
+          examples:
+          - 0
+          title: Inference Gpu A100 Count Usage
+          type: integer
+        inference_gpu_h100_count_limit:
+          description: Inference GPU H100 Count limit
+          examples:
+          - 0
+          title: Inference Gpu H100 Count Limit
+          type: integer
+        inference_gpu_h100_count_usage:
+          description: Inference GPU H100 Count usage
+          examples:
+          - 0
+          title: Inference Gpu H100 Count Usage
+          type: integer
+        inference_gpu_l40s_count_limit:
+          description: Inference GPU L40s Count limit
+          examples:
+          - 0
+          title: Inference Gpu L40S Count Limit
+          type: integer
+        inference_gpu_l40s_count_usage:
+          description: Inference GPU L40s Count usage
+          examples:
+          - 0
+          title: Inference Gpu L40S Count Usage
+          type: integer
+        inference_instance_count_limit:
+          description: Inference instance count limit
+          examples:
+          - 0
+          title: Inference Instance Count Limit
+          type: integer
+        inference_instance_count_usage:
+          description: Inference instance count usage
+          examples:
+          - 0
+          title: Inference Instance Count Usage
+          type: integer
+        inference_public_model_api_key_count_limit:
+          description: Public model API keys count limit
+          examples:
+          - 0
+          title: Inference Public Model Api Key Count Limit
+          type: integer
+        inference_public_model_api_key_count_usage:
+          description: Public model API keys count usage
+          examples:
+          - 0
+          title: Inference Public Model Api Key Count Usage
+          type: integer
+        keypair_count_limit:
+          description: SSH Keys Count limit
+          examples:
+          - 100
+          title: Keypair Count Limit
+          type: integer
+        keypair_count_usage:
+          description: SSH Keys Count usage
+          examples:
+          - 0
+          title: Keypair Count Usage
+          type: integer
+        project_count_limit:
+          description: Projects Count limit
+          examples:
+          - 2
+          title: Project Count Limit
+          type: integer
+        project_count_usage:
+          description: Projects Count usage
+          examples:
+          - 1
+          title: Project Count Usage
+          type: integer
+      title: GlobalQuotas object
+      type: object
+    RegionalQuotasLimitsSerializer:
+      additionalProperties: false
+      properties:
+        baremetal_basic_count_limit:
+          description: Basic bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Basic Count Limit
+          type: integer
+        baremetal_gpu_a100_count_limit:
+          description: Bare metal A100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu A100 Count Limit
+          type: integer
+        baremetal_gpu_count_limit:
+          deprecated: true
+          description: Total number of AI GPU bare metal servers. This field is deprecated and is now always calculated automatically as the sum of baremetal_gpu_a100_count_limit, baremetal_gpu_h100_count_limit, baremetal_gpu_h200_count_limit, and baremetal_gpu_l40s_count_limit.
+          examples:
+          - 0
+          title: Baremetal Gpu Count Limit
+          type: integer
+        baremetal_gpu_h100_count_limit:
+          description: Bare metal H100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H100 Count Limit
+          type: integer
+        baremetal_gpu_h200_count_limit:
+          description: Bare metal H200 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H200 Count Limit
+          type: integer
+        baremetal_gpu_l40s_count_limit:
+          description: Bare metal L40S GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu L40S Count Limit
+          type: integer
+        baremetal_hf_count_limit:
+          description: High-frequency bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Hf Count Limit
+          type: integer
+        baremetal_infrastructure_count_limit:
+          description: Infrastructure bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Infrastructure Count Limit
+          type: integer
+        baremetal_network_count_limit:
+          description: Bare metal Network Count limit
+          examples:
+          - 0
+          title: Baremetal Network Count Limit
+          type: integer
+        baremetal_storage_count_limit:
+          description: Storage bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Storage Count Limit
+          type: integer
+        caas_container_count_limit:
+          description: Containers count limit
+          examples:
+          - 0
+          title: Caas Container Count Limit
+          type: integer
+        caas_cpu_count_limit:
+          description: mCPU count for containers limit
+          examples:
+          - 0
+          title: Caas Cpu Count Limit
+          type: integer
+        caas_gpu_count_limit:
+          description: Containers gpu count limit
+          examples:
+          - 0
+          title: Caas Gpu Count Limit
+          type: integer
+        caas_ram_size_limit:
+          description: MiB memory count for containers limit
+          examples:
+          - 0
+          title: Caas Ram Size Limit
+          type: integer
+        cluster_count_limit:
+          description: K8s clusters count limit
+          examples:
+          - 0
+          title: Cluster Count Limit
+          type: integer
+        cpu_count_limit:
+          description: vCPU Count limit
+          examples:
+          - 0
+          title: Cpu Count Limit
+          type: integer
+        dbaas_postgres_cluster_count_limit:
+          description: DBaaS cluster count limit
+          examples:
+          - 0
+          title: Dbaas Postgres Cluster Count Limit
+          type: integer
+        external_ip_count_limit:
+          description: External IP Count limit
+          examples:
+          - 0
+          title: External Ip Count Limit
+          type: integer
+        faas_cpu_count_limit:
+          description: mCPU count for functions limit
+          examples:
+          - 0
+          title: Faas Cpu Count Limit
+          type: integer
+        faas_function_count_limit:
+          description: Functions count limit
+          examples:
+          - 0
+          title: Faas Function Count Limit
+          type: integer
+        faas_namespace_count_limit:
+          description: Functions namespace count limit
+          examples:
+          - 0
+          title: Faas Namespace Count Limit
+          type: integer
+        faas_ram_size_limit:
+          description: MiB memory count for functions limit
+          examples:
+          - 0
+          title: Faas Ram Size Limit
+          type: integer
+        firewall_count_limit:
+          description: Firewalls Count limit
+          examples:
+          - 0
+          title: Firewall Count Limit
+          type: integer
+        floating_count_limit:
+          description: Floating IP Count limit
+          examples:
+          - 0
+          title: Floating Count Limit
+          type: integer
+        gpu_count_limit:
+          description: GPU Count limit
+          examples:
+          - 0
+          title: Gpu Count Limit
+          type: integer
+        gpu_virtual_a100_count_limit:
+          description: Virtual A100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual A100 Count Limit
+          type: integer
+        gpu_virtual_h100_count_limit:
+          description: Virtual H100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H100 Count Limit
+          type: integer
+        gpu_virtual_h200_count_limit:
+          description: Virtual H200 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H200 Count Limit
+          type: integer
+        gpu_virtual_l40s_count_limit:
+          description: Virtual L40S GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual L40S Count Limit
+          type: integer
+        image_count_limit:
+          description: Images Count limit
+          examples:
+          - 0
+          title: Image Count Limit
+          type: integer
+        image_size_limit:
+          description: Images Size, bytes limit
+          examples:
+          - 0
+          title: Image Size Limit
+          type: integer
+        ipu_count_limit:
+          description: IPU Count limit
+          examples:
+          - 0
+          title: Ipu Count Limit
+          type: integer
+        laas_topic_count_limit:
+          description: LaaS Topics Count limit
+          examples:
+          - 0
+          title: Laas Topic Count Limit
+          type: integer
+        loadbalancer_count_limit:
+          description: Load Balancers Count limit
+          examples:
+          - 0
+          title: Loadbalancer Count Limit
+          type: integer
+        network_count_limit:
+          description: Networks Count limit
+          examples:
+          - 0
+          title: Network Count Limit
+          type: integer
+        ram_limit:
+          description: RAM Size, MiB limit
+          examples:
+          - 0
+          title: Ram Limit
+          type: integer
+        region_id:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+        registry_count_limit:
+          description: Registries count limit
+          examples:
+          - 0
+          title: Registry Count Limit
+          type: integer
+        registry_storage_limit:
+          description: Registries volume usage, GiB limit
+          examples:
+          - 0
+          title: Registry Storage Limit
+          type: integer
+        router_count_limit:
+          description: Routers Count limit
+          examples:
+          - 0
+          title: Router Count Limit
+          type: integer
+        secret_count_limit:
+          description: Secret Count limit
+          examples:
+          - 0
+          title: Secret Count Limit
+          type: integer
+        servergroup_count_limit:
+          description: Placement Group Count limit
+          examples:
+          - 0
+          title: Servergroup Count Limit
+          type: integer
+        sfs_count_limit:
+          description: Shared file system Count limit
+          examples:
+          - 0
+          title: Sfs Count Limit
+          type: integer
+        sfs_size_limit:
+          description: Shared file system Size, GiB limit
+          examples:
+          - 0
+          title: Sfs Size Limit
+          type: integer
+        shared_vm_count_limit:
+          description: Basic VMs Count limit
+          examples:
+          - 0
+          title: Shared Vm Count Limit
+          type: integer
+        slurm_cluster_count_limit:
+          description: Slurm cluster count limit for this region. 0 disables Slurm in this region.
+          examples:
+          - 0
+          title: Slurm Cluster Count Limit
+          type: integer
+        snapshot_schedule_count_limit:
+          description: Snapshot Schedules Count limit
+          examples:
+          - 0
+          title: Snapshot Schedule Count Limit
+          type: integer
+        subnet_count_limit:
+          description: Subnets Count limit
+          examples:
+          - 0
+          title: Subnet Count Limit
+          type: integer
+        vm_count_limit:
+          description: Instances Dedicated Count limit
+          examples:
+          - 0
+          title: Vm Count Limit
+          type: integer
+        volume_count_limit:
+          description: Volumes Count limit
+          examples:
+          - 0
+          title: Volume Count Limit
+          type: integer
+        volume_size_limit:
+          description: Volumes Size, GiB limit
+          examples:
+          - 0
+          title: Volume Size Limit
+          type: integer
+        volume_snapshots_count_limit:
+          description: Snapshots Count limit
+          examples:
+          - 0
+          title: Volume Snapshots Count Limit
+          type: integer
+        volume_snapshots_size_limit:
+          description: Snapshots Size, GiB limit
+          examples:
+          - 0
+          title: Volume Snapshots Size Limit
+          type: integer
+      title: RegionalQuotasLimitsSerializer
+      type: object
+    AllClientQuotasSerializer:
+      properties:
+        global_quotas:
+          $ref: '#/components/schemas/GlobalQuotasSerializer'
+          description: Global entity quotas
+        regional_quotas:
+          description: Regional entity quotas. Only contains initialized quotas.
+          items:
+            $ref: '#/components/schemas/RegionalQuotasSerializer'
+          title: Regional Quotas
+          type: array
+      title: Global and regional quotas of the client.
+      type: object
+    RegionalQuotasSerializer:
+      properties:
+        baremetal_basic_count_limit:
+          description: Basic bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Basic Count Limit
+          type: integer
+        baremetal_basic_count_usage:
+          description: Basic bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Basic Count Usage
+          type: integer
+        baremetal_gpu_a100_count_limit:
+          description: Bare metal A100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu A100 Count Limit
+          type: integer
+        baremetal_gpu_a100_count_usage:
+          description: Bare metal A100 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu A100 Count Usage
+          type: integer
+        baremetal_gpu_count_limit:
+          deprecated: true
+          description: Total number of AI GPU bare metal servers. This field is deprecated and is now always calculated automatically as the sum of baremetal_gpu_a100_count_limit, baremetal_gpu_h100_count_limit, baremetal_gpu_h200_count_limit, and baremetal_gpu_l40s_count_limit.
+          examples:
+          - 0
+          title: Baremetal Gpu Count Limit
+          type: integer
+        baremetal_gpu_count_usage:
+          deprecated: true
+          description: Baremetal Gpu Count Usage. This field is deprecated and is now always calculated automatically as the sum of baremetal_gpu_a100_count_usage, baremetal_gpu_h100_count_usage, baremetal_gpu_h200_count_usage, and baremetal_gpu_l40s_count_usage.
+          examples:
+          - 0
+          title: Baremetal Gpu Count Usage
+          type: integer
+        baremetal_gpu_h100_count_limit:
+          description: Bare metal H100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H100 Count Limit
+          type: integer
+        baremetal_gpu_h100_count_usage:
+          description: Bare metal H100 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu H100 Count Usage
+          type: integer
+        baremetal_gpu_h200_count_limit:
+          description: Bare metal H200 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H200 Count Limit
+          type: integer
+        baremetal_gpu_h200_count_usage:
+          description: Bare metal H200 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu H200 Count Usage
+          type: integer
+        baremetal_gpu_l40s_count_limit:
+          description: Bare metal L40S GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu L40S Count Limit
+          type: integer
+        baremetal_gpu_l40s_count_usage:
+          description: Bare metal L40S GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu L40S Count Usage
+          type: integer
+        baremetal_hf_count_limit:
+          description: High-frequency bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Hf Count Limit
+          type: integer
+        baremetal_hf_count_usage:
+          description: High-frequency bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Hf Count Usage
+          type: integer
+        baremetal_infrastructure_count_limit:
+          description: Infrastructure bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Infrastructure Count Limit
+          type: integer
+        baremetal_infrastructure_count_usage:
+          description: Infrastructure bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Infrastructure Count Usage
+          type: integer
+        baremetal_network_count_limit:
+          description: Bare metal Network Count limit
+          examples:
+          - 0
+          title: Baremetal Network Count Limit
+          type: integer
+        baremetal_network_count_usage:
+          description: Bare metal Network Count usage
+          examples:
+          - 0
+          title: Baremetal Network Count Usage
+          type: integer
+        baremetal_storage_count_limit:
+          description: Storage bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Storage Count Limit
+          type: integer
+        baremetal_storage_count_usage:
+          description: Storage bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Storage Count Usage
+          type: integer
+        caas_container_count_limit:
+          description: Containers count limit
+          examples:
+          - 0
+          title: Caas Container Count Limit
+          type: integer
+        caas_container_count_usage:
+          description: Containers count usage
+          examples:
+          - 0
+          title: Caas Container Count Usage
+          type: integer
+        caas_cpu_count_limit:
+          description: mCPU count for containers limit
+          examples:
+          - 0
+          title: Caas Cpu Count Limit
+          type: integer
+        caas_cpu_count_usage:
+          description: mCPU count for containers usage
+          examples:
+          - 0
+          title: Caas Cpu Count Usage
+          type: integer
+        caas_gpu_count_limit:
+          description: Containers gpu count limit
+          examples:
+          - 0
+          title: Caas Gpu Count Limit
+          type: integer
+        caas_gpu_count_usage:
+          description: Containers gpu count usage
+          examples:
+          - 0
+          title: Caas Gpu Count Usage
+          type: integer
+        caas_ram_size_limit:
+          description: MiB memory count for containers limit
+          examples:
+          - 0
+          title: Caas Ram Size Limit
+          type: integer
+        caas_ram_size_usage:
+          description: MiB memory count for containers usage
+          examples:
+          - 0
+          title: Caas Ram Size Usage
+          type: integer
+        cluster_count_limit:
+          description: K8s clusters count limit
+          examples:
+          - 0
+          title: Cluster Count Limit
+          type: integer
+        cluster_count_usage:
+          description: K8s clusters count usage
+          examples:
+          - 0
+          title: Cluster Count Usage
+          type: integer
+        cpu_count_limit:
+          description: vCPU Count limit
+          examples:
+          - 0
+          title: Cpu Count Limit
+          type: integer
+        cpu_count_usage:
+          description: vCPU Count usage
+          examples:
+          - 0
+          title: Cpu Count Usage
+          type: integer
+        dbaas_postgres_cluster_count_limit:
+          description: DBaaS cluster count limit
+          examples:
+          - 0
+          title: Dbaas Postgres Cluster Count Limit
+          type: integer
+        dbaas_postgres_cluster_count_usage:
+          description: DBaaS cluster count usage
+          examples:
+          - 0
+          title: Dbaas Postgres Cluster Count Usage
+          type: integer
+        external_ip_count_limit:
+          description: External IP Count limit
+          examples:
+          - 0
+          title: External Ip Count Limit
+          type: integer
+        external_ip_count_usage:
+          description: External IP Count usage
+          examples:
+          - 0
+          title: External Ip Count Usage
+          type: integer
+        faas_cpu_count_limit:
+          description: mCPU count for functions limit
+          examples:
+          - 0
+          title: Faas Cpu Count Limit
+          type: integer
+        faas_cpu_count_usage:
+          description: mCPU count for functions usage
+          examples:
+          - 0
+          title: Faas Cpu Count Usage
+          type: integer
+        faas_function_count_limit:
+          description: Functions count limit
+          examples:
+          - 0
+          title: Faas Function Count Limit
+          type: integer
+        faas_function_count_usage:
+          description: Functions count usage
+          examples:
+          - 0
+          title: Faas Function Count Usage
+          type: integer
+        faas_namespace_count_limit:
+          description: Functions namespace count limit
+          examples:
+          - 0
+          title: Faas Namespace Count Limit
+          type: integer
+        faas_namespace_count_usage:
+          description: Functions namespace count usage
+          examples:
+          - 0
+          title: Faas Namespace Count Usage
+          type: integer
+        faas_ram_size_limit:
+          description: MiB memory count for functions limit
+          examples:
+          - 0
+          title: Faas Ram Size Limit
+          type: integer
+        faas_ram_size_usage:
+          description: MiB memory count for functions usage
+          examples:
+          - 0
+          title: Faas Ram Size Usage
+          type: integer
+        firewall_count_limit:
+          description: Firewalls Count limit
+          examples:
+          - 0
+          title: Firewall Count Limit
+          type: integer
+        firewall_count_usage:
+          description: Firewalls Count usage
+          examples:
+          - 0
+          title: Firewall Count Usage
+          type: integer
+        floating_count_limit:
+          description: Floating IP Count limit
+          examples:
+          - 0
+          title: Floating Count Limit
+          type: integer
+        floating_count_usage:
+          description: Floating IP Count usage
+          examples:
+          - 0
+          title: Floating Count Usage
+          type: integer
+        gpu_count_limit:
+          description: GPU Count limit
+          examples:
+          - 0
+          title: Gpu Count Limit
+          type: integer
+        gpu_count_usage:
+          description: GPU Count usage
+          examples:
+          - 0
+          title: Gpu Count Usage
+          type: integer
+        gpu_virtual_a100_count_limit:
+          description: Virtual A100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual A100 Count Limit
+          type: integer
+        gpu_virtual_a100_count_usage:
+          description: Virtual A100 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual A100 Count Usage
+          type: integer
+        gpu_virtual_h100_count_limit:
+          description: Virtual H100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H100 Count Limit
+          type: integer
+        gpu_virtual_h100_count_usage:
+          description: Virtual H100 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual H100 Count Usage
+          type: integer
+        gpu_virtual_h200_count_limit:
+          description: Virtual H200 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H200 Count Limit
+          type: integer
+        gpu_virtual_h200_count_usage:
+          description: Virtual H200 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual H200 Count Usage
+          type: integer
+        gpu_virtual_l40s_count_limit:
+          description: Virtual L40S GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual L40S Count Limit
+          type: integer
+        gpu_virtual_l40s_count_usage:
+          description: Virtual L40S GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual L40S Count Usage
+          type: integer
+        image_count_limit:
+          description: Images Count limit
+          examples:
+          - 0
+          title: Image Count Limit
+          type: integer
+        image_count_usage:
+          description: Images Count usage
+          examples:
+          - 0
+          title: Image Count Usage
+          type: integer
+        image_size_limit:
+          description: Images Size, bytes limit
+          examples:
+          - 0
+          title: Image Size Limit
+          type: integer
+        image_size_usage:
+          description: Images Size, bytes usage
+          examples:
+          - 0
+          title: Image Size Usage
+          type: integer
+        ipu_count_limit:
+          description: IPU Count limit
+          examples:
+          - 0
+          title: Ipu Count Limit
+          type: integer
+        ipu_count_usage:
+          description: IPU Count usage
+          examples:
+          - 0
+          title: Ipu Count Usage
+          type: integer
+        laas_topic_count_limit:
+          description: LaaS Topics Count limit
+          examples:
+          - 0
+          title: Laas Topic Count Limit
+          type: integer
+        laas_topic_count_usage:
+          description: LaaS Topics Count usage
+          examples:
+          - 0
+          title: Laas Topic Count Usage
+          type: integer
+        loadbalancer_count_limit:
+          description: Load Balancers Count limit
+          examples:
+          - 0
+          title: Loadbalancer Count Limit
+          type: integer
+        loadbalancer_count_usage:
+          description: Load Balancers Count usage
+          examples:
+          - 0
+          title: Loadbalancer Count Usage
+          type: integer
+        network_count_limit:
+          description: Networks Count limit
+          examples:
+          - 0
+          title: Network Count Limit
+          type: integer
+        network_count_usage:
+          description: Networks Count usage
+          examples:
+          - 0
+          title: Network Count Usage
+          type: integer
+        ram_limit:
+          description: RAM Size, MiB limit
+          examples:
+          - 0
+          title: Ram Limit
+          type: integer
+        ram_usage:
+          description: RAM Size, MiB usage
+          examples:
+          - 0
+          title: Ram Usage
+          type: integer
+        region_id:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+        registry_count_limit:
+          description: Registries count limit
+          examples:
+          - 0
+          title: Registry Count Limit
+          type: integer
+        registry_count_usage:
+          description: Registries count usage
+          examples:
+          - 0
+          title: Registry Count Usage
+          type: integer
+        registry_storage_limit:
+          description: Registries volume usage, GiB limit
+          examples:
+          - 0
+          title: Registry Storage Limit
+          type: integer
+        registry_storage_usage:
+          description: Registries volume usage, GiB usage
+          examples:
+          - 0
+          title: Registry Storage Usage
+          type: integer
+        router_count_limit:
+          description: Routers Count limit
+          examples:
+          - 0
+          title: Router Count Limit
+          type: integer
+        router_count_usage:
+          description: Routers Count usage
+          examples:
+          - 0
+          title: Router Count Usage
+          type: integer
+        secret_count_limit:
+          description: Secret Count limit
+          examples:
+          - 0
+          title: Secret Count Limit
+          type: integer
+        secret_count_usage:
+          description: Secret Count usage
+          examples:
+          - 0
+          title: Secret Count Usage
+          type: integer
+        servergroup_count_limit:
+          description: Placement Group Count limit
+          examples:
+          - 0
+          title: Servergroup Count Limit
+          type: integer
+        servergroup_count_usage:
+          description: Placement Group Count usage
+          examples:
+          - 0
+          title: Servergroup Count Usage
+          type: integer
+        sfs_count_limit:
+          description: Shared file system Count limit
+          examples:
+          - 0
+          title: Sfs Count Limit
+          type: integer
+        sfs_count_usage:
+          description: Shared file system Count usage
+          examples:
+          - 0
+          title: Sfs Count Usage
+          type: integer
+        sfs_size_limit:
+          description: Shared file system Size, GiB limit
+          examples:
+          - 0
+          title: Sfs Size Limit
+          type: integer
+        sfs_size_usage:
+          description: Shared file system Size, GiB usage
+          examples:
+          - 0
+          title: Sfs Size Usage
+          type: integer
+        shared_vm_count_limit:
+          description: Basic VMs Count limit
+          examples:
+          - 0
+          title: Shared Vm Count Limit
+          type: integer
+        shared_vm_count_usage:
+          description: Basic VMs Count usage
+          examples:
+          - 0
+          title: Shared Vm Count Usage
+          type: integer
+        slurm_cluster_count_limit:
+          description: Slurm cluster count limit for this region. 0 disables Slurm in this region.
+          examples:
+          - 0
+          title: Slurm Cluster Count Limit
+          type: integer
+        slurm_cluster_count_usage:
+          description: Slurm cluster count usage
+          examples:
+          - 0
+          title: Slurm Cluster Count Usage
+          type: integer
+        snapshot_schedule_count_limit:
+          description: Snapshot Schedules Count limit
+          examples:
+          - 0
+          title: Snapshot Schedule Count Limit
+          type: integer
+        snapshot_schedule_count_usage:
+          description: Snapshot Schedules Count usage
+          examples:
+          - 0
+          title: Snapshot Schedule Count Usage
+          type: integer
+        subnet_count_limit:
+          description: Subnets Count limit
+          examples:
+          - 0
+          title: Subnet Count Limit
+          type: integer
+        subnet_count_usage:
+          description: Subnets Count usage
+          examples:
+          - 0
+          title: Subnet Count Usage
+          type: integer
+        vm_count_limit:
+          description: Instances Dedicated Count limit
+          examples:
+          - 0
+          title: Vm Count Limit
+          type: integer
+        vm_count_usage:
+          description: Instances Dedicated Count usage
+          examples:
+          - 0
+          title: Vm Count Usage
+          type: integer
+        volume_count_limit:
+          description: Volumes Count limit
+          examples:
+          - 0
+          title: Volume Count Limit
+          type: integer
+        volume_count_usage:
+          description: Volumes Count usage
+          examples:
+          - 0
+          title: Volume Count Usage
+          type: integer
+        volume_size_limit:
+          description: Volumes Size, GiB limit
+          examples:
+          - 0
+          title: Volume Size Limit
+          type: integer
+        volume_size_usage:
+          description: Volumes Size, GiB usage
+          examples:
+          - 0
+          title: Volume Size Usage
+          type: integer
+        volume_snapshots_count_limit:
+          description: Snapshots Count limit
+          examples:
+          - 0
+          title: Volume Snapshots Count Limit
+          type: integer
+        volume_snapshots_count_usage:
+          description: Snapshots Count usage
+          examples:
+          - 0
+          title: Volume Snapshots Count Usage
+          type: integer
+        volume_snapshots_size_limit:
+          description: Snapshots Size, GiB limit
+          examples:
+          - 0
+          title: Volume Snapshots Size Limit
+          type: integer
+        volume_snapshots_size_usage:
+          description: Snapshots Size, GiB usage
+          examples:
+          - 0
+          title: Volume Snapshots Size Usage
+          type: integer
+      title: RegionalQuotas object
+      type: object

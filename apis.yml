@@ -45,16 +45,16 @@ created: '2026-06-20'
 modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
-- aid: gcore:gcore-cdn-api
-  name: Gcore CDN API
-  description: Content delivery network resources, rules, origin groups, and purge.
+- aid: gcore:gcore-bare-metal-api
+  name: Gcore Bare Metal API
+  description: The Bare Metal API from Gcore — 11 operation(s) for bare metal.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - CDN
+  - Bare Metal
   properties:
   - type: OpenAPI
-    url: openapi/gcore-cdn-api-openapi.yml
+    url: openapi/gcore-bare-metal-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference
@@ -89,16 +89,16 @@ apis:
     url: https://gcore.com/docs/fastedge
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
-- aid: gcore:gcore-cloud-api
-  name: Gcore Cloud API
-  description: Virtual machine instances, networks, and volumes.
+- aid: gcore:gcore-container-as-a-service-api
+  name: Gcore Container as a Service API
+  description: The Container as a Service API from Gcore — 10 operation(s) for container as a service.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - Cloud
+  - Container as a Service
   properties:
   - type: OpenAPI
-    url: openapi/gcore-cloud-api-openapi.yml
+    url: openapi/gcore-container-as-a-service-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference
@@ -133,16 +133,16 @@ apis:
     url: https://gcore.com/docs/fastedge
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
-- aid: gcore:gcore-dns-api
-  name: Gcore DNS API
-  description: Managed authoritative DNS zones and RRSets.
+- aid: gcore:gcore-cost-reports-api
+  name: Gcore Cost Reports API
+  description: The Cost Reports API from Gcore — 6 operation(s) for cost reports.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - DNS
+  - Cost Reports
   properties:
   - type: OpenAPI
-    url: openapi/gcore-dns-api-openapi.yml
+    url: openapi/gcore-cost-reports-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference
@@ -177,16 +177,16 @@ apis:
     url: https://gcore.com/docs/fastedge
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
-- aid: gcore:gcore-fastedge-api
-  name: Gcore FastEdge API
-  description: Serverless edge functions and applications.
+- aid: gcore:gcore-ddos-protection-api
+  name: Gcore DDoS Protection API
+  description: The DDoS Protection API from Gcore — 7 operation(s) for ddos protection.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - FastEdge
+  - DDoS Protection
   properties:
   - type: OpenAPI
-    url: openapi/gcore-fastedge-api-openapi.yml
+    url: openapi/gcore-ddos-protection-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference
@@ -221,16 +221,16 @@ apis:
     url: https://gcore.com/docs/fastedge
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
-- aid: gcore:gcore-inference-api
-  name: Gcore Inference API
-  description: Everywhere Inference edge AI model deployments.
+- aid: gcore:gcore-everywhere-inference-api
+  name: Gcore Everywhere Inference API
+  description: The Everywhere Inference API from Gcore — 18 operation(s) for everywhere inference.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - Inference
+  - Everywhere Inference
   properties:
   - type: OpenAPI
-    url: openapi/gcore-inference-api-openapi.yml
+    url: openapi/gcore-everywhere-inference-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference
@@ -265,16 +265,17 @@ apis:
     url: https://gcore.com/docs/fastedge
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
-- aid: gcore:gcore-storage-api
-  name: Gcore Storage API
-  description: S3-compatible and SFTP object storage.
+- aid: gcore:gcore-everywhere-inference-apps-api
+  name: Gcore Everywhere Inference Apps API
+  description: >-
+    The Everywhere Inference Apps API from Gcore — 5 operation(s) for everywhere inference apps.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - Storage
+  - Everywhere Inference Apps
   properties:
   - type: OpenAPI
-    url: openapi/gcore-storage-api-openapi.yml
+    url: openapi/gcore-everywhere-inference-apps-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference
@@ -309,16 +310,16 @@ apis:
     url: https://gcore.com/docs/fastedge
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
-- aid: gcore:gcore-streaming-api
-  name: Gcore Streaming API
-  description: Video hosting (VOD) and live streaming.
+- aid: gcore:gcore-file-shares-api
+  name: Gcore File Shares API
+  description: The File Shares API from Gcore — 10 operation(s) for file shares.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - Streaming
+  - File Shares
   properties:
   - type: OpenAPI
-    url: openapi/gcore-streaming-api-openapi.yml
+    url: openapi/gcore-file-shares-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference
@@ -353,16 +354,1336 @@ apis:
     url: https://gcore.com/docs/fastedge
   - type: APIReference
     url: https://gcore.com/docs/api-reference/fastedge
-- aid: gcore:gcore-waap-api
-  name: Gcore WAAP API
-  description: Web Application and API Protection domains.
+- aid: gcore:gcore-floating-ips-api
+  name: Gcore Floating IPs API
+  description: The Floating IPs API from Gcore — 10 operation(s) for floating ips.
   humanURL: https://gcore.com/docs/api-reference/cdn
   baseURL: https://api.gcore.com/cdn
   tags:
-  - WAAP
+  - Floating IPs
   properties:
   - type: OpenAPI
-    url: openapi/gcore-waap-api-openapi.yml
+    url: openapi/gcore-floating-ips-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-function-as-a-service-api
+  name: Gcore Function as a Service API
+  description: The Function as a Service API from Gcore — 10 operation(s) for function as a service.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Function as a Service
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-function-as-a-service-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-gpu-bare-metal-api
+  name: Gcore GPU Bare Metal API
+  description: The GPU Bare Metal API from Gcore — 39 operation(s) for gpu bare metal.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - GPU Bare Metal
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-gpu-bare-metal-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-gpu-virtual-api
+  name: Gcore GPU Virtual API
+  description: The GPU Virtual API from Gcore — 14 operation(s) for gpu virtual.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - GPU Virtual
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-gpu-virtual-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-images-api
+  name: Gcore Images API
+  description: The Images API from Gcore — 8 operation(s) for images.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Images
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-images-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-instances-api
+  name: Gcore Instances API
+  description: The Instances API from Gcore — 38 operation(s) for instances.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Instances
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-instances-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-ip-ranges-api
+  name: Gcore IP Ranges API
+  description: The IP Ranges API from Gcore — 1 operation(s) for ip ranges.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - IP Ranges
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-ip-ranges-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-load-balancers-api
+  name: Gcore Load Balancers API
+  description: The Load Balancers API from Gcore — 31 operation(s) for load balancers.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Load Balancers
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-load-balancers-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-logging-api
+  name: Gcore Logging API
+  description: The Logging API from Gcore — 8 operation(s) for logging.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Logging
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-logging-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-managed-kubernetes-api
+  name: Gcore Managed Kubernetes API
+  description: The Managed Kubernetes API from Gcore — 19 operation(s) for managed kubernetes.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Managed Kubernetes
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-managed-kubernetes-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-managed-postgresql-api
+  name: Gcore Managed PostgreSQL API
+  description: The Managed PostgreSQL API from Gcore — 8 operation(s) for managed postgresql.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Managed PostgreSQL
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-managed-postgresql-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-networks-api
+  name: Gcore Networks API
+  description: The Networks API from Gcore — 11 operation(s) for networks.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Networks
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-networks-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-placement-groups-api
+  name: Gcore Placement Groups API
+  description: The Placement Groups API from Gcore — 2 operation(s) for placement groups.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Placement Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-placement-groups-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-ports-api
+  name: Gcore Ports API
+  description: The Ports API from Gcore — 2 operation(s) for ports.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Ports
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-ports-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-pricing-api
+  name: Gcore Pricing API
+  description: The Pricing API from Gcore — 1 operation(s) for pricing.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Pricing
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-pricing-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-projects-api
+  name: Gcore Projects API
+  description: The Projects API from Gcore — 2 operation(s) for projects.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-projects-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-quotas-api
+  name: Gcore Quotas API
+  description: The Quotas API from Gcore — 6 operation(s) for quotas.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Quotas
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-quotas-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-regions-api
+  name: Gcore Regions API
+  description: The Regions API from Gcore — 2 operation(s) for regions.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Regions
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-regions-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-registry-api
+  name: Gcore Registry API
+  description: The Registry API from Gcore — 13 operation(s) for registry.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Registry
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-registry-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-reservations-api
+  name: Gcore Reservations API
+  description: The Reservations API from Gcore — 1 operation(s) for reservations.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Reservations
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-reservations-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-reserved-ips-api
+  name: Gcore Reserved IPs API
+  description: The Reserved IPs API from Gcore — 6 operation(s) for reserved ips.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Reserved IPs
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-reserved-ips-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-routers-api
+  name: Gcore Routers API
+  description: The Routers API from Gcore — 6 operation(s) for routers.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Routers
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-routers-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-secrets-api
+  name: Gcore Secrets API
+  description: The Secrets API from Gcore — 3 operation(s) for secrets.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Secrets
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-secrets-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-security-groups-api
+  name: Gcore Security Groups API
+  description: The Security Groups API from Gcore — 12 operation(s) for security groups.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Security Groups
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-security-groups-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-snapshot-schedules-api
+  name: Gcore Snapshot Schedules API
+  description: The Snapshot Schedules API from Gcore — 10 operation(s) for snapshot schedules.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Snapshot Schedules
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-snapshot-schedules-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-snapshots-api
+  name: Gcore Snapshots API
+  description: The Snapshots API from Gcore — 4 operation(s) for snapshots.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Snapshots
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-snapshots-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-ssh-keys-api
+  name: Gcore SSH Keys API
+  description: The SSH Keys API from Gcore — 7 operation(s) for ssh keys.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - SSH Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-ssh-keys-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-tasks-api
+  name: Gcore Tasks API
+  description: The Tasks API from Gcore — 6 operation(s) for tasks.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-user-actions-api
+  name: Gcore User Actions API
+  description: The User Actions API from Gcore — 9 operation(s) for user actions.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - User Actions
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-user-actions-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-user-role-assignments-api
+  name: Gcore User Role Assignments API
+  description: The User Role Assignments API from Gcore — 4 operation(s) for user role assignments.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - User Role Assignments
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-user-role-assignments-api-openapi.yml
+  - type: Documentation
+    url: https://gcore.com/docs/cdn
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cdn
+  - type: PostmanCollection
+    url: collections/gcore.postman_collection.json
+  - type: OpenCollection
+    url: collections/gcore.opencollection.json
+  - type: Documentation
+    url: https://gcore.com/docs/cloud
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/cloud
+  - type: Documentation
+    url: https://gcore.com/docs/storage
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/storage
+  - type: Documentation
+    url: https://gcore.com/docs/dns
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/dns
+  - type: Documentation
+    url: https://gcore.com/docs/streaming-platform
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/streaming
+  - type: Documentation
+    url: https://gcore.com/docs/edge-ai/everywhere-inference
+  - type: Documentation
+    url: https://gcore.com/docs/waap
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/waap
+  - type: Documentation
+    url: https://gcore.com/docs/fastedge
+  - type: APIReference
+    url: https://gcore.com/docs/api-reference/fastedge
+- aid: gcore:gcore-volumes-api
+  name: Gcore Volumes API
+  description: The Volumes API from Gcore — 12 operation(s) for volumes.
+  humanURL: https://gcore.com/docs/api-reference/cdn
+  baseURL: https://api.gcore.com/cdn
+  tags:
+  - Volumes
+  properties:
+  - type: OpenAPI
+    url: openapi/gcore-volumes-api-openapi.yml
   - type: Documentation
     url: https://gcore.com/docs/cdn
   - type: APIReference

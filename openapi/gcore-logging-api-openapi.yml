@@ -1,0 +1,785 @@
+openapi: 3.2.0
+info:
+  title: Cloud Logging API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Logging
+paths:
+  /v1/laas/{project_id}/{region_id}/status:
+    get:
+      operationId: LaasStatusView.get
+      summary: Get logging status
+      description: Retrieve the current status of Logging as a Service (LaaS) for the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaasStatusSerializer'
+      tags:
+      - Logging
+    patch:
+      operationId: LaasStatusView.patch
+      summary: Update logging status
+      description: 'Update the status of Logging as a Service (LaaS) for the specified project and region.
+
+        This endpoint allows enabling or disabling LaaS functionality.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaasStatusSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchLaasStatusSerializer'
+      tags:
+      - Logging
+  /v1/laas/{project_id}/{region_id}/topics:
+    get:
+      operationId: LaasKafkaTopicView.get
+      summary: List logging topics
+      description: Retrieve a list of Kafka topics within the client's LaaS namespace for the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaasKafkaTopicCollectionSerializer'
+      tags:
+      - Logging
+    put:
+      operationId: LaasKafkaTopicView.put
+      summary: Create logging topic
+      description: 'Create a new Kafka topic within the client''s LaaS namespace for the specified project and region.
+
+        If a topic with the same name exists, it will be updated.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaasKafkaTopicSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateLaasKafkaTopicSerializer'
+      tags:
+      - Logging
+  /v1/laas/{project_id}/{region_id}/topics/{topic_name}:
+    delete:
+      operationId: LaasKafkaTopicOperationView.delete
+      summary: Delete logging topic
+      description: 'Delete a Kafka topic from the client''s LaaS namespace in the specified project and region.
+
+        The topic must not be in use by any other service.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      - in: path
+        name: topic_name
+        required: true
+        description: Kafka topic name
+        schema:
+          description: Kafka topic name
+          examples:
+          - my-topic
+          title: Topic Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Logging
+  /v1/laas/{project_id}/{region_id}/users:
+    post:
+      operationId: LaasRegenerateCredentialsView.post
+      summary: Regenerate logging credentials
+      description: 'Generate new credentials for accessing Logging as a Service (LaaS) in the specified project and region.
+
+        This will invalidate any existing credentials.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaasUserSerializer'
+      tags:
+      - Logging
+  /v1/laas/{region_id}/destination_regions:
+    get:
+      operationId: LaasSourceDestinationRegionView.get
+      summary: List logging destination regions
+      description: Retrieve a list of regions that can be used as destinations for LaaS logs from the specified source region.
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DestinationRegionCollectionSerializer'
+      tags:
+      - Logging
+  /v1/laas/{region_id}/hosts:
+    get:
+      operationId: LaasHostsView.get
+      summary: List logging hosts
+      description: Retrieve a list of hosts running LaaS services in the specified region.
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LaasHostsSerializer'
+      tags:
+      - Logging
+  /v1/laas/namespaces/{project_id}/{region_id}/{namespace_name}:
+    get:
+      operationId: LaasNamespaceView.get
+      summary: Check logging namespace
+      description: Check if a custom namespace name is available for LaaS in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      - in: path
+        name: namespace_name
+        required: true
+        description: Custom namespace for validation
+        schema:
+          description: Custom namespace for validation
+          examples:
+          - custom_namespace
+          title: Namespace Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NamespaceAvailabilitySerializer'
+      tags:
+      - Logging
+  /v1/pricing/{region_id}/laas:
+    get:
+      operationId: LaasPricingHandler.get
+      summary: Get logging price
+      description: Get the price for Logging-as-a-Service (LaaS) in the specified region.
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      tags:
+      - Logging
+components:
+  schemas:
+    LaasHostsSerializer:
+      additionalProperties: true
+      properties:
+        exporter:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: LaaS exporter hosts
+          examples:
+          - - exporter.example.com
+          title: Exporter
+        kafka:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: Kafka broker hosts
+          examples:
+          - - kafka.example.com
+          title: Kafka
+        opensearch:
+          anyOf:
+          - $ref: '#/components/schemas/LaasOpensearchHosts'
+          - type: 'null'
+          description: OpenSearch endpoints
+      required:
+      - opensearch
+      - kafka
+      - exporter
+      title: LaasHostsSerializer
+      type: object
+    PatchLaasStatusSerializer:
+      properties:
+        is_initialized:
+          description: Boolean showing whether client is initialized with LaaS
+          examples:
+          - true
+          title: Is Initialized
+          type: boolean
+        namespace:
+          anyOf:
+          - maxLength: 32
+            minLength: 0
+            type: string
+          - type: 'null'
+          default: null
+          description: Optional. Custom namespace
+          examples:
+          - custom
+          title: Namespace
+      required:
+      - is_initialized
+      title: PatchLaasStatusSerializer
+      type: object
+    DestinationRegionSerializer:
+      properties:
+        region_id:
+          description: Destination region ID
+          examples:
+          - 1
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          title: Region Id
+          type: integer
+        region_name:
+          description: Destination region display name
+          examples:
+          - Luxembourg-2
+          title: Region Name
+          type: string
+      required:
+      - region_id
+      - region_name
+      title: DestinationRegionSerializer
+      type: object
+    DestinationRegionCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/DestinationRegionSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: DestinationRegionCollectionSerializer
+      type: object
+    NamespaceAvailabilitySerializer:
+      properties:
+        available:
+          description: Is namespace available
+          examples:
+          - true
+          title: Available
+          type: boolean
+        namespace:
+          description: Client namespace
+          examples:
+          - custom_namespace
+          title: Namespace
+          type: string
+      required:
+      - namespace
+      - available
+      title: NamespaceAvailabilitySerializer
+      type: object
+    LaasUserSerializer:
+      properties:
+        password:
+          description: Password to be used in log shipper config to write logs to LaaS
+          examples:
+          - LnHyPmVor6dAufMtR8GC5WNcNg5NjjAIksjIlFNbaEQ
+          title: Password
+          type: string
+        username:
+          description: Username to be used in log shipper config to write logs to LaaS
+          examples:
+          - 2ehwccnfzytsnt576dkmvs
+          title: Username
+          type: string
+      required:
+      - username
+      - password
+      title: LaasUserSerializer
+      type: object
+    LaasOpensearchHosts:
+      additionalProperties: true
+      properties:
+        api:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: OpenSearch API endpoint
+          examples:
+          - https://logging-dev.example.com:443
+          title: Api
+        dashboards:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: OpenSearch Dashboards endpoint
+          examples:
+          - https://logging-dev-ui.example.com
+          title: Dashboards
+      required:
+      - api
+      - dashboards
+      title: LaasOpensearchHosts
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    LaasIndexRetentionPolicyPydanticSerializer:
+      properties:
+        period:
+          anyOf:
+          - exclusiveMinimum: 0
+            maximum: 1825
+            type: integer
+          - type: 'null'
+          description: Duration of days for which logs must be kept.
+          examples:
+          - 45
+          title: Period
+      required:
+      - period
+      title: LaasIndexRetentionPolicyPydanticSerializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    IndexPatternSerializer:
+      properties:
+        id:
+          description: Pattern ID
+          examples:
+          - exampletopicindexpatternid
+          title: Id
+          type: string
+      required:
+      - id
+      title: IndexPatternSerializer
+      type: object
+    LaasStatusSerializer:
+      properties:
+        is_initialized:
+          description: Boolean showing whether client is initialized with LaaS
+          examples:
+          - true
+          title: Is Initialized
+          type: boolean
+        namespace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Client namespace
+          examples:
+          - null
+          - 2ehwccnfzytsnt576dkmvs
+          title: Namespace
+      required:
+      - namespace
+      - is_initialized
+      title: LaasStatusSerializer
+      type: object
+    LaasKafkaTopicSerializer:
+      properties:
+        index_pattern:
+          anyOf:
+          - $ref: '#/components/schemas/IndexPatternSerializer'
+          - type: 'null'
+          description: Index Pattern data
+          examples:
+          - id: exampletopicindexpatternid
+        name:
+          description: Kafka topic name to be used in log shipper config to write logs to LaaS
+          examples:
+          - my-topic
+          title: Name
+          type: string
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          examples:
+          - period: 45
+        size_in_bytes:
+          description: Size of the topic in bytes
+          minimum: 0
+          title: Size In Bytes
+          type: integer
+      required:
+      - name
+      - size_in_bytes
+      - retention_policy
+      - index_pattern
+      title: LaasKafkaTopicSerializer
+      type: object
+    CreateLaasKafkaTopicSerializer:
+      properties:
+        index_pattern:
+          anyOf:
+          - $ref: '#/components/schemas/IndexPatternSerializer'
+          - type: 'null'
+          default: null
+          description: Index Pattern data
+          examples:
+          - id: exampletopicindexpatternid
+        name:
+          description: Kafka topic name to be used in log shipper config to write logs to LaaS
+          examples:
+          - my-topic
+          maxLength: 223
+          minLength: 1
+          pattern: ^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9](?:[-a-z0-9]*[a-z0-9])*)*$
+          title: Name
+          type: string
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          examples:
+          - period: 45
+        size_in_bytes:
+          default: 0
+          description: Size of the topic in bytes
+          minimum: 0
+          title: Size In Bytes
+          type: integer
+      required:
+      - name
+      title: CreateLaasKafkaTopicSerializer
+      type: object
+    LaasKafkaTopicCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/LaasKafkaTopicSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: LaasKafkaTopicCollectionSerializer
+      type: object

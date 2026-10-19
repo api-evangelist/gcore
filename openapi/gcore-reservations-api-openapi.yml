@@ -1,0 +1,332 @@
+openapi: 3.2.0
+info:
+  title: Cloud Reservations API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Reservations
+paths:
+  /v2/reservations:
+    get:
+      operationId: ReservationV2ViewSet.get
+      summary: List reservations
+      description: 'Get a list of billing reservations along with detailed information
+
+        on resource configurations and associated pricing.'
+      parameters:
+      - in: query
+        name: time_from
+        required: true
+        description: Start of the reservation period (ISO 8601). The period must not exceed 31 days. The API returns monthly pricing for this period.
+        schema:
+          description: Start of the reservation period (ISO 8601). The period must not exceed 31 days. The API returns monthly pricing for this period.
+          examples:
+          - '2025-01-01T00:00:00Z'
+          format: date-time
+          title: Time From
+          type: string
+      - in: query
+        name: time_to
+        required: true
+        description: End of the reservation period (ISO 8601). The period must not exceed 31 days. The API returns monthly pricing for this period.
+        schema:
+          description: End of the reservation period (ISO 8601). The period must not exceed 31 days. The API returns monthly pricing for this period.
+          examples:
+          - '2025-02-01T00:00:00Z'
+          format: date-time
+          title: Time To
+          type: string
+      - in: query
+        name: metric_name
+        required: false
+        description: Metric name for the resource (e.g., 'bm1-hf-medium_min')
+        schema:
+          description: Metric name for the resource (e.g., 'bm1-hf-medium_min')
+          title: Metric Name
+          type: string
+      - in: query
+        name: order_by
+        required: false
+        description: Order by field and direction.
+        schema:
+          $ref: '#/components/schemas/BillingReservationV2OrderByChoices'
+          default: active_from.desc
+          description: Order by field and direction.
+          examples:
+          - active_from.asc
+          - active_to.asc
+      - in: query
+        name: region_id
+        required: false
+        description: Region for reservation
+        schema:
+          description: Region for reservation
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingReservationV2CollectionResponseSerializer'
+      tags:
+      - Reservations
+components:
+  schemas:
+    BillingReservationV2ItemResponseSerializer:
+      properties:
+        active_billing_plan_id:
+          description: Active billing plan ID
+          examples:
+          - 207114
+          title: Active Billing Plan Id
+          type: integer
+        active_overcommit:
+          $ref: '#/components/schemas/BillingReservationV2OvercommitSerializer'
+          description: Overcommit pricing details
+        commit:
+          $ref: '#/components/schemas/BillingReservationV2CommitSerializer'
+          description: Commit pricing details
+        hardware_info:
+          $ref: '#/components/schemas/BillingReservationV2HardwareInfoSerializer'
+          description: Hardware specifications
+        region_name:
+          description: Region name
+          examples:
+          - LUX-4
+          title: Region Name
+          type: string
+        resource_count:
+          description: Number of reserved resource items
+          examples:
+          - 1
+          title: Resource Count
+          type: integer
+        resource_name:
+          description: Resource name
+          examples:
+          - bm1-hf-medium
+          title: Resource Name
+          type: string
+        unit_name:
+          description: Unit name (e.g., 'H' for hours)
+          examples:
+          - H
+          title: Unit Name
+          type: string
+        unit_size_month:
+          description: Unit size per month (e.g., 744 hours)
+          examples:
+          - '744.00000000'
+          title: Unit Size Month
+          type: string
+        unit_size_total:
+          description: Unit size month multiplied by count of resources in the reservation
+          examples:
+          - '8928.00000000'
+          title: Unit Size Total
+          type: string
+      required:
+      - active_billing_plan_id
+      - region_name
+      - resource_name
+      - resource_count
+      - unit_size_month
+      - unit_name
+      - unit_size_total
+      - commit
+      - active_overcommit
+      - hardware_info
+      title: BillingReservationV2ItemResponseSerializer
+      type: object
+    BillingReservationV2CollectionResponseSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/BillingReservationV2ItemResponseSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: BillingReservationV2CollectionResponseSerializer
+      type: object
+    BillingReservationV2CommitSerializer:
+      properties:
+        active_from:
+          description: Billing subscription active from date
+          examples:
+          - '2025-04-03T00:00:00'
+          format: date-time
+          title: Active From
+          type: string
+        active_to:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Billing subscription active to date
+          examples:
+          - '2026-04-03T00:00:00'
+          title: Active To
+        price_per_month:
+          description: Price per month, per one resource
+          examples:
+          - '224.80198100'
+          title: Price Per Month
+          type: string
+        price_per_unit:
+          description: Price per unit, per one resource (hourly)
+          examples:
+          - '0.30215320'
+          title: Price Per Unit
+          type: string
+        price_total:
+          description: Total price for the reservation period for the full reserved amount
+          examples:
+          - '2697.62377200'
+          title: Price Total
+          type: string
+        subscription_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Billing subscription ID for commit
+          examples:
+          - 12345
+          title: Subscription Id
+      required:
+      - active_from
+      - active_to
+      - subscription_id
+      - price_per_unit
+      - price_per_month
+      - price_total
+      title: BillingReservationV2CommitSerializer
+      type: object
+    BillingReservationV2OvercommitSerializer:
+      properties:
+        active_from:
+          description: Billing subscription active from date
+          examples:
+          - '2025-04-03T00:00:00'
+          format: date-time
+          title: Active From
+          type: string
+        plan_item_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Billing plan item ID
+          examples:
+          - 666
+          title: Plan Item Id
+        price_per_month:
+          description: Price per month
+          examples:
+          - '236.63366400'
+          title: Price Per Month
+          type: string
+        price_per_unit:
+          description: Price per unit (hourly)
+          examples:
+          - '0.31805600'
+          title: Price Per Unit
+          type: string
+        price_total:
+          description: Total price for the reservation period
+          examples:
+          - '2839.60396800'
+          title: Price Total
+          type: string
+        subscription_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Billing subscription ID for overcommit
+          examples:
+          - 12344
+          title: Subscription Id
+      required:
+      - active_from
+      - subscription_id
+      - plan_item_id
+      - price_per_unit
+      - price_per_month
+      - price_total
+      title: BillingReservationV2OvercommitSerializer
+      type: object
+    BillingReservationV2HardwareInfoSerializer:
+      properties:
+        cpu:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: CPU specification
+          examples:
+          - 2xIntel Xeon 8468
+          title: Cpu
+        disk:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Disk specification
+          examples:
+          - 8 x 3.84 TB NVMe
+          title: Disk
+        ram:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: RAM specification
+          examples:
+          - 2TB RAM
+          title: Ram
+      required:
+      - cpu
+      - ram
+      - disk
+      title: BillingReservationV2HardwareInfoSerializer
+      type: object
+    BillingReservationV2OrderByChoices:
+      enum:
+      - active_from.asc
+      - active_from.desc
+      - active_to.asc
+      - active_to.desc
+      title: BillingReservationV2OrderByChoices
+      type: string

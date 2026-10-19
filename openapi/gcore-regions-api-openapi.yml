@@ -1,0 +1,479 @@
+openapi: 3.2.0
+info:
+  title: Cloud Regions API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Regions
+paths:
+  /v1/regions:
+    get:
+      operationId: RegionHandler.get
+      summary: List regions
+      description: ''
+      parameters:
+      - in: query
+        name: display_name
+        required: false
+        description: Filter regions by display name. Case-insensitive exact match.
+        schema:
+          description: Filter regions by display name. Case-insensitive exact match.
+          examples:
+          - Luxembourg
+          title: Display Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Limit the number of returned regions. Falls back to default of 100 if not specified. Limited by max limit value of 1000
+        schema:
+          default: 100
+          description: Limit the number of returned regions. Falls back to default of 100 if not specified. Limited by max limit value of 1000
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Order by field and direction.
+        schema:
+          $ref: '#/components/schemas/RegionOrderByChoices'
+          default: created_at.desc
+          description: Order by field and direction.
+          examples:
+          - created_at.desc
+      - in: query
+        name: product
+        required: false
+        description: If defined then return only regions that support given product.
+        schema:
+          $ref: '#/components/schemas/RegionProductChoices'
+          description: If defined then return only regions that support given product.
+          examples:
+          - inference
+      - in: query
+        name: show_volume_types
+        required: false
+        description: If true, null `available_volume_type` is replaced with a list of available volume types.
+        schema:
+          default: false
+          description: If true, null `available_volume_type` is replaced with a list of available volume types.
+          examples:
+          - false
+          title: Show Volume Types
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionCollectionSerializer'
+      tags:
+      - Regions
+  /v1/regions/{region_id}:
+    get:
+      operationId: RegionInstanceHandler.get
+      summary: Get region
+      description: ''
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 11
+          title: Region Id
+          type: integer
+      - in: query
+        name: show_volume_types
+        required: false
+        description: If true, null `available_volume_type` is replaced with a list of available volume types.
+        schema:
+          default: false
+          description: If true, null `available_volume_type` is replaced with a list of available volume types.
+          examples:
+          - false
+          title: Show Volume Types
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionSerializer'
+      tags:
+      - Regions
+components:
+  schemas:
+    RegionProductChoices:
+      enum:
+      - containers
+      - inference
+      title: RegionProductChoices
+      type: string
+    RegionState:
+      enum:
+      - ACTIVE
+      - DELETED
+      - DELETING
+      - DELETION_FAILED
+      - INACTIVE
+      - MAINTENANCE
+      - NEW
+      title: RegionState
+      type: string
+    RegionAccessType:
+      enum:
+      - core
+      - edge
+      title: RegionAccessType
+      type: string
+    RegionSerializer:
+      properties:
+        access_level:
+          $ref: '#/components/schemas/RegionAccessType'
+          description: The access level of the region.
+          examples:
+          - core
+        available_volume_types:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: List of available volume types, 'standard', 'ssd_hiiops', 'cold'].
+          examples:
+          - - standard
+            - ssd_hiiops
+            - cold
+          title: Available Volume Types
+        coordinates:
+          anyOf:
+          - $ref: '#/components/schemas/Coordinate'
+          - type: 'null'
+          description: Coordinates of the region
+          examples:
+          - latitude: 41.40338
+            longitude: 2.17403
+          title: Coordinates
+        country:
+          description: Two-letter country code, ISO 3166-1 alpha-2
+          examples:
+          - LU
+          pattern: ^\w{2}$
+          title: Country
+          type: string
+        created_at:
+          description: Region creation date and time
+          examples:
+          - '2019-12-31T23:59:59'
+          format: date-time
+          title: Created At
+          type: string
+        created_on:
+          deprecated: true
+          description: This field is deprecated. Use `created_at` instead.
+          examples:
+          - '2019-12-31T23:59:59'
+          format: date-time
+          title: Created On
+          type: string
+        ddos_endpoint_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          deprecated: true
+          description: DDoS endpoint ID
+          examples:
+          - 3
+          title: Ddos Endpoint Id
+        display_name:
+          description: Human-readable region name
+          examples:
+          - Luxembourg
+          title: Display Name
+          type: string
+        endpoint_type:
+          $ref: '#/components/schemas/RegionEndpointType'
+          description: Endpoint type
+          examples:
+          - public
+        external_network_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: External network ID
+          examples:
+          - c843c3e6-ef4d-4b92-8db2-e16ac05c5650
+          title: External Network Id
+        file_share_types:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/FileShareStorageType'
+            type: array
+          - type: 'null'
+          description: List of available file share types
+          examples:
+          - - standard
+            - vast
+            - ddn
+          title: File Share Types
+        has_ai:
+          description: Region has AI capability
+          examples:
+          - true
+          title: Has Ai
+          type: boolean
+        has_ai_gpu:
+          description: Region has AI GPU capability
+          examples:
+          - true
+          title: Has Ai Gpu
+          type: boolean
+        has_baremetal:
+          description: Region has bare metal capability
+          examples:
+          - false
+          title: Has Baremetal
+          type: boolean
+        has_basic_vm:
+          description: Region has basic vm capability
+          examples:
+          - false
+          title: Has Basic Vm
+          type: boolean
+        has_dbaas:
+          description: Region has DBAAS service
+          examples:
+          - false
+          title: Has Dbaas
+          type: boolean
+        has_ddos:
+          description: Region has Advanced DDoS Protection capability
+          examples:
+          - true
+          - false
+          title: Has Ddos
+          type: boolean
+        has_k8s:
+          description: Region has managed kubernetes capability
+          examples:
+          - true
+          title: Has K8S
+          type: boolean
+        has_kvm:
+          description: Region supports virtual machine instances
+          examples:
+          - true
+          title: Has Kvm
+          type: boolean
+        has_sfs:
+          description: Region has SFS capability
+          examples:
+          - false
+          title: Has Sfs
+          type: boolean
+        id:
+          description: Region ID
+          examples:
+          - 1
+          title: Id
+          type: integer
+        keystone_id:
+          description: ID of the identity service record
+          examples:
+          - 1
+          title: Keystone Id
+          type: integer
+        keystone_name:
+          description: Technical region name
+          examples:
+          - ED-9
+          title: Keystone Name
+          type: string
+        metrics_database_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Foreign key to Metrics database entity
+          examples:
+          - 1
+          title: Metrics Database Id
+        slug:
+          description: Short, human-readable region identifier (e.g. luxembourg-2, santa-clara-1).
+          examples:
+          - luxembourg-1
+          title: Slug
+          type: string
+        state:
+          $ref: '#/components/schemas/RegionState'
+          description: Region state
+          examples:
+          - NEW
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          deprecated: true
+          description: This field is deprecated and can be ignored
+          examples:
+          - null
+          title: Task Id
+        vlan_physical_network:
+          description: Physical network name to create vlan networks
+          examples:
+          - br-ex
+          title: Vlan Physical Network
+          type: string
+        zone:
+          anyOf:
+          - $ref: '#/components/schemas/Zone'
+          - type: 'null'
+          description: Geographical zone
+          examples:
+          - EMEA
+      required:
+      - id
+      - display_name
+      - keystone_name
+      - slug
+      - state
+      - country
+      - zone
+      - task_id
+      - endpoint_type
+      - external_network_id
+      - created_on
+      - created_at
+      - keystone_id
+      - has_kvm
+      - has_baremetal
+      - has_basic_vm
+      - has_sfs
+      - has_dbaas
+      - has_ddos
+      - vlan_physical_network
+      - available_volume_types
+      - metrics_database_id
+      - access_level
+      - has_k8s
+      - has_ai
+      - has_ai_gpu
+      - coordinates
+      - file_share_types
+      title: Region object
+      type: object
+    FileShareStorageType:
+      enum:
+      - ddn
+      - standard
+      - vast
+      title: FileShareStorageType
+      type: string
+    Coordinate:
+      properties:
+        latitude:
+          examples:
+          - '41.40338'
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Latitude
+          type: string
+        longitude:
+          examples:
+          - '2.17403'
+          pattern: ^(?!^[-+.]*$)[+-]?0*\d*\.?\d*$
+          title: Longitude
+          type: string
+      required:
+      - latitude
+      - longitude
+      title: Coordinate
+      type: object
+    RegionOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - display_name.asc
+      - display_name.desc
+      title: RegionOrderByChoices
+      type: string
+    Zone:
+      enum:
+      - AMERICAS
+      - APAC
+      - EMEA
+      - RUSSIA_AND_CIS
+      title: Zone
+      type: string
+    RegionCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RegionSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RegionCollectionSerializer
+      type: object
+    RegionEndpointType:
+      enum:
+      - admin
+      - internal
+      - public
+      title: RegionEndpointType
+      type: string

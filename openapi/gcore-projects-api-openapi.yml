@@ -1,0 +1,375 @@
+openapi: 3.2.0
+info:
+  title: Cloud Projects API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Projects
+paths:
+  /v1/projects:
+    post:
+      operationId: ProjectListViewSet.post
+      summary: Create project
+      description: 'Create a new project for a client.
+
+        Project management must be enabled to perform this operation.'
+      parameters: []
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectSerializer'
+      tags:
+      - Projects
+    get:
+      operationId: ProjectListViewSet.get
+      summary: List projects
+      description: 'Retrieve a list of projects for a client.
+
+        Results can be filtered by name and ordered by various fields.'
+      parameters:
+      - in: query
+        name: include_deleted
+        required: false
+        description: Whether to include deleted projects in the response.
+        schema:
+          default: false
+          description: Whether to include deleted projects in the response.
+          examples:
+          - false
+          title: Include Deleted
+          type: boolean
+      - in: query
+        name: limit
+        required: false
+        description: Limit value is used to limit the number of records in the result
+        schema:
+          default: 100
+          description: Limit value is used to limit the number of records in the result
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Name to filter the results by.
+        schema:
+          description: Name to filter the results by.
+          examples:
+          - my-project
+          title: Name
+          type: string
+      - in: query
+        name: offset
+        required: false
+        description: Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Order by field and direction.
+        schema:
+          $ref: '#/components/schemas/ProjectOrderByChoices'
+          default: created_at.desc
+          description: Order by field and direction.
+          examples:
+          - name.desc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListProjectsSerializer'
+      tags:
+      - Projects
+  /v1/projects/{project_id}:
+    get:
+      operationId: ProjectViewSet.get
+      summary: Get project
+      description: Retrieve detailed information about a specific project.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 4
+          format: int64
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSerializer'
+      tags:
+      - Projects
+    patch:
+      operationId: ProjectViewSet.patch
+      summary: Update project
+      description: 'This endpoint allows partial updates of a project (such as its name or description).
+
+        Only the fields explicitly provided in the request body will be updated.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 4
+          format: int64
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectSerializer'
+      tags:
+      - Projects
+    delete:
+      operationId: ProjectViewSet.delete
+      summary: Delete project
+      description: 'Delete a project and all its associated cloud resources across all regions.
+
+        This operation is irreversible and cannot be undone.
+
+        Default projects cannot be deleted.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 4
+          format: int64
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Projects
+components:
+  schemas:
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    ProjectSerializer:
+      properties:
+        client_id:
+          description: ID associated with the client.
+          examples:
+          - 1
+          title: Client Id
+          type: integer
+        created_at:
+          description: Datetime of creation, which is automatically generated.
+          examples:
+          - '2019-12-31T23:59:59'
+          format: date-time
+          title: Created At
+          type: string
+        deleted_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Datetime of deletion, which is automatically generated if the project is deleted.
+          examples:
+          - '2020-12-31T23:59:59'
+          title: Deleted At
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Description of the project.
+          examples:
+          - Project description
+          title: Description
+        id:
+          description: Project ID, which is automatically generated upon creation.
+          examples:
+          - 1
+          title: Id
+          type: integer
+        is_default:
+          description: Indicates if the project is the default one. Each client always has one default project.
+          examples:
+          - true
+          title: Is Default
+          type: boolean
+        name:
+          description: Unique project name for a client.
+          examples:
+          - default
+          title: Name
+          type: string
+        state:
+          description: The state of the project.
+          examples:
+          - ACTIVE
+          title: State
+          type: string
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - 7244e161-664c-4afd-a34e-7003eac4d949
+          title: Task Id
+      required:
+      - client_id
+      - created_at
+      - deleted_at
+      - description
+      - id
+      - is_default
+      - name
+      - state
+      - task_id
+      title: ProjectSerializer
+      type: object
+    ProjectOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - name.asc
+      - name.desc
+      title: ProjectOrderByChoices
+      type: string
+    UpdateProjectSerializer:
+      properties:
+        description:
+          description: Description of the project.
+          examples:
+          - Project description
+          title: Description
+          type: string
+        name:
+          description: Name of the entity, following a specific format.
+          examples:
+          - my-project
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+      title: UpdateProjectSerializer
+      type: object
+    CreateProjectSerializer:
+      properties:
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          default: null
+          description: Description of the project.
+          examples:
+          - Project description
+          title: Description
+        name:
+          description: Unique project name for a client. Each client always has one "default" project.
+          examples:
+          - my-project
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+      required:
+      - name
+      title: CreateProjectSerializer
+      type: object
+    ListProjectsSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ProjectSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ListProjectsSerializer
+      type: object

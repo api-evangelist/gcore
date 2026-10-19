@@ -1,0 +1,2221 @@
+openapi: 3.2.0
+info:
+  title: Cloud Managed PostgreSQL API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Managed PostgreSQL
+paths:
+  /v1/dbaas/postgres/check_limit/{project_id}/{region_id}:
+    post:
+      operationId: DBAASPorstresLimitsHandler.post
+      summary: Check PostgreSQL cluster quota
+      description: 'Check if regional quota is exceeded for PostgreSQL cluster creation.
+
+        If exceeded, calculate additional quotas needed.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionRequestedQuotasSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PGClusterCreateSerializer'
+      tags:
+      - Managed PostgreSQL
+  /v1/dbaas/postgres/clusters/{project_id}/{region_id}:
+    post:
+      operationId: PGClustersViewSet.post
+      summary: Create PostgreSQL cluster
+      description: Create a new PostgreSQL cluster with the specified configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PGClusterCreateSerializer'
+      tags:
+      - Managed PostgreSQL
+    get:
+      operationId: PGClustersViewSet.get
+      summary: List PostgreSQL clusters
+      description: 'List all PostgreSQL clusters in the specified project and region.
+
+        Results can be filtered by search query and paginated.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Maximum number of clusters to return
+        schema:
+          default: 10
+          description: Maximum number of clusters to return
+          minimum: 0
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Filter clusters by name
+        schema:
+          description: Filter clusters by name
+          title: Name
+          type: string
+      - in: query
+        name: offset
+        required: false
+        description: Number of clusters to skip
+        schema:
+          default: 0
+          description: Number of clusters to skip
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PGClusterShortCollectionSerializer'
+      tags:
+      - Managed PostgreSQL
+  /v1/dbaas/postgres/clusters/{project_id}/{region_id}/{cluster_name}:
+    get:
+      operationId: PGClusterViewSet.get
+      summary: Get PostgreSQL cluster
+      description: Get detailed information about a specific PostgreSQL cluster.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostgresClusterOverviewSerializer'
+      tags:
+      - Managed PostgreSQL
+    patch:
+      operationId: PGClusterViewSet.patch
+      summary: Update PostgreSQL cluster
+      description: Update the configuration of an existing PostgreSQL cluster.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchPGClusterSerializer'
+      tags:
+      - Managed PostgreSQL
+    delete:
+      operationId: PGClusterViewSet.delete
+      summary: Delete PostgreSQL cluster
+      description: Delete a PostgreSQL cluster and all its associated resources.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Managed PostgreSQL
+  /v1/dbaas/postgres/clusters/{project_id}/{region_id}/{cluster_name}/metrics:
+    get:
+      operationId: PGClusterMetricsViewSet.get
+      summary: Get PostgreSQL cluster metrics
+      description: Get metrics for a specific PostgreSQL cluster in Prometheus format.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          title: Cluster Name
+          type: string
+      responses:
+        '200':
+          description: OK
+      tags:
+      - Managed PostgreSQL
+  /v1/dbaas/postgres/clusters/{project_id}/{region_id}/{cluster_name}/users/{username}/credentials:
+    post:
+      operationId: DBAASPostgresRegenerateSecretView.post
+      summary: Regenerate PostgreSQL user credentials
+      description: Generate new credentials for a specific user in a PostgreSQL cluster.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          title: Cluster Name
+          type: string
+      - in: path
+        name: username
+        required: true
+        description: Username
+        schema:
+          description: Username
+          title: Username
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCredentialsSerializer'
+      tags:
+      - Managed PostgreSQL
+    get:
+      operationId: DBAASPostgresRegenerateSecretView.get
+      summary: Get PostgreSQL user credentials
+      description: 'Get the credentials for a specific user in a PostgreSQL cluster.
+
+        This endpoint can only be used once per user.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      - in: path
+        name: cluster_name
+        required: true
+        description: Cluster name
+        schema:
+          description: Cluster name
+          title: Cluster Name
+          type: string
+      - in: path
+        name: username
+        required: true
+        description: Username
+        schema:
+          description: Username
+          title: Username
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCredentialsSerializer'
+      tags:
+      - Managed PostgreSQL
+  /v1/dbaas/postgres/configuration/{project_id}/{region_id}:
+    get:
+      operationId: DBAASPostgresAwailableConfigurationView.get
+      summary: Get PostgreSQL configurations
+      description: Get all available PostgreSQL configurations for the specified region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DBAASPGConfiguration'
+      tags:
+      - Managed PostgreSQL
+  /v1/dbaas/postgres/validate_pg_conf/{project_id}/{region_id}:
+    post:
+      operationId: DBAASPostgresValidatePGConfView.post
+      summary: Validate PostgreSQL configuration
+      description: Validate a custom PostgreSQL configuration file.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PGConfValidateResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PGConfValidationRequestSerializer'
+      tags:
+      - Managed PostgreSQL
+  /v1/dbaas/status/{project_id}/{region_id}:
+    get:
+      operationId: DBAASStatusView.get
+      summary: Get PostgreSQL service status
+      description: 'Get the current status of the PostgreSQL service for the specified project.
+
+        The service may be initialized or not.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DbaasStatusSerializer'
+      tags:
+      - Managed PostgreSQL
+    put:
+      operationId: DBAASStatusView.put
+      summary: Update PostgreSQL service status
+      description: Activate or deactivate the PostgreSQL service for the specified project.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DbaasStatusSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DbaasStatusRequestSerializer'
+      tags:
+      - Managed PostgreSQL
+components:
+  schemas:
+    DbaasStatusSerializer:
+      properties:
+        is_initialized:
+          description: DBAAS service status
+          examples:
+          - true
+          - false
+          title: Is Initialized
+          type: boolean
+      required:
+      - is_initialized
+      title: DbaasStatusSerializer
+      type: object
+    PatchPGClusterSerializer:
+      properties:
+        databases:
+          default: []
+          items:
+            $ref: '#/components/schemas/Database'
+          title: Databases
+          type: array
+        flavor:
+          anyOf:
+          - $ref: '#/components/schemas/Flavor'
+          - type: 'null'
+          default: null
+          description: New instance RAM and CPU
+        high_availability:
+          anyOf:
+          - $ref: '#/components/schemas/HighAvailabilityOptions'
+          - type: 'null'
+          default: null
+          description: New High Availability settings
+        network:
+          anyOf:
+          - $ref: '#/components/schemas/PublicNetwork'
+          - type: 'null'
+          default: null
+          title: Network
+        pg_server_configuration:
+          anyOf:
+          - $ref: '#/components/schemas/PatchPostgreSQLServerConfig'
+          - type: 'null'
+          default: null
+          description: New PosgtreSQL cluster configuration
+        storage:
+          anyOf:
+          - $ref: '#/components/schemas/StorageSize'
+          - type: 'null'
+          default: null
+          description: New storage configuration
+        users:
+          default: []
+          items:
+            $ref: '#/components/schemas/PgUser'
+          title: Users
+          type: array
+      title: PatchPGClusterSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    PgUserOverview:
+      properties:
+        is_secret_revealed:
+          description: Display was secret revealed or not
+          examples:
+          - true
+          - false
+          title: Is Secret Revealed
+          type: boolean
+        name:
+          description: User name
+          examples:
+          - myuser
+          pattern: ^[a-z]*$
+          title: Name
+          type: string
+        role_attributes:
+          description: User's attributes
+          examples:
+          - - INHERIT
+          items:
+            enum:
+            - BYPASSRLS
+            - CREATEDB
+            - CREATEROLE
+            - INHERIT
+            - LOGIN
+            - NOLOGIN
+            type: string
+          title: Role Attributes
+          type: array
+          uniqueItems: true
+      required:
+      - name
+      - role_attributes
+      - is_secret_revealed
+      title: PgUserOverview
+      type: object
+    PatchPostgreSQLServerConfig:
+      properties:
+        pg_conf:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: New pg.conf file settings
+          examples:
+          - '
+
+            listen_addresses = ''localhost''
+
+            port = 5432
+
+            max_connections = 100
+
+            shared_buffers = 128MB
+
+            logging_collector = on'
+          title: Pg Conf
+        pooler:
+          anyOf:
+          - $ref: '#/components/schemas/PoolerConfigurationSchema'
+          - type: 'null'
+          default: null
+          examples:
+          - null
+          title: Pooler configuration for master
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: New cluster version
+          examples:
+          - '15'
+          title: Version
+      title: PatchPostgreSQLServerConfig
+      type: object
+    PostgresClusterOverviewSerializer:
+      properties:
+        cluster_name:
+          maxLength: 50
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: PostgreSQL server name
+          type: string
+        created_at:
+          format: date-time
+          title: Created At
+          type: string
+        databases:
+          items:
+            $ref: '#/components/schemas/DatabaseOverview'
+          title: Databases
+          type: array
+        flavor:
+          $ref: '#/components/schemas/Flavor'
+          description: Instance RAM and CPU
+        high_availability:
+          anyOf:
+          - $ref: '#/components/schemas/HighAvailabilityOptions'
+          - type: 'null'
+          title: HA settings
+        network:
+          $ref: '#/components/schemas/PublicNetworkOut'
+          title: Network
+        pg_server_configuration:
+          $ref: '#/components/schemas/PostgreSQLServerConfig'
+          description: Main PG configuration
+        status:
+          $ref: '#/components/schemas/ClusterStatus'
+          description: Current cluster status
+        storage:
+          $ref: '#/components/schemas/Storage'
+          description: PG's storage configuration
+        users:
+          items:
+            $ref: '#/components/schemas/PgUserOverview'
+          title: Users
+          type: array
+      required:
+      - cluster_name
+      - network
+      - high_availability
+      - flavor
+      - storage
+      - pg_server_configuration
+      - created_at
+      - status
+      - databases
+      - users
+      title: PostgresClusterOverviewSerializer
+      type: object
+    StorageSize:
+      properties:
+        size_gib:
+          description: Total available storage for database
+          examples:
+          - 100
+          maximum: 100
+          minimum: 1
+          title: Size Gib
+          type: integer
+      required:
+      - size_gib
+      title: StorageSize
+      type: object
+    PGClusterShortCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/PGClusterShortSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: PGClusterShortCollectionSerializer
+      type: object
+    ReplicationMode:
+      enum:
+      - async
+      - sync
+      title: ReplicationMode
+      type: string
+    ClusterStatus:
+      enum:
+      - DELETING
+      - FAILED
+      - PREPARING
+      - READY
+      - UNHEALTHY
+      - UNKNOWN
+      - UPDATING
+      title: ClusterStatus
+      type: string
+    FlavorConfiguration:
+      properties:
+        cpu:
+          description: Maximum available cores for instance
+          examples:
+          - 1
+          - 2
+          minimum: 1
+          title: Cpu
+          type: integer
+        memory_gib:
+          description: Maximum available RAM for instance
+          examples:
+          - 1
+          - 2
+          minimum: 1
+          title: Memory Gib
+          type: integer
+        pg_conf:
+          examples:
+          - '
+
+            listen_addresses = ''localhost''
+
+            port = 5432
+
+            max_connections = 100
+
+            shared_buffers = 128MB
+
+            logging_collector = on'
+          title: PG Conf for flavor
+          type: string
+      required:
+      - cpu
+      - memory_gib
+      - pg_conf
+      title: FlavorConfiguration
+      type: object
+    PoolerConfigurationSchema:
+      properties:
+        mode:
+          $ref: '#/components/schemas/PoolerModes'
+          examples:
+          - transaction
+        type:
+          const: pgbouncer
+          default: pgbouncer
+          examples:
+          - pgbouncer
+          title: Type
+          type: string
+      required:
+      - mode
+      title: PoolerConfigurationSchema
+      type: object
+    StorageClass:
+      properties:
+        name:
+          description: Storage type
+          examples:
+          - ssd-hiiops
+          title: Name
+          type: string
+      required:
+      - name
+      title: StorageClass
+      type: object
+    PGClusterShortSerializer:
+      properties:
+        cluster_name:
+          description: PostgreSQL cluster name
+          examples:
+          - mycluster
+          title: Cluster Name
+          type: string
+        created_at:
+          description: Creation timestamp
+          format: date-time
+          title: Created At
+          type: string
+        status:
+          $ref: '#/components/schemas/ClusterStatus'
+          description: Current cluster status
+        version:
+          description: Cluster version
+          examples:
+          - '15'
+          title: Version
+          type: string
+      required:
+      - cluster_name
+      - version
+      - created_at
+      - status
+      title: PGClusterShortSerializer
+      type: object
+    RegionRequestedQuotasSerializer:
+      properties:
+        baremetal_basic_count_limit:
+          description: Basic bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Basic Count Limit
+          type: integer
+        baremetal_basic_count_requested:
+          description: Basic bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Basic Count Requested
+          type: integer
+        baremetal_basic_count_usage:
+          description: Basic bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Basic Count Usage
+          type: integer
+        baremetal_gpu_a100_count_limit:
+          description: Bare metal A100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu A100 Count Limit
+          type: integer
+        baremetal_gpu_a100_count_requested:
+          description: Bare metal A100 GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu A100 Count Requested
+          type: integer
+        baremetal_gpu_a100_count_usage:
+          description: Bare metal A100 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu A100 Count Usage
+          type: integer
+        baremetal_gpu_h100_count_limit:
+          description: Bare metal H100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H100 Count Limit
+          type: integer
+        baremetal_gpu_h100_count_requested:
+          description: Bare metal H100 GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu H100 Count Requested
+          type: integer
+        baremetal_gpu_h100_count_usage:
+          description: Bare metal H100 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu H100 Count Usage
+          type: integer
+        baremetal_gpu_h200_count_limit:
+          description: Bare metal H200 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H200 Count Limit
+          type: integer
+        baremetal_gpu_h200_count_requested:
+          description: Bare metal H200 GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu H200 Count Requested
+          type: integer
+        baremetal_gpu_h200_count_usage:
+          description: Bare metal H200 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu H200 Count Usage
+          type: integer
+        baremetal_gpu_l40s_count_limit:
+          description: Bare metal L40S GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu L40S Count Limit
+          type: integer
+        baremetal_gpu_l40s_count_requested:
+          description: Bare metal L40S GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu L40S Count Requested
+          type: integer
+        baremetal_gpu_l40s_count_usage:
+          description: Bare metal L40S GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu L40S Count Usage
+          type: integer
+        baremetal_hf_count_limit:
+          description: High-frequency bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Hf Count Limit
+          type: integer
+        baremetal_hf_count_requested:
+          description: High-frequency bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Hf Count Requested
+          type: integer
+        baremetal_hf_count_usage:
+          description: High-frequency bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Hf Count Usage
+          type: integer
+        baremetal_infrastructure_count_limit:
+          description: Infrastructure bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Infrastructure Count Limit
+          type: integer
+        baremetal_infrastructure_count_requested:
+          description: Infrastructure bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Infrastructure Count Requested
+          type: integer
+        baremetal_infrastructure_count_usage:
+          description: Infrastructure bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Infrastructure Count Usage
+          type: integer
+        baremetal_network_count_limit:
+          description: Bare metal Network Count limit
+          examples:
+          - 0
+          title: Baremetal Network Count Limit
+          type: integer
+        baremetal_network_count_requested:
+          description: Bare metal Network Count requested
+          examples:
+          - 1
+          title: Baremetal Network Count Requested
+          type: integer
+        baremetal_network_count_usage:
+          description: Bare metal Network Count usage
+          examples:
+          - 0
+          title: Baremetal Network Count Usage
+          type: integer
+        baremetal_storage_count_limit:
+          description: Storage bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Storage Count Limit
+          type: integer
+        baremetal_storage_count_requested:
+          description: Storage bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Storage Count Requested
+          type: integer
+        baremetal_storage_count_usage:
+          description: Storage bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Storage Count Usage
+          type: integer
+        caas_container_count_limit:
+          description: Containers count limit
+          examples:
+          - 0
+          title: Caas Container Count Limit
+          type: integer
+        caas_container_count_requested:
+          description: Containers count requested
+          examples:
+          - 1
+          title: Caas Container Count Requested
+          type: integer
+        caas_container_count_usage:
+          description: Containers count usage
+          examples:
+          - 0
+          title: Caas Container Count Usage
+          type: integer
+        caas_cpu_count_limit:
+          description: mCPU count for containers limit
+          examples:
+          - 0
+          title: Caas Cpu Count Limit
+          type: integer
+        caas_cpu_count_requested:
+          description: mCPU count for containers requested
+          examples:
+          - 1
+          title: Caas Cpu Count Requested
+          type: integer
+        caas_cpu_count_usage:
+          description: mCPU count for containers usage
+          examples:
+          - 0
+          title: Caas Cpu Count Usage
+          type: integer
+        caas_gpu_count_limit:
+          description: Containers gpu count limit
+          examples:
+          - 0
+          title: Caas Gpu Count Limit
+          type: integer
+        caas_gpu_count_requested:
+          description: Containers gpu count requested
+          examples:
+          - 1
+          title: Caas Gpu Count Requested
+          type: integer
+        caas_gpu_count_usage:
+          description: Containers gpu count usage
+          examples:
+          - 0
+          title: Caas Gpu Count Usage
+          type: integer
+        caas_ram_size_limit:
+          description: MiB memory count for containers limit
+          examples:
+          - 0
+          title: Caas Ram Size Limit
+          type: integer
+        caas_ram_size_requested:
+          description: MiB memory count for containers requested
+          examples:
+          - 1
+          title: Caas Ram Size Requested
+          type: integer
+        caas_ram_size_usage:
+          description: MiB memory count for containers usage
+          examples:
+          - 0
+          title: Caas Ram Size Usage
+          type: integer
+        cluster_count_limit:
+          description: K8s clusters count limit
+          examples:
+          - 0
+          title: Cluster Count Limit
+          type: integer
+        cluster_count_requested:
+          description: K8s clusters count requested
+          examples:
+          - 1
+          title: Cluster Count Requested
+          type: integer
+        cluster_count_usage:
+          description: K8s clusters count usage
+          examples:
+          - 0
+          title: Cluster Count Usage
+          type: integer
+        cpu_count_limit:
+          description: vCPU Count limit
+          examples:
+          - 0
+          title: Cpu Count Limit
+          type: integer
+        cpu_count_requested:
+          description: vCPU Count requested
+          examples:
+          - 1
+          title: Cpu Count Requested
+          type: integer
+        cpu_count_usage:
+          description: vCPU Count usage
+          examples:
+          - 0
+          title: Cpu Count Usage
+          type: integer
+        dbaas_postgres_cluster_count_limit:
+          description: DBaaS cluster count limit
+          examples:
+          - 0
+          title: Dbaas Postgres Cluster Count Limit
+          type: integer
+        dbaas_postgres_cluster_count_requested:
+          description: DBaaS cluster count requested
+          examples:
+          - 1
+          title: Dbaas Postgres Cluster Count Requested
+          type: integer
+        dbaas_postgres_cluster_count_usage:
+          description: DBaaS cluster count usage
+          examples:
+          - 0
+          title: Dbaas Postgres Cluster Count Usage
+          type: integer
+        external_ip_count_limit:
+          description: External IP Count limit
+          examples:
+          - 0
+          title: External Ip Count Limit
+          type: integer
+        external_ip_count_requested:
+          description: External IP Count requested
+          examples:
+          - 1
+          title: External Ip Count Requested
+          type: integer
+        external_ip_count_usage:
+          description: External IP Count usage
+          examples:
+          - 0
+          title: External Ip Count Usage
+          type: integer
+        faas_cpu_count_limit:
+          description: mCPU count for functions limit
+          examples:
+          - 0
+          title: Faas Cpu Count Limit
+          type: integer
+        faas_cpu_count_requested:
+          description: mCPU count for functions requested
+          examples:
+          - 1
+          title: Faas Cpu Count Requested
+          type: integer
+        faas_cpu_count_usage:
+          description: mCPU count for functions usage
+          examples:
+          - 0
+          title: Faas Cpu Count Usage
+          type: integer
+        faas_function_count_limit:
+          description: Functions count limit
+          examples:
+          - 0
+          title: Faas Function Count Limit
+          type: integer
+        faas_function_count_requested:
+          description: Functions count requested
+          examples:
+          - 1
+          title: Faas Function Count Requested
+          type: integer
+        faas_function_count_usage:
+          description: Functions count usage
+          examples:
+          - 0
+          title: Faas Function Count Usage
+          type: integer
+        faas_namespace_count_limit:
+          description: Functions namespace count limit
+          examples:
+          - 0
+          title: Faas Namespace Count Limit
+          type: integer
+        faas_namespace_count_requested:
+          description: Functions namespace count requested
+          examples:
+          - 1
+          title: Faas Namespace Count Requested
+          type: integer
+        faas_namespace_count_usage:
+          description: Functions namespace count usage
+          examples:
+          - 0
+          title: Faas Namespace Count Usage
+          type: integer
+        faas_ram_size_limit:
+          description: MiB memory count for functions limit
+          examples:
+          - 0
+          title: Faas Ram Size Limit
+          type: integer
+        faas_ram_size_requested:
+          description: MiB memory count for functions requested
+          examples:
+          - 1
+          title: Faas Ram Size Requested
+          type: integer
+        faas_ram_size_usage:
+          description: MiB memory count for functions usage
+          examples:
+          - 0
+          title: Faas Ram Size Usage
+          type: integer
+        firewall_count_limit:
+          description: Firewalls Count limit
+          examples:
+          - 0
+          title: Firewall Count Limit
+          type: integer
+        firewall_count_requested:
+          description: Firewalls Count requested
+          examples:
+          - 1
+          title: Firewall Count Requested
+          type: integer
+        firewall_count_usage:
+          description: Firewalls Count usage
+          examples:
+          - 0
+          title: Firewall Count Usage
+          type: integer
+        floating_count_limit:
+          description: Floating IP Count limit
+          examples:
+          - 0
+          title: Floating Count Limit
+          type: integer
+        floating_count_requested:
+          description: Floating IP Count requested
+          examples:
+          - 1
+          title: Floating Count Requested
+          type: integer
+        floating_count_usage:
+          description: Floating IP Count usage
+          examples:
+          - 0
+          title: Floating Count Usage
+          type: integer
+        gpu_count_limit:
+          description: GPU Count limit
+          examples:
+          - 0
+          title: Gpu Count Limit
+          type: integer
+        gpu_count_requested:
+          description: GPU Count requested
+          examples:
+          - 1
+          title: Gpu Count Requested
+          type: integer
+        gpu_count_usage:
+          description: GPU Count usage
+          examples:
+          - 0
+          title: Gpu Count Usage
+          type: integer
+        gpu_virtual_a100_count_limit:
+          description: Virtual A100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual A100 Count Limit
+          type: integer
+        gpu_virtual_a100_count_requested:
+          description: Virtual A100 GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual A100 Count Requested
+          type: integer
+        gpu_virtual_a100_count_usage:
+          description: Virtual A100 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual A100 Count Usage
+          type: integer
+        gpu_virtual_h100_count_limit:
+          description: Virtual H100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H100 Count Limit
+          type: integer
+        gpu_virtual_h100_count_requested:
+          description: Virtual H100 GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual H100 Count Requested
+          type: integer
+        gpu_virtual_h100_count_usage:
+          description: Virtual H100 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual H100 Count Usage
+          type: integer
+        gpu_virtual_h200_count_limit:
+          description: Virtual H200 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H200 Count Limit
+          type: integer
+        gpu_virtual_h200_count_requested:
+          description: Virtual H200 GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual H200 Count Requested
+          type: integer
+        gpu_virtual_h200_count_usage:
+          description: Virtual H200 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual H200 Count Usage
+          type: integer
+        gpu_virtual_l40s_count_limit:
+          description: Virtual L40S GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual L40S Count Limit
+          type: integer
+        gpu_virtual_l40s_count_requested:
+          description: Virtual L40S GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual L40S Count Requested
+          type: integer
+        gpu_virtual_l40s_count_usage:
+          description: Virtual L40S GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual L40S Count Usage
+          type: integer
+        image_count_limit:
+          description: Images Count limit
+          examples:
+          - 0
+          title: Image Count Limit
+          type: integer
+        image_count_requested:
+          description: Images Count requested
+          examples:
+          - 1
+          title: Image Count Requested
+          type: integer
+        image_count_usage:
+          description: Images Count usage
+          examples:
+          - 0
+          title: Image Count Usage
+          type: integer
+        image_size_limit:
+          description: Images Size, bytes limit
+          examples:
+          - 0
+          title: Image Size Limit
+          type: integer
+        image_size_requested:
+          description: Images Size, bytes requested
+          examples:
+          - 1
+          title: Image Size Requested
+          type: integer
+        image_size_usage:
+          description: Images Size, bytes usage
+          examples:
+          - 0
+          title: Image Size Usage
+          type: integer
+        ipu_count_limit:
+          description: IPU Count limit
+          examples:
+          - 0
+          title: Ipu Count Limit
+          type: integer
+        ipu_count_requested:
+          description: IPU Count requested
+          examples:
+          - 1
+          title: Ipu Count Requested
+          type: integer
+        ipu_count_usage:
+          description: IPU Count usage
+          examples:
+          - 0
+          title: Ipu Count Usage
+          type: integer
+        laas_topic_count_limit:
+          description: LaaS Topics Count limit
+          examples:
+          - 0
+          title: Laas Topic Count Limit
+          type: integer
+        laas_topic_count_requested:
+          description: LaaS Topics Count requested
+          examples:
+          - 1
+          title: Laas Topic Count Requested
+          type: integer
+        laas_topic_count_usage:
+          description: LaaS Topics Count usage
+          examples:
+          - 0
+          title: Laas Topic Count Usage
+          type: integer
+        loadbalancer_count_limit:
+          description: Load Balancers Count limit
+          examples:
+          - 0
+          title: Loadbalancer Count Limit
+          type: integer
+        loadbalancer_count_requested:
+          description: Load Balancers Count requested
+          examples:
+          - 1
+          title: Loadbalancer Count Requested
+          type: integer
+        loadbalancer_count_usage:
+          description: Load Balancers Count usage
+          examples:
+          - 0
+          title: Loadbalancer Count Usage
+          type: integer
+        network_count_limit:
+          description: Networks Count limit
+          examples:
+          - 0
+          title: Network Count Limit
+          type: integer
+        network_count_requested:
+          description: Networks Count requested
+          examples:
+          - 1
+          title: Network Count Requested
+          type: integer
+        network_count_usage:
+          description: Networks Count usage
+          examples:
+          - 0
+          title: Network Count Usage
+          type: integer
+        ram_limit:
+          description: RAM Size, MiB limit
+          examples:
+          - 0
+          title: Ram Limit
+          type: integer
+        ram_requested:
+          description: RAM Size, MiB requested
+          examples:
+          - 1
+          title: Ram Requested
+          type: integer
+        ram_usage:
+          description: RAM Size, MiB usage
+          examples:
+          - 0
+          title: Ram Usage
+          type: integer
+        registry_count_limit:
+          description: Registries count limit
+          examples:
+          - 0
+          title: Registry Count Limit
+          type: integer
+        registry_count_requested:
+          description: Registries count requested
+          examples:
+          - 1
+          title: Registry Count Requested
+          type: integer
+        registry_count_usage:
+          description: Registries count usage
+          examples:
+          - 0
+          title: Registry Count Usage
+          type: integer
+        registry_storage_limit:
+          description: Registries volume usage, GiB limit
+          examples:
+          - 0
+          title: Registry Storage Limit
+          type: integer
+        registry_storage_requested:
+          description: Registries volume usage, GiB requested
+          examples:
+          - 1
+          title: Registry Storage Requested
+          type: integer
+        registry_storage_usage:
+          description: Registries volume usage, GiB usage
+          examples:
+          - 0
+          title: Registry Storage Usage
+          type: integer
+        router_count_limit:
+          description: Routers Count limit
+          examples:
+          - 0
+          title: Router Count Limit
+          type: integer
+        router_count_requested:
+          description: Routers Count requested
+          examples:
+          - 1
+          title: Router Count Requested
+          type: integer
+        router_count_usage:
+          description: Routers Count usage
+          examples:
+          - 0
+          title: Router Count Usage
+          type: integer
+        secret_count_limit:
+          description: Secret Count limit
+          examples:
+          - 0
+          title: Secret Count Limit
+          type: integer
+        secret_count_requested:
+          description: Secret Count requested
+          examples:
+          - 1
+          title: Secret Count Requested
+          type: integer
+        secret_count_usage:
+          description: Secret Count usage
+          examples:
+          - 0
+          title: Secret Count Usage
+          type: integer
+        servergroup_count_limit:
+          description: Placement Group Count limit
+          examples:
+          - 0
+          title: Servergroup Count Limit
+          type: integer
+        servergroup_count_requested:
+          description: Placement Group Count requested
+          examples:
+          - 1
+          title: Servergroup Count Requested
+          type: integer
+        servergroup_count_usage:
+          description: Placement Group Count usage
+          examples:
+          - 0
+          title: Servergroup Count Usage
+          type: integer
+        sfs_count_limit:
+          description: Shared file system Count limit
+          examples:
+          - 0
+          title: Sfs Count Limit
+          type: integer
+        sfs_count_requested:
+          description: Shared file system Count requested
+          examples:
+          - 1
+          title: Sfs Count Requested
+          type: integer
+        sfs_count_usage:
+          description: Shared file system Count usage
+          examples:
+          - 0
+          title: Sfs Count Usage
+          type: integer
+        sfs_size_limit:
+          description: Shared file system Size, GiB limit
+          examples:
+          - 0
+          title: Sfs Size Limit
+          type: integer
+        sfs_size_requested:
+          description: Shared file system Size, GiB requested
+          examples:
+          - 1
+          title: Sfs Size Requested
+          type: integer
+        sfs_size_usage:
+          description: Shared file system Size, GiB usage
+          examples:
+          - 0
+          title: Sfs Size Usage
+          type: integer
+        shared_vm_count_limit:
+          description: Basic VMs Count limit
+          examples:
+          - 0
+          title: Shared Vm Count Limit
+          type: integer
+        shared_vm_count_requested:
+          description: Basic VMs Count requested
+          examples:
+          - 1
+          title: Shared Vm Count Requested
+          type: integer
+        shared_vm_count_usage:
+          description: Basic VMs Count usage
+          examples:
+          - 0
+          title: Shared Vm Count Usage
+          type: integer
+        slurm_cluster_count_limit:
+          description: Slurm cluster count limit for this region. 0 disables Slurm in this region.
+          examples:
+          - 0
+          title: Slurm Cluster Count Limit
+          type: integer
+        slurm_cluster_count_requested:
+          description: Slurm cluster count requested
+          examples:
+          - 1
+          title: Slurm Cluster Count Requested
+          type: integer
+        slurm_cluster_count_usage:
+          description: Slurm cluster count usage
+          examples:
+          - 0
+          title: Slurm Cluster Count Usage
+          type: integer
+        snapshot_schedule_count_limit:
+          description: Snapshot Schedules Count limit
+          examples:
+          - 0
+          title: Snapshot Schedule Count Limit
+          type: integer
+        snapshot_schedule_count_requested:
+          description: Snapshot Schedules Count requested
+          examples:
+          - 1
+          title: Snapshot Schedule Count Requested
+          type: integer
+        snapshot_schedule_count_usage:
+          description: Snapshot Schedules Count usage
+          examples:
+          - 0
+          title: Snapshot Schedule Count Usage
+          type: integer
+        subnet_count_limit:
+          description: Subnets Count limit
+          examples:
+          - 0
+          title: Subnet Count Limit
+          type: integer
+        subnet_count_requested:
+          description: Subnets Count requested
+          examples:
+          - 1
+          title: Subnet Count Requested
+          type: integer
+        subnet_count_usage:
+          description: Subnets Count usage
+          examples:
+          - 0
+          title: Subnet Count Usage
+          type: integer
+        vm_count_limit:
+          description: Instances Dedicated Count limit
+          examples:
+          - 0
+          title: Vm Count Limit
+          type: integer
+        vm_count_requested:
+          description: Instances Dedicated Count requested
+          examples:
+          - 1
+          title: Vm Count Requested
+          type: integer
+        vm_count_usage:
+          description: Instances Dedicated Count usage
+          examples:
+          - 0
+          title: Vm Count Usage
+          type: integer
+        volume_count_limit:
+          description: Volumes Count limit
+          examples:
+          - 0
+          title: Volume Count Limit
+          type: integer
+        volume_count_requested:
+          description: Volumes Count requested
+          examples:
+          - 1
+          title: Volume Count Requested
+          type: integer
+        volume_count_usage:
+          description: Volumes Count usage
+          examples:
+          - 0
+          title: Volume Count Usage
+          type: integer
+        volume_size_limit:
+          description: Volumes Size, GiB limit
+          examples:
+          - 0
+          title: Volume Size Limit
+          type: integer
+        volume_size_requested:
+          description: Volumes Size, GiB requested
+          examples:
+          - 1
+          title: Volume Size Requested
+          type: integer
+        volume_size_usage:
+          description: Volumes Size, GiB usage
+          examples:
+          - 0
+          title: Volume Size Usage
+          type: integer
+        volume_snapshots_count_limit:
+          description: Snapshots Count limit
+          examples:
+          - 0
+          title: Volume Snapshots Count Limit
+          type: integer
+        volume_snapshots_count_requested:
+          description: Snapshots Count requested
+          examples:
+          - 1
+          title: Volume Snapshots Count Requested
+          type: integer
+        volume_snapshots_count_usage:
+          description: Snapshots Count usage
+          examples:
+          - 0
+          title: Volume Snapshots Count Usage
+          type: integer
+        volume_snapshots_size_limit:
+          description: Snapshots Size, GiB limit
+          examples:
+          - 0
+          title: Volume Snapshots Size Limit
+          type: integer
+        volume_snapshots_size_requested:
+          description: Snapshots Size, GiB requested
+          examples:
+          - 1
+          title: Volume Snapshots Size Requested
+          type: integer
+        volume_snapshots_size_usage:
+          description: Snapshots Size, GiB usage
+          examples:
+          - 0
+          title: Volume Snapshots Size Usage
+          type: integer
+      title: RegionRequestedQuotasSerializer
+      type: object
+    PGConfValidateResponseSerializer:
+      properties:
+        errors:
+          description: Errors list
+          items:
+            type: string
+          title: Errors
+          type: array
+        is_valid:
+          description: Validity of pg.conf file
+          examples:
+          - true
+          - false
+          title: Is Valid
+          type: boolean
+      required:
+      - is_valid
+      - errors
+      title: PGConfValidateResponseSerializer
+      type: object
+    Database:
+      properties:
+        name:
+          description: Database name
+          examples:
+          - mydatabase
+          pattern: ^[a-z]*$
+          title: Name
+          type: string
+        owner:
+          description: Database owner from users list
+          examples:
+          - myuser
+          title: Owner
+          type: string
+      required:
+      - name
+      - owner
+      title: Database
+      type: object
+    UserCredentialsSerializer:
+      properties:
+        password:
+          description: Password
+          examples:
+          - <PASSWORD>
+          title: Password
+          type: string
+        username:
+          description: Username
+          examples:
+          - myuser
+          title: Username
+          type: string
+      required:
+      - password
+      - username
+      title: UserCredentialsSerializer
+      type: object
+    PGConfValidationRequestSerializer:
+      properties:
+        pg_conf:
+          description: PostgreSQL configuration
+          examples:
+          - '
+
+            listen_addresses = ''localhost''
+
+            port = 5432
+
+            max_connections = 100
+
+            shared_buffers = 128MB
+
+            logging_collector = on'
+          title: Pg Conf
+          type: string
+        version:
+          description: PostgreSQL version
+          examples:
+          - '15'
+          title: Version
+          type: string
+      required:
+      - pg_conf
+      - version
+      title: PGConfValidationRequestSerializer
+      type: object
+    DatabaseOverview:
+      properties:
+        name:
+          description: Database name
+          examples:
+          - mydatabase
+          pattern: ^[a-z]*$
+          title: Name
+          type: string
+        owner:
+          description: Database owner from users list
+          examples:
+          - myuser
+          title: Owner
+          type: string
+        size:
+          description: Size in bytes
+          examples:
+          - 2048
+          - 4096
+          title: Size
+          type: integer
+      required:
+      - name
+      - owner
+      - size
+      title: DatabaseOverview
+      type: object
+    DbaasStatusRequestSerializer:
+      properties:
+        is_initialized:
+          description: DBAAS service status
+          examples:
+          - true
+          - false
+          title: Is Initialized
+          type: boolean
+      required:
+      - is_initialized
+      title: DbaasStatusRequestSerializer
+      type: object
+    PoolerModes:
+      enum:
+      - session
+      - statement
+      - transaction
+      title: PoolerModes
+      type: string
+    PgUser:
+      properties:
+        name:
+          description: User name
+          examples:
+          - myuser
+          pattern: ^[a-z]*$
+          title: Name
+          type: string
+        role_attributes:
+          description: User's attributes
+          examples:
+          - - INHERIT
+          items:
+            enum:
+            - BYPASSRLS
+            - CREATEDB
+            - CREATEROLE
+            - INHERIT
+            - LOGIN
+            - NOLOGIN
+            type: string
+          title: Role Attributes
+          type: array
+          uniqueItems: true
+      required:
+      - name
+      - role_attributes
+      title: PgUser
+      type: object
+    Storage:
+      properties:
+        size_gib:
+          description: Total available storage for database
+          examples:
+          - 100
+          maximum: 100
+          minimum: 1
+          title: Size Gib
+          type: integer
+        type:
+          description: Storage type
+          examples:
+          - ssd-hiiops
+          title: Type
+          type: string
+      required:
+      - size_gib
+      - type
+      title: Storage
+      type: object
+    PostgreSQLServerConfig:
+      properties:
+        pg_conf:
+          description: pg.conf settings
+          examples:
+          - '
+
+            listen_addresses = ''localhost''
+
+            port = 5432
+
+            max_connections = 100
+
+            shared_buffers = 128MB
+
+            logging_collector = on'
+          title: Pg Conf
+          type: string
+        pooler:
+          anyOf:
+          - $ref: '#/components/schemas/PoolerConfigurationSchema'
+          - type: 'null'
+          default: null
+          examples:
+          - null
+          title: Pooler configuration for master
+        version:
+          description: Cluster version
+          title: Version
+          type: string
+      required:
+      - pg_conf
+      - version
+      title: PostgreSQLServerConfig
+      type: object
+    PGClusterCreateSerializer:
+      properties:
+        cluster_name:
+          description: PostgreSQL cluster name
+          maxLength: 50
+          minLength: 1
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Cluster Name
+          type: string
+        databases:
+          default: []
+          items:
+            $ref: '#/components/schemas/Database'
+          title: Databases
+          type: array
+        flavor:
+          $ref: '#/components/schemas/Flavor'
+          description: Instance RAM and CPU
+        high_availability:
+          anyOf:
+          - $ref: '#/components/schemas/HighAvailabilityOptions'
+          - type: 'null'
+          description: High Availability settings
+        network:
+          $ref: '#/components/schemas/PublicNetwork'
+          title: Network
+        pg_server_configuration:
+          $ref: '#/components/schemas/PostgreSQLServerConfig'
+          description: PosgtreSQL cluster configuration
+        storage:
+          $ref: '#/components/schemas/Storage'
+          description: Cluster's storage configuration
+        users:
+          default: []
+          items:
+            $ref: '#/components/schemas/PgUser'
+          title: Users
+          type: array
+      required:
+      - cluster_name
+      - network
+      - high_availability
+      - flavor
+      - storage
+      - pg_server_configuration
+      title: PGClusterCreateSerializer
+      type: object
+    HighAvailabilityOptions:
+      properties:
+        replication_mode:
+          $ref: '#/components/schemas/ReplicationMode'
+          description: Type of replication
+          examples:
+          - sync
+          - async
+      required:
+      - replication_mode
+      title: HighAvailabilityOptions
+      type: object
+    Flavor:
+      properties:
+        cpu:
+          description: Maximum available cores for instance
+          examples:
+          - 1
+          - 2
+          minimum: 1
+          title: Cpu
+          type: integer
+        memory_gib:
+          description: Maximum available RAM for instance
+          examples:
+          - 1
+          - 2
+          minimum: 1
+          title: Memory Gib
+          type: integer
+      required:
+      - cpu
+      - memory_gib
+      title: Flavor
+      type: object
+    PublicNetworkOut:
+      properties:
+        acl:
+          description: Allowed IPs and subnets for incoming traffic
+          examples:
+          - - 92.33.34.127
+          items:
+            format: ipvanyinterface
+            type: string
+          title: Acl
+          type: array
+        connection_string:
+          description: Connection string to main database
+          examples:
+          - postgresql://username:password@address.example.com:5432/dbname
+          title: Connection String
+          type: string
+        host:
+          description: database hostname
+          examples:
+          - address.example.com
+          title: Host
+          type: string
+        network_type:
+          const: public
+          description: Network Type
+          examples:
+          - public
+          title: Network Type
+          type: string
+      required:
+      - network_type
+      - acl
+      - connection_string
+      - host
+      title: PublicNetworkOut
+      type: object
+    DBAASPGConfiguration:
+      properties:
+        flavors:
+          items:
+            $ref: '#/components/schemas/FlavorConfiguration'
+          title: Available flavors
+          type: array
+        storage_classes:
+          items:
+            $ref: '#/components/schemas/StorageClass'
+          title: Available storages
+          type: array
+        versions:
+          description: Available versions
+          examples:
+          - - '14'
+            - '15'
+          items:
+            type: string
+          title: Versions
+          type: array
+      required:
+      - versions
+      - storage_classes
+      - flavors
+      title: DBAASPGConfiguration
+      type: object
+    PublicNetwork:
+      properties:
+        acl:
+          description: Allowed IPs and subnets for incoming traffic
+          examples:
+          - - 92.33.34.127
+          items:
+            format: ipvanyinterface
+            type: string
+          title: Acl
+          type: array
+        network_type:
+          const: public
+          description: Network Type
+          examples:
+          - public
+          title: Network Type
+          type: string
+      required:
+      - network_type
+      - acl
+      title: PublicNetwork
+      type: object

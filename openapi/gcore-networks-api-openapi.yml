@@ -1,0 +1,2616 @@
+openapi: 3.2.0
+info:
+  title: Cloud Networks API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Networks
+paths:
+  /v1/networks/{project_id}/{region_id}:
+    post:
+      operationId: NetworkViewSet.post
+      summary: Create network
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNetworkSerializer'
+      tags:
+      - Networks
+    get:
+      operationId: NetworkViewSet.get
+      summary: List networks
+      description: 'Returns a list of networks. Use the `owned_by` query parameter to control which networks are returned:
+
+        `project` (default) returns only networks owned by the project,
+
+        `any` returns all networks the project can use, including shared networks.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: external
+        required: false
+        description: Filter by external network status
+        schema:
+          description: Filter by external network status
+          examples:
+          - true
+          title: External
+          type: boolean
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Filter networks by name
+        schema:
+          description: Filter networks by name
+          examples:
+          - my-network
+          maxLength: 61
+          title: Name
+          type: string
+      - in: query
+        name: network_type
+        required: false
+        description: Filter by network type (vlan or vxlan)
+        schema:
+          $ref: '#/components/schemas/NetworkType'
+          description: Filter by network type (vlan or vxlan)
+          examples:
+          - vlan
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Ordering networks list result by `name`, `created_at` or `priority` fields and directions (e.g. `created_at.desc`). Default is `created_at.desc`. Use `priority.desc` to sort by shared network priority (relevant when `owned_by=any`).
+        schema:
+          $ref: '#/components/schemas/NetworkListOrderByChoices'
+          default: created_at.desc
+          description: Ordering networks list result by `name`, `created_at` or `priority` fields and directions (e.g. `created_at.desc`). Default is `created_at.desc`. Use `priority.desc` to sort by shared network priority (relevant when `owned_by=any`).
+          examples:
+          - created_at.desc
+      - in: query
+        name: owned_by
+        required: false
+        description: Controls which networks are returned. 'project' (default) returns only networks owned by the project. 'any' returns all networks that the project can use, including shared networks from other projects.
+        schema:
+          $ref: '#/components/schemas/NetworkOwnedBy'
+          default: project
+          description: Controls which networks are returned. 'project' (default) returns only networks owned by the project. 'any' returns all networks that the project can use, including shared networks from other projects.
+          examples:
+          - project
+      - in: query
+        name: tag_key
+        required: false
+        description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+        schema:
+          description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+          examples:
+          - - key1
+            - key2
+          items:
+            description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+            examples:
+            - my-tag
+            maxLength: 255
+            minLength: 1
+            pattern: ^[^\s=]+$
+            type: string
+          title: Tag Key
+          type: array
+      - in: query
+        name: tag_key_value
+        required: false
+        description: Optional. Filter by tag key-value pairs.
+        schema:
+          contentMediaType: application/json
+          contentSchema:
+            propertyNames:
+              description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^\s=]+$
+            type: object
+            additionalProperties:
+              description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag-value
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+              type: string
+          description: Optional. Filter by tag key-value pairs.
+          examples:
+          - key: value
+          title: Tag Key Value
+          type: string
+      responses:
+        '200':
+          description: Networks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkCollectionSerializer'
+      tags:
+      - Networks
+  /v2/networks/{project_id}/{region_id}/{network_id}:
+    patch:
+      operationId: NetworkInstanceViewSetV2.patch
+      summary: Update network
+      description: 'Rename network and/or update network tags in a background task.
+
+        Returns a task ID and uses a network task lock, so concurrent update/delete task creation fails with conflict.
+
+        The request will only process the fields that are provided in the request body.
+
+        Any fields that are not included will remain unchanged.
+
+        If a provided field already matches the current network state it is skipped, and when no field
+
+        changes anything no task is created and an empty task list is returned.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchNetworkSerializer'
+      tags:
+      - Networks
+  /v1/networks/{project_id}/{region_id}/{network_id}:
+    get:
+      operationId: NetworkInstanceViewSet.get
+      summary: Get network
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '200':
+          description: Network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkSerializer'
+      tags:
+      - Networks
+    delete:
+      operationId: NetworkInstanceViewSet.delete
+      summary: Delete network
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Networks
+    patch:
+      operationId: NetworkInstanceViewSet.patch
+      summary: Update network
+      description: 'Rename network and/or update network tags.
+
+        The request will only process the fields that are provided in the request body.
+
+        Any fields that are not included will remain unchanged.
+
+
+        **Deprecated**: Use `PATCH /v2/networks/{project_id}/{region_id}/{network_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '200':
+          description: Network
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchNetworkSerializer'
+      tags:
+      - Networks
+  /v1/networks/{project_id}/{region_id}/{network_id}/ports:
+    get:
+      operationId: InstancePortsByNetworkView.get
+      summary: List instance ports by network
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '200':
+          description: Instance ports
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortAndInstanceCollectionSerializer'
+      tags:
+      - Networks
+  /v1/subnets/{project_id}/{region_id}:
+    post:
+      operationId: SubnetViewSet.post
+      summary: Create subnet
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubnetSerializer'
+      tags:
+      - Networks
+    get:
+      operationId: SubnetViewSet.get
+      summary: List subnets
+      description: 'Returns a list of subnets. Use the `owned_by` query parameter to control which subnets are returned:
+
+        `project` (default) returns only subnets owned by the project,
+
+        `any` returns all subnets from networks available to the project.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: network_id
+        required: false
+        description: Only list subnets of this network
+        schema:
+          description: Only list subnets of this network
+          examples:
+          - b30d0de7-bca2-4c83-9c57-9e645bd2cc92
+          format: uuid4
+          title: Network Id
+          type: string
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Ordering subnets list result by `name`, `created_at`, `updated_at`, `available_ips`, `total_ips`, and `cidr` (default) fields of the subnet and directions (`name.asc`).
+        schema:
+          $ref: '#/components/schemas/SubnetListOrderByChoices'
+          default: cidr.asc
+          description: Ordering subnets list result by `name`, `created_at`, `updated_at`, `available_ips`, `total_ips`, and `cidr` (default) fields of the subnet and directions (`name.asc`).
+          examples:
+          - name.asc
+      - in: query
+        name: owned_by
+        required: false
+        description: Controls which subnets are returned. 'project' (default) returns only subnets owned by the project. 'any' returns all subnets from networks available to the project, including subnets from shared networks.
+        schema:
+          $ref: '#/components/schemas/SubnetOwnedBy'
+          default: project
+          description: Controls which subnets are returned. 'project' (default) returns only subnets owned by the project. 'any' returns all subnets from networks available to the project, including subnets from shared networks.
+          examples:
+          - project
+      - in: query
+        name: tag_key
+        required: false
+        description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+        schema:
+          description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+          examples:
+          - - key1
+            - key2
+          items:
+            description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+            examples:
+            - my-tag
+            maxLength: 255
+            minLength: 1
+            pattern: ^[^\s=]+$
+            type: string
+          title: Tag Key
+          type: array
+      - in: query
+        name: tag_key_value
+        required: false
+        description: Optional. Filter by tag key-value pairs.
+        schema:
+          contentMediaType: application/json
+          contentSchema:
+            propertyNames:
+              description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^\s=]+$
+            type: object
+            additionalProperties:
+              description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag-value
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+              type: string
+          description: Optional. Filter by tag key-value pairs.
+          examples:
+          - key: value
+          title: Tag Key Value
+          type: string
+      responses:
+        '200':
+          description: Subnets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetSerializerList'
+      tags:
+      - Networks
+  /v1/subnets/{project_id}/{region_id}/{subnet_id}:
+    get:
+      operationId: SubnetInstanceViewSet.get
+      summary: Get subnet
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      responses:
+        '200':
+          description: Subnet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetSerializer'
+      tags:
+      - Networks
+    patch:
+      operationId: SubnetInstanceViewSet.patch
+      summary: Update subnet
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      responses:
+        '200':
+          description: Subnet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubnetSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchSubnetSerializer'
+      tags:
+      - Networks
+    delete:
+      operationId: SubnetInstanceViewSet.delete
+      summary: Delete subnet
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Networks
+  /v1/availablenetworks/{project_id}/{region_id}:
+    get:
+      operationId: AvailableNetworkViewSet.get
+      summary: List networks with subnets details
+      description: 'Retrieve the list of directly-attachable networks with subnet details. Returned entities
+
+        may or may not be owned by the project.
+
+
+        **Deprecated**: Use `GET /v1/networks/{project_id}/{region_id}?owned_by=any` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: external
+        required: false
+        description: Filter by external network status
+        schema:
+          description: Filter by external network status
+          examples:
+          - true
+          title: External
+          type: boolean
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Filter networks by name
+        schema:
+          description: Filter networks by name
+          examples:
+          - my-network
+          maxLength: 61
+          title: Name
+          type: string
+      - in: query
+        name: network_id
+        required: false
+        description: Optional. Can be used to only show subnets of the specific network
+        schema:
+          description: Optional. Can be used to only show subnets of the specific network
+          examples:
+          - 123e4567-e89b-12d3-a456-426614174000
+          format: uuid4
+          title: Network Id
+          type: string
+      - in: query
+        name: network_type
+        required: false
+        description: Filter by network type (vlan or vxlan)
+        schema:
+          $ref: '#/components/schemas/NetworkType'
+          description: Filter by network type (vlan or vxlan)
+          examples:
+          - vlan
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Ordering networks list result by `name`, `created_at` or `priority` fields and directions (e.g. `created_at.desc`).
+        schema:
+          $ref: '#/components/schemas/NetworkListOrderByChoices'
+          description: Ordering networks list result by `name`, `created_at` or `priority` fields and directions (e.g. `created_at.desc`).
+          examples:
+          - created_at.desc
+      - in: query
+        name: shared
+        required: false
+        description: Filter by shared state
+        schema:
+          description: Filter by shared state
+          examples:
+          - true
+          title: Shared
+          type: boolean
+      - in: query
+        name: tag_key
+        required: false
+        description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+        schema:
+          description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+          examples:
+          - - key1
+            - key2
+          items:
+            description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+            examples:
+            - my-tag
+            maxLength: 255
+            minLength: 1
+            pattern: ^[^\s=]+$
+            type: string
+          title: Tag Key
+          type: array
+      - in: query
+        name: tag_key_value
+        required: false
+        description: Optional. Filter by tag key-value pairs.
+        schema:
+          contentMediaType: application/json
+          contentSchema:
+            propertyNames:
+              description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^\s=]+$
+            type: object
+            additionalProperties:
+              description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag-value
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+              type: string
+          description: Optional. Filter by tag key-value pairs.
+          examples:
+          - key: value
+          title: Tag Key Value
+          type: string
+      responses:
+        '200':
+          description: Networks with subnets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkSubnetworkCollectionSerializer'
+      deprecated: true
+      tags:
+      - Networks
+  /v1/networks/{project_id}/{region_id}/{network_id}/metadata:
+    post:
+      operationId: NetworkMetadataHandler.post
+      summary: Create or update network tags
+      description: 'Create or update one or more tags for a network.
+
+        If a tag does not exist, it gets created.
+
+        If a tag already exists, its value is overwritten.
+
+
+        **Deprecated**: Use `PATCH /v1/networks/{project_id}/{region_id}/{network_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagsSerializer'
+      tags:
+      - Networks
+    get:
+      operationId: NetworkMetadataHandler.get
+      summary: List network tags
+      description: 'Lists all tags for a network.
+
+
+        **Deprecated**: Use `GET /v1/networks/{project_id}/{region_id}/{network_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '200':
+          description: Key-value tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagCollectionSerializer'
+      deprecated: true
+      tags:
+      - Networks
+    put:
+      operationId: NetworkMetadataHandler.put
+      summary: Replace network tags
+      description: 'All existing tags are deleted and replaced with the tags from the request.
+
+
+        **Deprecated**: Use `PATCH /v1/networks/{project_id}/{region_id}/{network_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagsSerializer'
+      tags:
+      - Networks
+  /v1/networks/{project_id}/{region_id}/{network_id}/metadata_item:
+    get:
+      operationId: NetworkMetadataItemHandler.get
+      summary: Get network tag
+      description: 'Get network tag by key.
+
+
+        **Deprecated**: Use `GET /v1/networks/{project_id}/{region_id}/{network_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key to filter by
+        schema:
+          description: Tag key to filter by
+          examples:
+          - cost-center
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^\s=]+$
+          title: Key
+          type: string
+      responses:
+        '200':
+          description: Network tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagSerializer'
+      deprecated: true
+      tags:
+      - Networks
+    delete:
+      operationId: NetworkMetadataItemHandler.delete
+      summary: Delete network tag
+      description: 'Delete network tag by key.
+
+
+        **Deprecated**: Use `PATCH /v1/networks/{project_id}/{region_id}/{network_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: network_id
+        required: true
+        description: Network ID
+        schema:
+          description: Network ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Network Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key to filter by
+        schema:
+          description: Tag key to filter by
+          examples:
+          - cost-center
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^\s=]+$
+          title: Key
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      tags:
+      - Networks
+  /v1/subnets/{project_id}/{region_id}/{subnet_id}/metadata:
+    post:
+      operationId: SubnetMetadataHandler.post
+      summary: Create or update subnet tags
+      description: 'Create or update one or more tags for a subnet.
+
+        If a tag does not exist, it gets created.
+
+        If a tag already exists, its value is overwritten.
+
+
+        **Deprecated**: Use `PATCH /v1/subnets/{project_id}/{region_id}/{subnet_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagsSerializer'
+      tags:
+      - Networks
+    get:
+      operationId: SubnetMetadataHandler.get
+      summary: List subnet tags
+      description: 'Lists all tags for a subnet.
+
+
+        **Deprecated**: Use `GET /v1/subnets/{project_id}/{region_id}/{subnet_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      responses:
+        '200':
+          description: Key-value tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagCollectionSerializer'
+      deprecated: true
+      tags:
+      - Networks
+    put:
+      operationId: SubnetMetadataHandler.put
+      summary: Replace subnet tags
+      description: 'All existing tags are deleted and replaced with the tags from the request.
+
+
+        **Deprecated**: Use `PATCH /v1/subnets/{project_id}/{region_id}/{subnet_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagsSerializer'
+      tags:
+      - Networks
+  /v1/subnets/{project_id}/{region_id}/{subnet_id}/metadata_item:
+    get:
+      operationId: SubnetMetadataItemHandler.get
+      summary: Get subnet tag
+      description: 'Get subnet tag by key.
+
+
+        **Deprecated**: Use `GET /v1/subnets/{project_id}/{region_id}/{subnet_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key to filter by
+        schema:
+          description: Tag key to filter by
+          examples:
+          - cost-center
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^\s=]+$
+          title: Key
+          type: string
+      responses:
+        '200':
+          description: Subnet tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagSerializer'
+      deprecated: true
+      tags:
+      - Networks
+    delete:
+      operationId: SubnetMetadataItemHandler.delete
+      summary: Delete subnet tag
+      description: 'Delete subnet tag by key.
+
+
+        **Deprecated**: Use `PATCH /v1/subnets/{project_id}/{region_id}/{subnet_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: subnet_id
+        required: true
+        description: Subnet ID
+        schema:
+          description: Subnet ID
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Subnet Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key to filter by
+        schema:
+          description: Tag key to filter by
+          examples:
+          - cost-center
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^\s=]+$
+          title: Key
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      tags:
+      - Networks
+components:
+  schemas:
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    NetworkOwnedBy:
+      enum:
+      - any
+      - project
+      title: NetworkOwnedBy
+      type: string
+    SubnetSerializer:
+      properties:
+        available_ips:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Number of available ips in subnet. Null when this data isn't available.
+          examples:
+          - 250
+          title: Available Ips
+        cidr:
+          description: CIDR
+          examples:
+          - 192.168.13.0/24
+          format: ipvanynetwork
+          title: Cidr
+          type: string
+        created_at:
+          description: Datetime when the subnet was created
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity. Null when the subnet wasn't created via a tracked task.
+          examples:
+          - 5cc890da-d031-4a23-ac31-625edfa22812
+          title: Creator Task Id
+        dns_nameservers:
+          description: List IP addresses of a DNS resolver reachable from the network
+          examples:
+          - - 8.8.8.8
+            - 8.8.4.4
+          items:
+            format: ipvanyaddress
+            type: string
+          title: Dns Nameservers
+          type: array
+        enable_dhcp:
+          description: True if DHCP should be enabled
+          examples:
+          - true
+          title: Enable Dhcp
+          type: boolean
+        gateway_ip:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - type: 'null'
+          description: Default GW IPv4 address, advertised in DHCP routes of this subnet. If null, no gateway is advertised by this subnet.
+          examples:
+          - 192.168.13.1
+          title: Gateway Ip
+        has_router:
+          deprecated: true
+          description: Deprecated. Always returns `false`.
+          examples:
+          - false
+          readOnly: true
+          title: Has Router
+          type: boolean
+        host_routes:
+          description: List of custom static routes to advertise via DHCP.
+          examples:
+          - []
+          items:
+            $ref: '#/components/schemas/RouteOutSerializer'
+          title: Host Routes
+          type: array
+        id:
+          description: Subnet id.
+          examples:
+          - b39792c3-3160-4356-912e-ba396c95cdcf
+          format: uuid4
+          title: Id
+          type: string
+        ip_version:
+          $ref: '#/components/schemas/IPVersion'
+          description: IP version
+          examples:
+          - 4
+        name:
+          description: Subnet name
+          examples:
+          - subnet_3
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        network_id:
+          description: Network ID
+          examples:
+          - b30d0de7-bca2-4c83-9c57-9e645bd2cc92
+          format: uuid4
+          title: Network Id
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        total_ips:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Total number of ips in subnet. Null when this data isn't available.
+          examples:
+          - 253
+          title: Total Ips
+        updated_at:
+          description: Datetime when the subnet was last updated
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - name
+      - id
+      - network_id
+      - ip_version
+      - enable_dhcp
+      - cidr
+      - creator_task_id
+      - task_id
+      - available_ips
+      - total_ips
+      - dns_nameservers
+      - host_routes
+      - gateway_ip
+      - tags
+      - created_at
+      - updated_at
+      - has_router
+      title: SubnetSerializer
+      type: object
+    PatchSubnetSerializer:
+      properties:
+        dns_nameservers:
+          anyOf:
+          - items:
+              format: ipvanyaddress
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          description: List IP addresses of DNS servers to advertise via DHCP.
+          examples:
+          - - 8.8.4.4
+            - 1.1.1.1
+          title: Dns Nameservers
+        enable_dhcp:
+          description: True if DHCP should be enabled
+          examples:
+          - true
+          title: Enable Dhcp
+          type: boolean
+        gateway_ip:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - type: 'null'
+          description: Default GW IPv4 address to advertise in DHCP routes in this subnet. Omit this field to let the cloud backend allocate it automatically. Set to null if no gateway must be advertised by this subnet's DHCP (useful when attaching instances to multiple subnets in order to prevent default route conflicts).
+          examples:
+          - 192.168.10.1
+          title: Gateway Ip
+        host_routes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RouteInSerializer'
+            type: array
+          - type: 'null'
+          default: null
+          description: List of custom static routes to advertise via DHCP.
+          examples:
+          - - destination: 10.0.3.0/24
+              nexthop: 10.0.0.13
+          title: Host Routes
+        name:
+          anyOf:
+          - pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+            type: string
+          - type: 'null'
+          default: null
+          description: Name
+          examples:
+          - some_name
+          title: Name
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: PatchSubnetSerializer
+      type: object
+    NetworkType:
+      enum:
+      - vlan
+      - vxlan
+      title: NetworkType
+      type: string
+    CreateTagsSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: CreateTagsSerializer
+      type: object
+      additionalProperties:
+        description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag-value
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+        type: string
+    SubnetSerializerList:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/SubnetSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: SubnetSerializerList
+      type: object
+    UpdateTagsSerializer:
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: UpdateTagsSerializer
+      type: object
+      additionalProperties:
+        anyOf:
+        - maxLength: 255
+          minLength: 1
+          pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+          type: string
+        - type: 'null'
+        description: Tag value. Maximum 255 characters. Cannot contain tabs, newlines, empty string or start/end with whitespace. Trailing or leading whitespaces will be stripped. Set to `null` in order to delete this tag.
+        examples:
+        - my-tag-value
+    PortAndInstanceCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/PortAndInstanceSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: PortAndInstanceCollectionSerializer
+      type: object
+    NetworkSerializer:
+      properties:
+        created_at:
+          description: Datetime when the network was created
+          examples:
+          - 2019-06-18T11:56:16+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity
+          examples:
+          - fd50fdd1-0482-4c9b-b847-fc9924665af6
+          title: Creator Task Id
+        default:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: True if network has is_default attribute
+          examples:
+          - true
+          title: Default
+        external:
+          description: True if the network `router:external` attribute
+          examples:
+          - true
+          title: External
+          type: boolean
+        id:
+          description: Network ID
+          examples:
+          - eed97610-708d-43a5-a9a5-caebd2b7b4ee
+          format: uuid4
+          title: Id
+          type: string
+        mtu:
+          description: MTU (maximum transmission unit). Default value is 1450
+          examples:
+          - 1500
+          title: Mtu
+          type: integer
+        name:
+          description: Network name
+          examples:
+          - public
+          title: Name
+          type: string
+        port_security_enabled:
+          description: Indicates port_security_enabled status of all newly created in the network ports.
+          examples:
+          - true
+          - false
+          title: Port Security Enabled
+          type: boolean
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        segmentation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Id of network segment
+          examples:
+          - 9
+          title: Segmentation Id
+        shared:
+          description: True when the network is shared with your project by external owner
+          examples:
+          - false
+          title: Shared
+          type: boolean
+        subnets:
+          description: List of subnetworks
+          examples:
+          - - f00624ab-41bc-4d54-a723-1673ce32d997
+            - 41e0f698-4d39-483b-b77a-18eb070e4c09
+          items:
+            format: uuid4
+            type: string
+          title: Subnets
+          type: array
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        type:
+          description: Network type (vlan, vxlan)
+          examples:
+          - vlan
+          title: Type
+          type: string
+        updated_at:
+          description: Datetime when the network was last updated
+          examples:
+          - 2019-06-18T11:57:00+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - id
+      - name
+      - mtu
+      - created_at
+      - updated_at
+      - type
+      - segmentation_id
+      - external
+      - default
+      - shared
+      - subnets
+      - creator_task_id
+      - task_id
+      - tags
+      - port_security_enabled
+      title: NetworkSerializer
+      type: object
+    TagCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: TagCollectionSerializer
+      type: object
+    NetworkSubnetworkSerializer:
+      properties:
+        created_at:
+          description: Datetime when the network was created
+          examples:
+          - 2019-06-18T11:56:16+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity
+          examples:
+          - fd50fdd1-0482-4c9b-b847-fc9924665af6
+          title: Creator Task Id
+        default:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: True if network has is_default attribute
+          examples:
+          - true
+          title: Default
+        external:
+          description: True if the network `router:external` attribute
+          examples:
+          - true
+          title: External
+          type: boolean
+        id:
+          description: Network ID
+          examples:
+          - eed97610-708d-43a5-a9a5-caebd2b7b4ee
+          format: uuid4
+          title: Id
+          type: string
+        mtu:
+          description: MTU (maximum transmission unit). Default value is 1450
+          examples:
+          - 1500
+          title: Mtu
+          type: integer
+        name:
+          description: Network name
+          examples:
+          - public
+          title: Name
+          type: string
+        port_security_enabled:
+          description: Indicates port_security_enabled status of all newly created in the network ports.
+          examples:
+          - true
+          - false
+          title: Port Security Enabled
+          type: boolean
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        segmentation_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Id of network segment
+          examples:
+          - 9
+          title: Segmentation Id
+        shared:
+          description: True when the network is shared with your project by external owner
+          examples:
+          - false
+          title: Shared
+          type: boolean
+        subnets:
+          description: List of subnets associated with the network
+          examples:
+          - - available_ips: 65432
+              cidr: 10.0.0.0/16
+              created_at: 2019-07-18T12:07:00+0000
+              description: example description
+              enable_dhcp: true
+              id: 80bfcb8e-1709-4bb2-99d4-3fa1332571de
+              ip_version: 4
+              name: test 2
+              network_id: 162091db-33cc-45d5-a375-964509af4813
+              project_id: 1
+              region: Luxembourg 1
+              region_id: 1
+              tags:
+              - key: key1
+                read_only: false
+                value: value1
+              total_ips: 65536
+              updated_at: 2019-07-22T10:55:45+0000
+            - available_ips: 232
+              cidr: 192.168.192.0/24
+              created_at: 2019-07-22T15:15:05+0000
+              description: '{"task_id": "cc9a5445-189e-48de-a01f-5e10641a6915"}'
+              enable_dhcp: true
+              id: 94196a6a-c2ce-4f0d-8dc7-d9e0e722aea0
+              ip_version: 4
+              name: string
+              network_id: 162091db-33cc-45d5-a375-964509af4813
+              project_id: 1
+              region: Luxembourg 1
+              region_id: 1
+              tags:
+              - key: key1
+                read_only: false
+                value: value1
+              total_ips: 256
+              updated_at: 2019-07-22T15:15:05+0000
+          items:
+            $ref: '#/components/schemas/SubnetSerializer'
+          title: Subnets
+          type: array
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        type:
+          description: Network type (vlan, vxlan)
+          examples:
+          - vlan
+          title: Type
+          type: string
+        updated_at:
+          description: Datetime when the network was last updated
+          examples:
+          - 2019-06-18T11:57:00+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - id
+      - name
+      - mtu
+      - created_at
+      - updated_at
+      - type
+      - segmentation_id
+      - external
+      - default
+      - shared
+      - subnets
+      - creator_task_id
+      - task_id
+      - tags
+      - port_security_enabled
+      title: NetworkSubnetworkSerializer
+      type: object
+    CreateNetworkSerializer:
+      properties:
+        create_router:
+          default: true
+          description: Defaults to True
+          examples:
+          - true
+          title: Create Router
+          type: boolean
+        name:
+          description: Network name
+          examples:
+          - my network
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        tags:
+          $ref: '#/components/schemas/CreateTagsSerializer'
+          description: Key-value tags to associate with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Both tag keys and values have a maximum length of 255 characters. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - my-tag: my-tag-value
+        type:
+          $ref: '#/components/schemas/NetworkType'
+          default: vxlan
+          description: vlan or vxlan network type is allowed. Default value is vxlan
+          examples:
+          - vxlan
+      required:
+      - name
+      title: CreateNetworkSerializer
+      type: object
+    SubnetOwnedBy:
+      enum:
+      - any
+      - project
+      title: SubnetOwnedBy
+      type: string
+    NetworkSubnetworkCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/NetworkSubnetworkSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: NetworkSubnetworkCollectionSerializer
+      type: object
+    NetworkCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/NetworkSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: NetworkCollectionSerializer
+      type: object
+    NetworkListOrderByChoices:
+      enum:
+      - created_at.asc
+      - created_at.desc
+      - name.asc
+      - name.desc
+      - priority.desc
+      title: NetworkListOrderByChoices
+      type: string
+    IPVersion:
+      enum:
+      - 4
+      - 6
+      title: IPVersion
+      type: integer
+    RouteInSerializer:
+      properties:
+        destination:
+          description: CIDR of destination IPv4 or IPv6 subnet.
+          examples:
+          - 10.0.3.0/24
+          format: ipvanynetwork
+          title: Destination
+          type: string
+        nexthop:
+          description: IPv4 or IPv6 address to forward traffic to if it's destination IP matches 'destination' CIDR.
+          examples:
+          - 10.0.0.13
+          format: ipvanyaddress
+          title: Nexthop
+          type: string
+      required:
+      - destination
+      - nexthop
+      title: RouteInSerializer
+      type: object
+    PortAndInstanceSerializer:
+      properties:
+        id:
+          description: Port ID
+          examples:
+          - 8e009163-d526-4351-9266-93d9fd8fa8ef
+          format: uuid4
+          title: Id
+          type: string
+        instance_id:
+          description: Instance ID
+          examples:
+          - bfc7824b-31b6-4a28-a0c4-7df137139215
+          format: uuid4
+          title: Instance Id
+          type: string
+        instance_name:
+          description: Instance name
+          examples:
+          - instance_1
+          title: Instance Name
+          type: string
+      required:
+      - id
+      - instance_id
+      - instance_name
+      title: PortAndInstanceSerializer
+      type: object
+    PatchNetworkSerializer:
+      properties:
+        name:
+          description: Name.
+          examples:
+          - some_name
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: PatchNetworkSerializer
+      type: object
+    SubnetListOrderByChoices:
+      enum:
+      - available_ips.asc
+      - available_ips.desc
+      - cidr.asc
+      - cidr.desc
+      - created_at.asc
+      - created_at.desc
+      - name.asc
+      - name.desc
+      - total_ips.asc
+      - total_ips.desc
+      - updated_at.asc
+      - updated_at.desc
+      title: SubnetListOrderByChoices
+      type: string
+    TagSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      properties:
+        key:
+          description: Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag
+          title: Key
+          type: string
+        read_only:
+          description: If true, the tag is read-only and cannot be modified by the user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        value:
+          description: Tag value. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag-value
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      - read_only
+      title: TagSerializer
+      type: object
+    CreateSubnetSerializer:
+      properties:
+        cidr:
+          description: CIDR
+          examples:
+          - 192.168.10.0/24
+          format: ipvanynetwork
+          title: Cidr
+          type: string
+        connect_to_network_router:
+          default: true
+          description: True if the network's router should get a gateway in this subnet. Must be explicitly 'false' when gateway_ip is null.
+          examples:
+          - true
+          title: Connect To Network Router
+          type: boolean
+        dns_nameservers:
+          anyOf:
+          - items:
+              format: ipvanyaddress
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          description: List IP addresses of DNS servers to advertise via DHCP.
+          examples:
+          - - 8.8.4.4
+            - 1.1.1.1
+          title: Dns Nameservers
+        enable_dhcp:
+          default: true
+          description: True if DHCP should be enabled
+          examples:
+          - true
+          title: Enable Dhcp
+          type: boolean
+        gateway_ip:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - type: 'null'
+          description: Default GW IPv4 address to advertise in DHCP routes in this subnet. Omit this field to let the cloud backend allocate it automatically. Set to null if no gateway must be advertised by this subnet's DHCP (useful when attaching instances to multiple subnets in order to prevent default route conflicts).
+          examples:
+          - 192.168.10.1
+          title: Gateway Ip
+        host_routes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RouteInSerializer'
+            type: array
+          - type: 'null'
+          default: null
+          description: List of custom static routes to advertise via DHCP.
+          examples:
+          - - destination: 10.0.3.0/24
+              nexthop: 10.0.0.13
+          title: Host Routes
+        ip_version:
+          $ref: '#/components/schemas/IPVersion'
+          description: IP version
+          examples:
+          - 4
+        name:
+          description: Subnet name
+          examples:
+          - my subnet
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        network_id:
+          description: Network ID
+          examples:
+          - ee2402d0-f0cd-4503-9b75-69be1d11c5f1
+          format: uuid4
+          title: Network Id
+          type: string
+        router_id_to_connect:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: ID of the router to connect to. Requires `connect_to_network_router` set to true. If not specified, attempts to find a router created during network creation.
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          title: Router Id To Connect
+        tags:
+          $ref: '#/components/schemas/CreateTagsSerializer'
+          description: Key-value tags to associate with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Both tag keys and values have a maximum length of 255 characters. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - my-tag: my-tag-value
+      required:
+      - name
+      - network_id
+      - cidr
+      title: CreateSubnetSerializer
+      type: object
+    RouteOutSerializer:
+      properties:
+        destination:
+          description: CIDR of destination IPv4 or IPv6 subnet.
+          examples:
+          - 10.0.3.0/24
+          format: ipvanynetwork
+          title: Destination
+          type: string
+        nexthop:
+          description: IPv4 or IPv6 address to forward traffic to if it's destination IP matches 'destination' CIDR.
+          examples:
+          - 10.0.0.13
+          format: ipvanyaddress
+          title: Nexthop
+          type: string
+      required:
+      - destination
+      - nexthop
+      title: RouteOutSerializer
+      type: object

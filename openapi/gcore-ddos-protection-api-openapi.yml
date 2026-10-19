@@ -1,0 +1,1073 @@
+openapi: 3.2.0
+info:
+  title: Cloud DDoS Protection API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: DDoS Protection
+paths:
+  /v1/ddos/accessibility/{region_id}:
+    get:
+      operationId: AccessibilityHandler.get
+      summary: Get DDoS protection access status
+      description: Check DDoS protection service accessibility and operational status for a specific region.
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: DDoS access status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessStatusSerializer'
+      tags:
+      - DDoS Protection
+  /v1/ddos/profile-templates/{region_id}:
+    get:
+      operationId: ProfileTemplatesHandler.get
+      summary: List DDoS protection profile templates
+      description: 'This endpoint returns a comprehensive list of pre-configured DDoS protection
+
+        templates that can be used to create protection profiles. Each template contains
+
+        predefined security rules, field configurations, and protection parameters
+
+        optimized for different types of applications and attack vectors.
+
+
+        Templates include metadata such as name, description, and configurable fields
+
+        with validation schemas. These templates serve as blueprints for creating
+
+        customized DDoS protection profiles tailored to specific security requirements.'
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: DDoS profile templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientProfileTemplateSerializerList'
+      tags:
+      - DDoS Protection
+  /v1/ddos/profiles/{project_id}/{region_id}:
+    post:
+      operationId: ProfilesHandler.post
+      summary: Create DDoS protection profile
+      description: 'Creates DDoS protection profile to safeguard a specific resource (instance, bare metal, or load balancer)
+
+        against DDoS attacks. Resource type is automatically identified based on the IP address.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Unique identifier of the cloud project that owns the DDoS protection resources
+        schema:
+          description: Unique identifier of the cloud project that owns the DDoS protection resources
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MutateClientProfileSerializer'
+      tags:
+      - DDoS Protection
+    get:
+      operationId: ProfilesHandler.get
+      summary: List DDoS protection profiles
+      description: 'This endpoint returns a comprehensive list of all DDoS protection profiles
+
+        associated with the specified project and region. Each profile contains
+
+        detailed information about the protection configuration including IP addresses,
+
+        profile templates, field values, activation status, and current operational state.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Unique identifier of the cloud project that owns the DDoS protection resources
+        schema:
+          description: Unique identifier of the cloud project that owns the DDoS protection resources
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: ip_address
+        required: false
+        description: Filter DDoS profiles by this IP address
+        schema:
+          anyOf:
+          - format: ipv4
+            type: string
+          - format: ipv6
+            type: string
+          - format: ipv4network
+            type: string
+          - format: ipv6network
+            type: string
+          description: Filter DDoS profiles by this IP address
+          examples:
+          - 203.0.113.1
+          - 203.0.113.0/24
+          title: Ip Address
+      - in: query
+        name: limit
+        required: false
+        description: Limit of items on a single page
+        schema:
+          default: 1000
+          description: Limit of items on a single page
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: managed_by
+        required: false
+        description: 'Specifies the entity responsible for managing the resource.
+
+          - `user`: The profile is created and maintained directly by the user.
+
+          - `system`: The profile is created and maintained automatically by the system.'
+        schema:
+          description: 'Specifies the entity responsible for managing the resource.
+
+            - `user`: The profile is created and maintained directly by the user.
+
+            - `system`: The profile is created and maintained automatically by the system.'
+          examples:
+          - user
+          items:
+            $ref: '#/components/schemas/DdosManagedBy'
+          title: Managed By
+          type: array
+      - in: query
+        name: offset
+        required: false
+        description: Offset in results list
+        schema:
+          default: 0
+          description: Offset in results list
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Sort results by field and direction
+        schema:
+          $ref: '#/components/schemas/DdosProfileOrderByChoices'
+          default: id.asc
+          description: Sort results by field and direction
+          examples:
+          - id.asc
+      responses:
+        '200':
+          description: DDoS profiles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientProfileSerializerList'
+      tags:
+      - DDoS Protection
+  /v1/ddos/profiles/{project_id}/{region_id}/{profile_id}:
+    patch:
+      operationId: ProfileHandler.patch
+      summary: Update DDoS protection profile
+      description: 'Updates various aspects of DDoS protection profile including profile template,
+
+        field values, and activation status. The update process includes comprehensive
+
+        validation to ensure changes are compatible with the existing configuration
+
+        and security requirements.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Unique identifier of the cloud project that owns the DDoS protection resources
+        schema:
+          description: Unique identifier of the cloud project that owns the DDoS protection resources
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: profile_id
+        required: true
+        description: Unique identifier of the specific DDoS protection profile to be operated on
+        schema:
+          description: Unique identifier of the specific DDoS protection profile to be operated on
+          examples:
+          - 1
+          title: Profile Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MutateClientProfileSerializer'
+      tags:
+      - DDoS Protection
+    delete:
+      operationId: ProfileHandler.delete
+      summary: Delete DDoS protection profile
+      description: Deletes DDoS protection profile and removes all associated protection rules and configurations.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Unique identifier of the cloud project that owns the DDoS protection resources
+        schema:
+          description: Unique identifier of the cloud project that owns the DDoS protection resources
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: profile_id
+        required: true
+        description: Unique identifier of the specific DDoS protection profile to be operated on
+        schema:
+          description: Unique identifier of the specific DDoS protection profile to be operated on
+          examples:
+          - 1
+          title: Profile Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - DDoS Protection
+  /v1/ddos/profiles/{project_id}/{region_id}/{profile_id}/action:
+    post:
+      operationId: ProfileActivationHandler.post
+      summary: Activate or deactivate DDoS protection profile
+      description: 'Activates or deactivates DDoS protection profile, controlling its protection status.
+
+        This operation allows enabling or disabling DDoS protection for a specific IP address
+
+        or network range.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Unique identifier of the cloud project that owns the DDoS protection resources
+        schema:
+          description: Unique identifier of the cloud project that owns the DDoS protection resources
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: profile_id
+        required: true
+        description: Unique identifier of the specific DDoS protection profile to be operated on
+        schema:
+          description: Unique identifier of the specific DDoS protection profile to be operated on
+          examples:
+          - 1
+          title: Profile Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivateDeactivateProfileSerializer'
+      tags:
+      - DDoS Protection
+  /v1/ddos/region_coverage/{region_id}:
+    get:
+      operationId: RegionCoverageHandler.get
+      summary: Get DDoS protection region coverage information
+      description: Check if the current region is covered by the Advanced DDoS protection features.
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Unique identifier of the cloud region where DDoS protection operations will be performed
+        schema:
+          description: Unique identifier of the cloud region where DDoS protection operations will be performed
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: DDoS region coverage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionCoverageSerializer'
+      tags:
+      - DDoS Protection
+  /v1/pricing/{region_id}/ddos:
+    get:
+      operationId: DdosPricingHandler.get
+      summary: Get DDoS protection price
+      description: Get the DDoS protection price based on mitigation capacity.
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: DDoS price preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DDosPricingPreviewResponseSerializer'
+      tags:
+      - DDoS Protection
+components:
+  schemas:
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    DDosPriceDetailsSerializer:
+      properties:
+        feature_name:
+          description: Name of the billing feature
+          title: Feature Name
+          type: string
+        period:
+          description: Period of the price
+          title: Period
+          type: string
+        price_currency:
+          description: Currency code (3 letter code per ISO 4217)
+          enum:
+          - AZN
+          - EUR
+          - USD
+          title: Price Currency
+          type: string
+        price_per_30d:
+          description: Price of the feature charged per 30 days
+          title: Price Per 30D
+          type: number
+        price_per_day:
+          description: Price of the feature charged per day
+          title: Price Per Day
+          type: number
+        price_per_hour:
+          description: Price of the feature charged per hour
+          title: Price Per Hour
+          type: number
+        unit_name:
+          description: Name of the unit
+          title: Unit Name
+          type: string
+        unit_size:
+          description: Number of units
+          title: Unit Size
+          type: integer
+      required:
+      - feature_name
+      - period
+      - unit_name
+      - unit_size
+      - price_currency
+      - price_per_day
+      - price_per_hour
+      - price_per_30d
+      title: DDosPriceDetailsSerializer
+      type: object
+    RegionCoverageSerializer:
+      properties:
+        is_covered:
+          description: Is the current region covered by the Advanced DDoS protection features.
+          examples:
+          - true
+          title: Is Covered
+          type: boolean
+      required:
+      - is_covered
+      title: RegionCoverageSerializer
+      type: object
+    ClientProfileTemplateFieldSerializer:
+      properties:
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      title: ClientProfileTemplateFieldSerializer
+      type: object
+    MutateClientProfileSerializer:
+      properties:
+        fields:
+          description: List of field configurations that customize the protection parameters for this profile
+          examples:
+          - - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+          items:
+            $ref: '#/components/schemas/CreateClientProfileFieldSerializer'
+          title: Fields
+          type: array
+        ip_address:
+          anyOf:
+          - format: ipv4
+            type: string
+          - format: ipv6
+            type: string
+          description: IP address that will be protected by the DDoS protection profile
+          examples:
+          - 11.111.111.1
+          title: Ip Address
+        profile_template:
+          description: Unique identifier of the DDoS protection template to use for this profile
+          examples:
+          - 123
+          title: Profile Template
+          type: integer
+      required:
+      - profile_template
+      - ip_address
+      title: MutateClientProfileSerializer
+      type: object
+    DdosProfileStatusSerializer:
+      properties:
+        error_description:
+          description: Detailed error message describing any issues with the profile operation
+          examples:
+          - An error occured while deleting profile
+          title: Error Description
+          type: string
+        status:
+          description: Current operational status of the DDoS protection profile
+          examples:
+          - Error Deleting
+          maxLength: 30
+          minLength: 3
+          title: Status
+          type: string
+      required:
+      - status
+      - error_description
+      title: DdosProfileStatusSerializer
+      type: object
+    DdosProfileOrderByChoices:
+      enum:
+      - id.asc
+      - id.desc
+      - ip_address.asc
+      - ip_address.desc
+      - managed_by.asc
+      - managed_by.desc
+      - site.asc
+      - site.desc
+      - status.asc
+      - status.desc
+      title: DdosProfileOrderByChoices
+      type: string
+    AccessStatusSerializer:
+      properties:
+        http_code:
+          description: HTTP status code of the response from the Advanced DDoS protection service.
+          examples:
+          - 200
+          title: Http Code
+          type: integer
+        is_accessible:
+          description: Is the current region covered by the Advanced DDoS protection features.
+          examples:
+          - true
+          title: Is Accessible
+          type: boolean
+        message:
+          description: Message from the Advanced DDoS protection service.
+          examples:
+          - Advanced DDoS protection is accessible.
+          title: Message
+          type: string
+      required:
+      - is_accessible
+      - http_code
+      - message
+      title: AccessStatusSerializer
+      type: object
+    DDosPricingPreviewResponseSerializer:
+      examples:
+      - current_month_days: 31
+        current_month_days_last: 26
+        next_month_days: 30
+        price:
+          feature_name: Advanced DDoS Protection Bare-metal Servers
+          period: day
+          price_currency: EUR
+          price_per_30d: 60.0
+          price_per_day: 2.0
+          price_per_hour: 0.08333333333333333
+          unit_name: PC
+          unit_size: 1
+      properties:
+        current_month_days:
+          description: Number of days in the current month
+          title: Current Month Days
+          type: integer
+        current_month_days_last:
+          description: Number of days left in the current month
+          title: Current Month Days Last
+          type: integer
+        next_month_days:
+          description: Number of days in the next month
+          title: Next Month Days
+          type: integer
+        price:
+          $ref: '#/components/schemas/DDosPriceDetailsSerializer'
+          description: DDoS protection price details
+      required:
+      - price
+      - current_month_days_last
+      - current_month_days
+      - next_month_days
+      title: DDosPricingPreviewResponseSerializer
+      type: object
+    CreateClientProfileFieldSerializer:
+      properties:
+        base_field:
+          description: Unique identifier of the DDoS protection field being configured
+          examples:
+          - 123
+          title: Base Field
+          type: integer
+        field_value:
+          anyOf:
+          - items: {}
+            type: array
+          - type: integer
+          - type: string
+          - type: 'null'
+          description: Complex value for the DDoS profile field
+          examples:
+          - null
+          - - 100001
+          title: Field Value
+      required:
+      - base_field
+      title: CreateClientProfileFieldSerializer
+      type: object
+    ActivateDeactivateProfileSerializer:
+      properties:
+        active:
+          description: Controls whether to enable or disable the DDoS protection profile
+          title: Active
+          type: boolean
+        bgp:
+          description: Controls whether to enable or disable BGP routing for DDoS protection traffic
+          title: Bgp
+          type: boolean
+      required:
+      - active
+      - bgp
+      title: ActivateDeactivateProfileSerializer
+      type: object
+    ClientProfileTemplateSerializer:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description explaining the template's purpose and use cases
+          examples:
+          - description
+          title: Description
+        fields:
+          description: List of configurable fields that define the template's protection parameters
+          items:
+            $ref: '#/components/schemas/ClientProfileTemplateFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection template
+          examples:
+          - 123
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection template
+          examples:
+          - ICMP port
+          maxLength: 100
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - fields
+      title: ClientProfileTemplateSerializer
+      type: object
+    ClientProfileSerializerList:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ClientProfileSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ClientProfileSerializerList
+      type: object
+    ClientProfileSerializer:
+      properties:
+        fields:
+          description: List of configured field values for the protection profile
+          items:
+            $ref: '#/components/schemas/ClientProfileFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection profile
+          examples:
+          - 0
+          title: Id
+          type: integer
+        ip_address:
+          anyOf:
+          - format: ipv4
+            type: string
+          - format: ipv6
+            type: string
+          - format: ipv4network
+            type: string
+          - format: ipv6network
+            type: string
+          - type: 'null'
+          description: IP address or network range (CIDR) that is protected by this DDoS profile
+          examples:
+          - 203.0.113.1
+          - 203.0.113.0/24
+          title: Ip Address
+        managed_by:
+          $ref: '#/components/schemas/DdosManagedBy'
+          description: Specifies the entity responsible for managing the resource.
+          examples:
+          - user
+        options:
+          $ref: '#/components/schemas/ProfileOptionsSerializer'
+          description: Configuration options controlling profile activation and BGP routing
+          examples:
+          - active: true
+            bgp: true
+        profile_template:
+          anyOf:
+          - $ref: '#/components/schemas/ClientProfileTemplateSerializer'
+          - type: 'null'
+          description: Complete template configuration data used for this profile
+        profile_template_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description of the protection template used for this profile
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Profile Template Description
+        protocols:
+          description: List of network protocols and ports configured for protection
+          examples:
+          - - port: '80'
+              protocols:
+              - TCP
+              - HTTP
+            - port: '53'
+              protocols:
+              - UDP
+          items:
+            $ref: '#/components/schemas/ProtocolsOnPortSerializer'
+          title: Protocols
+          type: array
+        site:
+          description: Geographic site identifier where the protection is deployed
+          examples:
+          - ED
+          maxLength: 50
+          title: Site
+          type: string
+        status:
+          $ref: '#/components/schemas/DdosProfileStatusSerializer'
+          description: Current operational status and any error information for the profile
+          examples:
+          - error_description: ''
+            status: Updated
+      required:
+      - id
+      - options
+      - site
+      - protocols
+      - status
+      - profile_template_description
+      - profile_template
+      - fields
+      - ip_address
+      - managed_by
+      title: ClientProfileSerializer
+      type: object
+    DdosManagedBy:
+      enum:
+      - system
+      - user
+      title: DdosManagedBy
+      type: string
+    ProtocolsOnPortSerializer:
+      properties:
+        port:
+          description: Network port number for which protocols are configured
+          examples:
+          - '80'
+          title: Port
+          type: string
+        protocols:
+          description: List of network protocols enabled on the specified port
+          examples:
+          - - TCP
+            - HTTP
+          items:
+            type: string
+          title: Protocols
+          type: array
+      required:
+      - port
+      - protocols
+      title: ProtocolsOnPortSerializer
+      type: object
+    ProfileOptionsSerializer:
+      properties:
+        active:
+          description: Controls whether the DDoS protection profile is enabled and actively protecting the resource
+          examples:
+          - true
+          title: Active
+          type: boolean
+        bgp:
+          description: Enables Border Gateway Protocol (BGP) routing for DDoS protection traffic
+          examples:
+          - true
+          title: Bgp
+          type: boolean
+      required:
+      - active
+      - bgp
+      title: ProfileOptionsSerializer
+      type: object
+    ClientProfileTemplateSerializerList:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ClientProfileTemplateSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ClientProfileTemplateSerializerList
+      type: object
+    ClientProfileFieldSerializer:
+      properties:
+        base_field:
+          description: ID of DDoS profile field
+          examples:
+          - 10
+          title: Base Field
+          type: integer
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        field_value:
+          description: Complex value for the DDoS profile field
+          examples:
+          - 45046
+          - 45047
+          title: Field Value
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      - field_value
+      - base_field
+      title: ClientProfileFieldSerializer
+      type: object

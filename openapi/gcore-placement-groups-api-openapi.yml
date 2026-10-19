@@ -1,0 +1,361 @@
+openapi: 3.2.0
+info:
+  title: Cloud Placement Groups API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Placement Groups
+paths:
+  /v1/servergroups/{project_id}/{region_id}:
+    post:
+      operationId: ServerGroupsViewSet.post
+      summary: Create placement group
+      description: Create an affinity or anti-affinity or soft-anti-affinity placement group
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerGroupSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateServerGroupSerializer'
+      tags:
+      - Placement Groups
+    get:
+      operationId: ServerGroupsViewSet.get
+      summary: List placement groups
+      description: List all placement groups in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerGroupCollectionSerializer'
+      tags:
+      - Placement Groups
+  /v1/servergroups/{project_id}/{region_id}/{group_id}:
+    get:
+      operationId: ServerGroupInstanceViewSet.get
+      summary: Get placement group
+      description: Retrieve a single placement group by its ID.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: The ID of the placement group.
+        schema:
+          description: The ID of the placement group.
+          examples:
+          - 47003067-550a-6f17-93b6-81ee16ba061e
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerGroupSerializer'
+      tags:
+      - Placement Groups
+    delete:
+      operationId: ServerGroupInstanceViewSet.delete
+      summary: Delete placement group
+      description: Delete a placement group by its ID.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: The ID of the placement group.
+        schema:
+          description: The ID of the placement group.
+          examples:
+          - 47003067-550a-6f17-93b6-81ee16ba061e
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Placement Groups
+components:
+  schemas:
+    InstanceBriefSerializer:
+      properties:
+        instance_id:
+          description: The ID of the instance, corresponding to the attribute 'id'.
+          examples:
+          - 142988bb-aa1e-4862-bffb-1bc2f0036c77
+          title: Instance Id
+          type: string
+        instance_name:
+          description: The name of the instance, corresponding to the attribute 'name'.
+          examples:
+          - test_instance
+          title: Instance Name
+          type: string
+      required:
+      - instance_id
+      - instance_name
+      title: Instance brief details schema
+      type: object
+    ServerGroupSerializer:
+      properties:
+        instances:
+          description: The list of instances in this placement group.
+          examples:
+          - - instance_id: 6d14f194-6c1e-49b3-9fc7-50dc8401eb74
+              instance_name: my-instance-1
+            - instance_id: 142988bb-291e-4862-bffb-b1cf20036c27
+              instance_name: my-instance-2
+          items:
+            $ref: '#/components/schemas/InstanceBriefSerializer'
+          title: Instances
+          type: array
+        name:
+          description: The name of the placement group.
+          examples:
+          - my-placement-group
+          title: Name
+          type: string
+        policy:
+          description: 'The placement group policy. Options are: anti-affinity, affinity, or soft-anti-affinity.'
+          examples:
+          - anti-affinity
+          title: Policy
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        servergroup_id:
+          description: The ID of the placement group.
+          examples:
+          - 47003067-550a-6f17-93b6-81ee16ba061e
+          title: Servergroup Id
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - servergroup_id
+      - policy
+      - name
+      - instances
+      title: Placement group schema
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    CreateServerGroupSerializer:
+      properties:
+        name:
+          description: The name of the placement group.
+          examples:
+          - my-placement-group
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,108}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        policy:
+          $ref: '#/components/schemas/ServerGroupPolicyEnum'
+          description: The placement group policy.
+          examples:
+          - anti-affinity
+      required:
+      - name
+      - policy
+      title: Create placement group schema
+      type: object
+    ServerGroupCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ServerGroupSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ServerGroupCollectionSerializer
+      type: object
+    ServerGroupPolicyEnum:
+      enum:
+      - affinity
+      - anti-affinity
+      - soft-anti-affinity
+      title: ServerGroupPolicyEnum
+      type: string

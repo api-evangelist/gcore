@@ -1,0 +1,3952 @@
+openapi: 3.2.0
+info:
+  title: Cloud Everywhere Inference API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Everywhere Inference
+paths:
+  /v3/inference/{project_id}/api_keys:
+    post:
+      operationId: InferenceApiKeysHandler.post
+      summary: Create inference API key
+      description: 'This endpoint creates a new API key for everywhere inference. It returs api key''s actual secret only once
+
+        after creation.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateApiKeyResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeyCreateRequestSerializer'
+      tags:
+      - Everywhere Inference
+    get:
+      operationId: InferenceApiKeysHandler.get
+      summary: List inference API keys
+      description: This endpoint retrieves a list of API keys for everywhere inference.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 100
+          description: Optional. Limit the number of returned items
+          examples:
+          - 100
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyListResponseSerializer'
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/api_keys/{api_key_name}:
+    get:
+      operationId: InferenceApiKeyHandler.get
+      summary: Get inference API key
+      description: This endpoint retrieves a specific API key for everywhere inference.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: api_key_name
+        required: true
+        description: Api key name.
+        schema:
+          description: Api key name.
+          examples:
+          - aws-dev
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Api Key Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApiKeyResponseSerializer'
+      tags:
+      - Everywhere Inference
+    patch:
+      operationId: InferenceApiKeyHandler.patch
+      summary: Update inference API key
+      description: This endpoint updates a specific API key for everywhere inference.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: api_key_name
+        required: true
+        description: Api key name.
+        schema:
+          description: Api key name.
+          examples:
+          - aws-dev
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Api Key Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApiKeyResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeyUpdateRequestSerializer'
+      tags:
+      - Everywhere Inference
+    delete:
+      operationId: InferenceApiKeyHandler.delete
+      summary: Delete inference API key
+      description: 'This endpoint deletes a specific API key for everywhere inference.
+
+        If the API key is attached to any inference deployments, it will not be removed. ConflictError will be raised'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: api_key_name
+        required: true
+        description: Api key name.
+        schema:
+          description: Api key name.
+          examples:
+          - aws-dev
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Api Key Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/deployments:
+    post:
+      operationId: InferenceInstancesHandlerV3.post
+      summary: Create inference deployment
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceInstanceInSerializerV3'
+      tags:
+      - Everywhere Inference
+    get:
+      operationId: InferenceInstancesHandlerV3.get
+      summary: List inference deployments
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceInstanceOutSerializerV3List'
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/deployments/{deployment_name}:
+    get:
+      operationId: InferenceInstanceHandlerV3.get
+      summary: Get inference deployment
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Inference instance name.
+        schema:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          title: Deployment Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceInstanceOutSerializerV3'
+      tags:
+      - Everywhere Inference
+    patch:
+      operationId: InferenceInstanceHandlerV3.patch
+      summary: Update inference deployment
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Inference instance name.
+        schema:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          title: Deployment Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceInstanceInUpdateSerializerV3'
+      tags:
+      - Everywhere Inference
+    delete:
+      operationId: InferenceInstanceHandlerV3.delete
+      summary: Delete inference deployment
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Inference instance name.
+        schema:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          title: Deployment Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/deployments/{deployment_name}/logs:
+    get:
+      operationId: InferenceInstanceLogsHandlerV3.get
+      summary: Get inference deployment logs
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Inference instance name.
+        schema:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          title: Deployment Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Order by field
+        schema:
+          $ref: '#/components/schemas/InferenceLogsOrderByChoices'
+          default: time.desc
+          description: Order by field
+          examples:
+          - time.asc
+      - in: query
+        name: region_id
+        required: false
+        description: Region ID
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceInstanceLogSerializerV3List'
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/deployments/{deployment_name}/start:
+    post:
+      operationId: InferenceInstanceStartHandlerV3.post
+      summary: Start inference deployment
+      description: 'This operation initializes an inference deployment after it was stopped, making it available to handle inference
+
+        requests again.
+
+        The instance will launch with the **minimum** number of replicas defined in the scaling settings.
+
+
+        - If the minimum replicas are set to **0**, the instance will initially start with **0** replicas.
+
+        - It will automatically scale up when it receives requests or SQS messages,
+
+        according to the configured scaling rules.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Inference instance name.
+        schema:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          title: Deployment Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/deployments/{deployment_name}/stop:
+    post:
+      operationId: InferenceInstanceStopHandlerV3.post
+      summary: Stop inference deployment
+      description: 'This operation shuts down an inference deployment, making it unavailable for handling requests.
+
+        The deployment will scale down to **0** replicas, overriding any minimum replica settings.
+
+
+        - Once stopped, the deployment will **not** process any inference requests or SQS messages.
+
+        - It will **not** restart automatically and must be started manually.
+
+        - While stopped, the deployment will **not** incur any charges.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Inference instance name.
+        schema:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          title: Deployment Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/deployments/check_limits:
+    post:
+      operationId: InferenceCheckLimitsHandlerV3.post
+      summary: Check inference deployment quota
+      description: 'Check if global quota is exceeded, if yes the number of additional
+
+        quotas needed to create the specified inference deployment will be calculated.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceRequiredQuotaSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckQuotaBeforeInferenceCreationSerializer'
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/registry_credentials:
+    post:
+      operationId: InferenceRegistryCredentialsHandler.post
+      summary: Create inference registry credential
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceRegistryCredentialOutSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRegistryCredentialInSerializer'
+      tags:
+      - Everywhere Inference
+    get:
+      operationId: InferenceRegistryCredentialsHandler.get
+      summary: List inference registry credentials
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceRegistryCredentialOutSerializerList'
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/registry_credentials/{credential_name}:
+    get:
+      operationId: InferenceRegistryCredentialHandler.get
+      summary: Get inference registry credential
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: credential_name
+        required: true
+        description: Registry credential name.
+        schema:
+          description: Registry credential name.
+          examples:
+          - docker-io
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Credential Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceRegistryCredentialOutSerializer'
+      tags:
+      - Everywhere Inference
+    put:
+      operationId: InferenceRegistryCredentialHandler.put
+      summary: Replace inference registry credential
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: credential_name
+        required: true
+        description: Registry credential name.
+        schema:
+          description: Registry credential name.
+          examples:
+          - docker-io
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Credential Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceRegistryCredentialOutSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceRegistryCredentialInUpdateSerializer'
+      tags:
+      - Everywhere Inference
+    delete:
+      operationId: InferenceRegistryCredentialHandler.delete
+      summary: Delete inference registry credential
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: credential_name
+        required: true
+        description: Registry credential name.
+        schema:
+          description: Registry credential name.
+          examples:
+          - docker-io
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Credential Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/secrets:
+    post:
+      operationId: InferenceSecretsHandler.post
+      summary: Create inference secret
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceBoxSecretsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceBoxSecretsInSerializer'
+      tags:
+      - Everywhere Inference
+    get:
+      operationId: InferenceSecretsHandler.get
+      summary: List inference secrets
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceBoxSecretsSerializerList'
+      tags:
+      - Everywhere Inference
+  /v3/inference/{project_id}/secrets/{secret_name}:
+    get:
+      operationId: InferenceSecretHandler.get
+      summary: Get inference secret
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: secret_name
+        required: true
+        description: Inference secret name.
+        schema:
+          description: Inference secret name.
+          examples:
+          - aws-dev
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Secret Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceBoxSecretsSerializer'
+      tags:
+      - Everywhere Inference
+    put:
+      operationId: InferenceSecretHandler.put
+      summary: Replace inference secret
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: secret_name
+        required: true
+        description: Inference secret name.
+        schema:
+          description: Inference secret name.
+          examples:
+          - aws-dev
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Secret Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceBoxSecretsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceSecretInUpdateSerializer'
+      tags:
+      - Everywhere Inference
+    delete:
+      operationId: InferenceSecretHandler.delete
+      summary: Delete Inference Secret
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: secret_name
+        required: true
+        description: Inference secret name.
+        schema:
+          description: Inference secret name.
+          examples:
+          - aws-dev
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Secret Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Everywhere Inference
+  /v3/inference/capacity:
+    get:
+      operationId: InferenceCapacityHandlerV3.get
+      summary: Get inference capacity by region
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionCapacityOutSerializerV3List'
+      tags:
+      - Everywhere Inference
+  /v3/inference/flavors:
+    get:
+      operationId: InferenceFlavorsHandlerV3.get
+      summary: List inference flavors
+      description: ''
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceFlavorOutSerializerV3List'
+      tags:
+      - Everywhere Inference
+  /v3/inference/flavors/{flavor_name}:
+    get:
+      operationId: InferenceFlavorHandlerV3.get
+      summary: Get inference flavor
+      description: ''
+      parameters:
+      - in: path
+        name: flavor_name
+        required: true
+        description: Inference flavor name.
+        schema:
+          description: Inference flavor name.
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Flavor Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceFlavorOutSerializerV3'
+      tags:
+      - Everywhere Inference
+  /v2/pricing/inference/deployments:
+    post:
+      operationId: InferenceDeploymentPricingHandlerV2.post
+      summary: Preview inference deployment price
+      description: Preview the billing price for an inference deployment
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceDeploymentPriceRequestV2Serializer'
+      tags:
+      - Everywhere Inference
+  /v3/inference/models:
+    get:
+      operationId: MLModelCatalogListHandlerV3.get
+      summary: List models from catalog
+      description: ''
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Order instances by transmitted fields and directions
+        schema:
+          $ref: '#/components/schemas/MLCatalogOrderByChoices'
+          default: name.asc
+          description: Order instances by transmitted fields and directions
+          examples:
+          - name.desc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MLCatalogModelCardListSerializerV3'
+      deprecated: true
+      tags:
+      - Everywhere Inference
+  /v3/inference/models/{model_id}:
+    get:
+      operationId: MLModelCatalogCollectionHandlerV3.get
+      summary: Get model from catalog
+      description: ''
+      parameters:
+      - in: path
+        name: model_id
+        required: true
+        description: Model ID
+        schema:
+          description: Model ID
+          title: Model Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MLCatalogModelCardSerializerV3'
+      deprecated: true
+      tags:
+      - Everywhere Inference
+components:
+  schemas:
+    ContainerScaleTriggersSerializer:
+      properties:
+        cpu:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdSerializer'
+          - type: 'null'
+          default: null
+          description: CPU trigger configuration
+          examples:
+          - threshold: 80
+        gpu_memory:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdSerializer'
+          - type: 'null'
+          default: null
+          description: GPU memory trigger configuration. Calculated by DCGM_FI_DEV_MEM_COPY_UTIL metric
+          examples:
+          - threshold: 80
+        gpu_utilization:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdSerializer'
+          - type: 'null'
+          default: null
+          description: GPU utilization trigger configuration. Calculated by DCGM_FI_DEV_GPU_UTIL metric
+          examples:
+          - threshold: 80
+        http:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersRateSerializer'
+          - type: 'null'
+          default: null
+          description: HTTP trigger configuration
+          examples:
+          - rate: 1
+            window: 60
+        memory:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdSerializer'
+          - type: 'null'
+          default: null
+          description: Memory trigger configuration
+          examples:
+          - threshold: 80
+        sqs:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersSqsSerializer'
+          - type: 'null'
+          default: null
+          description: SQS trigger configuration
+      title: ContainerScaleTriggersSerializer
+      type: object
+    ContainerProbeTcpSocketConfigOutSerializerV2:
+      properties:
+        port:
+          description: Port number to check if it's open.
+          examples:
+          - 80
+          - 8080
+          title: Port
+          type: integer
+      required:
+      - port
+      title: ContainerProbeTcpSocketConfigOutSerializerV2
+      type: object
+    ContainerProbeTcpSocketConfigSerializerV2:
+      properties:
+        port:
+          description: Port number to check if it's open.
+          examples:
+          - 80
+          - 8080
+          maximum: 65535
+          minimum: 1
+          title: Port
+          type: integer
+      required:
+      - port
+      title: ContainerProbeTcpSocketConfigSerializerV2
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    ContainerScaleTriggersThresholdSerializer:
+      properties:
+        threshold:
+          description: Threshold value for the trigger in percentage
+          examples:
+          - 75
+          maximum: 100
+          minimum: 1
+          title: Threshold
+          type: integer
+      required:
+      - threshold
+      title: ContainerScaleTriggersThresholdSerializer
+      type: object
+    InferenceContainerPricingV2Serializer:
+      properties:
+        region_id:
+          description: Region ID for the container
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        scale:
+          $ref: '#/components/schemas/InferenceContainerScalePricingV2Serializer'
+          description: Scale for the container
+      required:
+      - region_id
+      - scale
+      title: InferenceContainerPricingV2Serializer
+      type: object
+    DeployStatusSerializer:
+      properties:
+        ready:
+          description: Number of ready instances
+          examples:
+          - 1
+          title: Ready
+          type: integer
+        total:
+          description: Total number of instances
+          examples:
+          - 2
+          title: Total
+          type: integer
+      required:
+      - total
+      - ready
+      title: DeployStatusSerializer
+      type: object
+    ApiKeyUpdateRequestSerializer:
+      properties:
+        description:
+          anyOf:
+          - maxLength: 300
+            type: string
+          - type: 'null'
+          description: Description of the API Key.
+          examples:
+          - This key is used for accessing the inference service.
+          title: Description
+      title: ApiKeyUpdateRequestSerializer
+      type: object
+    LoggingOutSerializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: ID of the region in which the logs will be stored
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          description: Indicates if log streaming is enabled or disabled
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: Logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The topic name to stream logs to
+          examples:
+          - my-log-name
+          title: Topic Name
+      required:
+      - enabled
+      - destination_region_id
+      - topic_name
+      title: LoggingOutSerializer
+      type: object
+    ApiKeyCreateRequestSerializer:
+      properties:
+        description:
+          description: Description of the API Key.
+          examples:
+          - This key is used for accessing the inference service.
+          maxLength: 300
+          title: Description
+          type: string
+        expires_at:
+          description: Expiration date of the API Key in ISO 8601 format.
+          examples:
+          - '2024-10-01T12:00:00Z'
+          title: Expires At
+          type: string
+        name:
+          description: Name of the API Key.
+          examples:
+          - my-api-key
+          maxLength: 63
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+          title: Name
+          type: string
+      required:
+      - name
+      title: ApiKeyCreateRequestSerializer
+      type: object
+    InferenceRegistryCredentialOutSerializer:
+      properties:
+        name:
+          description: Registry credential name.
+          examples:
+          - docker-io
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Name
+          type: string
+        project_id:
+          description: Project ID to which the inference registry credentials belongs.
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+        registry_url:
+          description: Registry URL.
+          examples:
+          - registry.example.com
+          title: Registry Url
+          type: string
+        username:
+          description: Registry username.
+          examples:
+          - username
+          title: Username
+          type: string
+      required:
+      - project_id
+      - name
+      - username
+      - registry_url
+      title: InferenceRegistryCredentialOutSerializer
+      type: object
+    InferenceInstanceProbesOutSerializerV2:
+      additionalProperties: false
+      properties:
+        liveness_probe:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceContainerProbeConfigurationOutSerializerV2'
+          - type: 'null'
+          description: Liveness probe configuration
+        readiness_probe:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceContainerProbeConfigurationOutSerializerV2'
+          - type: 'null'
+          description: Readiness probe configuration
+        startup_probe:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceContainerProbeConfigurationOutSerializerV2'
+          - type: 'null'
+          description: Startup probe configuration
+      required:
+      - liveness_probe
+      - readiness_probe
+      - startup_probe
+      title: InferenceInstanceProbesOutSerializerV2
+      type: object
+    InferenceInstanceLogSerializerV3List:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/InferenceInstanceLogSerializerV3'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: InferenceInstanceLogSerializerV3List
+      type: object
+    InferenceRequiredQuotaSerializer:
+      properties:
+        inference_cpu_millicore_count_limit:
+          description: Inference CPU millicore count limit
+          examples:
+          - 8000
+          title: Inference Cpu Millicore Count Limit
+          type: integer
+        inference_cpu_millicore_count_requested:
+          description: Inference CPU millicore count requested
+          examples:
+          - 3000
+          title: Inference Cpu Millicore Count Requested
+          type: integer
+        inference_cpu_millicore_count_usage:
+          description: Inference CPU millicore count usage
+          examples:
+          - 2000
+          title: Inference Cpu Millicore Count Usage
+          type: integer
+        inference_gpu_a100_count_limit:
+          description: Inference GPU A100 Count limit
+          examples:
+          - 4
+          title: Inference Gpu A100 Count Limit
+          type: integer
+        inference_gpu_a100_count_requested:
+          description: Inference GPU A100 Count requested
+          examples:
+          - 2
+          title: Inference Gpu A100 Count Requested
+          type: integer
+        inference_gpu_a100_count_usage:
+          description: Inference GPU A100 Count usage
+          examples:
+          - 1
+          title: Inference Gpu A100 Count Usage
+          type: integer
+        inference_gpu_h100_count_limit:
+          description: Inference GPU H100 Count limit
+          examples:
+          - 4
+          title: Inference Gpu H100 Count Limit
+          type: integer
+        inference_gpu_h100_count_requested:
+          description: Inference GPU H100 Count requested
+          examples:
+          - 2
+          title: Inference Gpu H100 Count Requested
+          type: integer
+        inference_gpu_h100_count_usage:
+          description: Inference GPU H100 Count usage
+          examples:
+          - 1
+          title: Inference Gpu H100 Count Usage
+          type: integer
+        inference_gpu_l40s_count_limit:
+          description: Inference GPU L40s Count limit
+          examples:
+          - 4
+          title: Inference Gpu L40S Count Limit
+          type: integer
+        inference_gpu_l40s_count_requested:
+          description: Inference GPU L40s Count requested
+          examples:
+          - 2
+          title: Inference Gpu L40S Count Requested
+          type: integer
+        inference_gpu_l40s_count_usage:
+          description: Inference GPU L40s Count usage
+          examples:
+          - 1
+          title: Inference Gpu L40S Count Usage
+          type: integer
+        inference_instance_count_limit:
+          description: Inference instance count limit
+          examples:
+          - 10
+          title: Inference Instance Count Limit
+          type: integer
+        inference_instance_count_requested:
+          description: Inference instance count requested
+          examples:
+          - 1
+          title: Inference Instance Count Requested
+          type: integer
+        inference_instance_count_usage:
+          description: Inference instance count usage
+          examples:
+          - 1
+          title: Inference Instance Count Usage
+          type: integer
+      title: InferenceRequiredQuotaSerializer
+      type: object
+    PatchInferenceInstanceProbesSerializerV2:
+      additionalProperties: false
+      properties:
+        liveness_probe:
+          anyOf:
+          - $ref: '#/components/schemas/PatchInferenceInstanceContainerProbeConfigurationInSerializerV2'
+          - type: 'null'
+          description: Liveness probe configuration
+        readiness_probe:
+          anyOf:
+          - $ref: '#/components/schemas/PatchInferenceInstanceContainerProbeConfigurationInSerializerV2'
+          - type: 'null'
+          description: Readiness probe configuration
+        startup_probe:
+          anyOf:
+          - $ref: '#/components/schemas/PatchInferenceInstanceContainerProbeConfigurationInSerializerV2'
+          - type: 'null'
+          description: Startup probe configuration
+      title: PatchInferenceInstanceProbesSerializerV2
+      type: object
+    InferenceBoxSecretsSerializerList:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/InferenceBoxSecretsSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: InferenceBoxSecretsSerializerList
+      type: object
+    InferenceBoxSecretsInSerializer:
+      properties:
+        data:
+          $ref: '#/components/schemas/AwsIamData'
+          description: Secret data.
+          examples:
+          - aws_access_key_id: fake-key-id
+            aws_secret_access_key: fake-secret
+        name:
+          description: Secret name.
+          examples:
+          - aws-dev
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+          title: Name
+          type: string
+        type:
+          description: Secret type. Currently only `aws-iam` is supported.
+          examples:
+          - aws-iam
+          pattern: ^aws-iam$
+          title: Type
+          type: string
+      required:
+      - name
+      - type
+      - data
+      title: InferenceBoxSecretsInSerializer
+      type: object
+    ContainerProbeHttpGetConfigSerializerV2:
+      properties:
+        headers:
+          additionalProperties:
+            type: string
+          description: HTTP headers to be sent with the request.
+          examples:
+          - Authorization: Bearer token 123
+          title: Headers
+          type: object
+        host:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Host name to send HTTP request to.
+          examples:
+          - 127.0.0.1
+          title: Host
+        path:
+          default: /
+          description: The endpoint to send the HTTP request to.
+          examples:
+          - /healthz
+          - /readiness
+          title: Path
+          type: string
+        port:
+          description: Port number the probe should connect to.
+          examples:
+          - 80
+          - 8080
+          maximum: 65535
+          minimum: 1
+          title: Port
+          type: integer
+        schema:
+          default: HTTP
+          description: Schema to use for the HTTP request.
+          examples:
+          - HTTP
+          - HTTPS
+          pattern: ^(HTTP|HTTPS)$
+          title: Schema
+          type: string
+      required:
+      - port
+      title: ContainerProbeHttpGetConfigSerializerV2
+      type: object
+    ContainerProbeHttpGetConfigOutSerializerV2:
+      properties:
+        headers:
+          additionalProperties:
+            type: string
+          description: HTTP headers to be sent with the request.
+          examples:
+          - Authorization: Bearer token 123
+          title: Headers
+          type: object
+        host:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Host name to send HTTP request to.
+          examples:
+          - 127.0.0.1
+          title: Host
+        path:
+          description: The endpoint to send the HTTP request to.
+          examples:
+          - /healthz
+          - /readiness
+          title: Path
+          type: string
+        port:
+          description: Port number the probe should connect to.
+          examples:
+          - 80
+          - 8080
+          title: Port
+          type: integer
+        schema:
+          description: Schema to use for the HTTP request.
+          examples:
+          - HTTP
+          - HTTPS
+          title: Schema
+          type: string
+      required:
+      - headers
+      - host
+      - path
+      - port
+      - schema
+      title: ContainerProbeHttpGetConfigOutSerializerV2
+      type: object
+    PatchContainerProbeExecConfigSerializerV2:
+      properties:
+        command:
+          description: Command to be executed inside the running container.
+          examples:
+          - - ls
+            - -l
+          items:
+            type: string
+          title: Command
+          type: array
+      title: PatchContainerProbeExecConfigSerializerV2
+      type: object
+    PatchContainerProbeTcpSocketConfigSerializerV2:
+      properties:
+        port:
+          description: Port number to check if it's open.
+          examples:
+          - 80
+          - 8080
+          maximum: 65535
+          minimum: 1
+          title: Port
+          type: integer
+      title: PatchContainerProbeTcpSocketConfigSerializerV2
+      type: object
+    ContainerScaleTriggersRateSerializer:
+      properties:
+        rate:
+          description: Request count per 'window' seconds for the http trigger
+          examples:
+          - 1
+          maximum: 1000
+          minimum: 1
+          title: Rate
+          type: integer
+        window:
+          description: Time window for rate calculation in seconds
+          examples:
+          - 60
+          maximum: 3600
+          minimum: 1
+          title: Window
+          type: integer
+      required:
+      - rate
+      - window
+      title: ContainerScaleTriggersRateSerializer
+      type: object
+    ApiKeyListResponseSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/GetApiKeyResponseSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ApiKeyListResponseSerializer
+      type: object
+    MLCatalogOrderByChoices:
+      enum:
+      - name.asc
+      - name.desc
+      title: MLCatalogOrderByChoices
+      type: string
+    ContainerScaleSerializerV3:
+      properties:
+        cooldown_period:
+          anyOf:
+          - maximum: 3600
+            minimum: 1
+            type: integer
+          - type: 'null'
+          default: 60
+          description: Cooldown period between scaling actions in seconds
+          examples:
+          - 60
+          title: Cooldown Period
+        max:
+          description: Maximum scale for the container
+          examples:
+          - 3
+          maximum: 300
+          title: Max
+          type: integer
+        min:
+          description: Minimum scale for the container
+          examples:
+          - 1
+          minimum: 0
+          title: Min
+          type: integer
+        polling_interval:
+          anyOf:
+          - maximum: 3600
+            minimum: 5
+            type: integer
+          - type: 'null'
+          default: 30
+          description: Polling interval for scaling triggers in seconds
+          examples:
+          - 30
+          title: Polling Interval
+        triggers:
+          $ref: '#/components/schemas/ContainerScaleTriggersSerializer'
+          default:
+            cpu:
+              threshold: 80
+            memory:
+              threshold: 80
+            gpu_utilization: null
+            gpu_memory: null
+            http: null
+            sqs: null
+          description: Triggers for scaling actions
+          examples:
+          - cpu:
+              threshold: 75
+      required:
+      - min
+      - max
+      title: ContainerScaleSerializerV3
+      type: object
+    GetApiKeyResponseSerializer:
+      properties:
+        created_at:
+          description: Timestamp when the API Key was created.
+          examples:
+          - '2023-10-01T12:00:00Z'
+          title: Created At
+          type: string
+        deployment_names:
+          description: List of inference deployment names to which this API Key has been attached.
+          examples:
+          - - inference-1
+            - inference-2
+          items:
+            type: string
+          title: Deployment Names
+          type: array
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Description of the API Key.
+          examples:
+          - This key is used for accessing the inference service.
+          title: Description
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Timestamp when the API Key will expire.
+          examples:
+          - '2024-10-01T12:00:00Z'
+          title: Expires At
+        name:
+          description: API Key name.
+          examples:
+          - my-api-key
+          title: Name
+          type: string
+      required:
+      - name
+      - description
+      - created_at
+      - expires_at
+      - deployment_names
+      title: GetApiKeyResponseSerializer
+      type: object
+    ContainerScaleTriggersOutSerializer:
+      properties:
+        cpu:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdOutSerializer'
+          - type: 'null'
+          description: CPU trigger configuration
+          examples:
+          - threshold: 80
+        gpu_memory:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdOutSerializer'
+          - type: 'null'
+          description: GPU memory trigger configuration. Calculated by DCGM_FI_DEV_MEM_COPY_UTIL metric
+          examples:
+          - threshold: 80
+        gpu_utilization:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdOutSerializer'
+          - type: 'null'
+          description: GPU utilization trigger configuration. Calculated by DCGM_FI_DEV_GPU_UTIL metric
+          examples:
+          - threshold: 80
+        http:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersRateOutSerializer'
+          - type: 'null'
+          description: HTTP trigger configuration
+          examples:
+          - rate: 1
+            window: 60
+        memory:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersThresholdOutSerializer'
+          - type: 'null'
+          description: Memory trigger configuration
+          examples:
+          - threshold: 80
+        sqs:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerScaleTriggersSqsOutSerializer'
+          - type: 'null'
+          description: SQS trigger configuration
+      required:
+      - cpu
+      - memory
+      - gpu_utilization
+      - gpu_memory
+      - http
+      - sqs
+      title: ContainerScaleTriggersOutSerializer
+      type: object
+    InferenceDeploymentPriceRequestV2Serializer:
+      properties:
+        containers:
+          description: List of containers for the inference instance.
+          items:
+            $ref: '#/components/schemas/InferenceContainerPricingV2Serializer'
+          minItems: 1
+          title: Containers
+          type: array
+        flavor_name:
+          description: Flavor name for the inference instance.
+          title: Flavor Name
+          type: string
+      required:
+      - flavor_name
+      - containers
+      title: InferenceDeploymentPriceRequestV2Serializer
+      type: object
+    InferenceInstanceLogSerializerV3:
+      properties:
+        message:
+          description: Log message.
+          examples:
+          - GET /v1/predictions
+          title: Message
+          type: string
+        pod:
+          description: Pod name.
+          examples:
+          - iate-container-8568ff8fc7-z7vx9
+          title: Pod
+          type: string
+        region_id:
+          description: Region ID where the container is deployed.
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        time:
+          description: Log message timestamp in ISO 8601 format.
+          examples:
+          - '2024-10-14T14:54:04.82851142Z'
+          format: date-time
+          title: Time
+          type: string
+      required:
+      - time
+      - region_id
+      - pod
+      - message
+      title: InferenceInstanceLogSerializerV3
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    InferenceRegistryCredentialOutSerializerList:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/InferenceRegistryCredentialOutSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: InferenceRegistryCredentialOutSerializerList
+      type: object
+    InferenceFlavorOutSerializerV3:
+      properties:
+        cpu:
+          description: Inference flavor cpu count.
+          examples:
+          - 2
+          title: Cpu
+          type: number
+        description:
+          description: Inference flavor description.
+          examples:
+          - 1xL40S / 16 vCPU / 232GiB RAM
+          title: Description
+          type: string
+        gpu:
+          description: Inference flavor gpu count.
+          examples:
+          - 1
+          title: Gpu
+          type: integer
+        gpu_compute_capability:
+          description: Inference flavor gpu compute capability.
+          examples:
+          - '8.6'
+          title: Gpu Compute Capability
+          type: string
+        gpu_memory:
+          description: Inference flavor gpu memory in Gi.
+          examples:
+          - 80
+          title: Gpu Memory
+          type: number
+        gpu_model:
+          description: Inference flavor gpu model.
+          examples:
+          - H100
+          title: Gpu Model
+          type: string
+        is_gpu_shared:
+          deprecated: true
+          description: Inference flavor is gpu shared (always false, deprecated).
+          examples:
+          - false
+          title: Is Gpu Shared
+          type: boolean
+        memory:
+          description: Inference flavor memory in Gi.
+          examples:
+          - 4
+          title: Memory
+          type: number
+        name:
+          description: Inference flavor name.
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Name
+          type: string
+      required:
+      - name
+      - cpu
+      - memory
+      - gpu
+      - gpu_model
+      - gpu_memory
+      - is_gpu_shared
+      - gpu_compute_capability
+      - description
+      title: InferenceFlavorOutSerializerV3
+      type: object
+    InferenceInstanceInUpdateSerializerV3:
+      properties:
+        api_keys:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: List of API keys for the inference instance. Multiple keys can be attached to one deployment.If `auth_enabled` and `api_keys` are both specified, a ValidationError will be raised.If `[]` is provided, the API keys will be removed and auth will be disabled on the deployment.
+          examples:
+          - - key1
+            - key2
+          title: Api Keys
+        auth_enabled:
+          deprecated: true
+          description: 'Set to `true` to enable API key authentication for the inference instance. `"Authorization": "Bearer *****"` or `"X-Api-Key": "*****"` header is required for the requests to the instance if enabled. This field is deprecated and will be removed in the future. Use `api_keys` field instead.If `auth_enabled` and `api_keys` are both specified, a ValidationError will be raised.'
+          examples:
+          - false
+          title: Auth Enabled
+          type: boolean
+        command:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          description: Command to be executed when running a container from an image.
+          examples:
+          - - nginx
+            - -g
+            - daemon off;
+          title: Command
+        containers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ContainerInUpdateSerializerV3'
+            minItems: 1
+            type: array
+          - type: 'null'
+          default: null
+          description: List of containers for the inference instance.
+          examples:
+          - - region_1: 1
+              scale:
+                cooldown_period: 60
+                max: 3
+                min: 1
+                triggers:
+                  cpu:
+                    threshold: 80
+                  memory:
+                    threshold: 70
+          title: Containers
+        credentials_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Registry credentials name
+          examples:
+          - dockerhub
+          title: Credentials Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Inference instance description.
+          examples:
+          - My first instance
+          title: Description
+        envs:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          default: null
+          description: Environment variables for the inference instance.
+          examples:
+          - DEBUG_MODE: 'False'
+            KEY: '12345'
+          title: Envs
+        flavor_name:
+          description: Flavor name for the inference instance.
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Flavor Name
+          type: string
+        image:
+          anyOf:
+          - pattern: ^(?:(?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*)(?::[A-Za-z0-9_][A-Za-z0-9_.-]{0,127})?$
+            type: string
+          - type: 'null'
+          default: null
+          description: Docker image for the inference instance. This field should contain the image name and tag in the format 'name:tag', e.g., 'nginx:latest'. It defaults to Docker Hub as the image registry, but any accessible Docker image URL can be specified.
+          examples:
+          - nginx:latest
+          title: Image
+        ingress_opts:
+          anyOf:
+          - $ref: '#/components/schemas/IngressOptsSerializer'
+          - type: 'null'
+          default: null
+          description: Ingress options for the inference instance
+          examples:
+          - disable_response_buffering: true
+        listening_port:
+          anyOf:
+          - maximum: 65535
+            minimum: 1
+            type: integer
+          - type: 'null'
+          default: null
+          description: Listening port for the inference instance.
+          examples:
+          - 80
+          title: Listening Port
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingInSerializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration for the inference instance
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 42
+            topic_name: my-log-name
+          - enabled: false
+        probes:
+          anyOf:
+          - $ref: '#/components/schemas/PatchInferenceInstanceProbesSerializerV2'
+          - type: 'null'
+          description: Probes configured for all containers of the inference instance.
+        timeout:
+          anyOf:
+          - minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: Specifies the duration in seconds without any requests after which the containers will be downscaled to their minimum scale value as defined by `scale.min`. If set, this helps in optimizing resource usage by reducing the number of container instances during periods of inactivity. The default value when the parameter is not set is 120.
+          examples:
+          - 120
+          title: Timeout
+      title: InferenceInstanceInUpdateSerializerV3
+      type: object
+    PatchContainerProbeInSerializerV2:
+      properties:
+        exec:
+          anyOf:
+          - $ref: '#/components/schemas/PatchContainerProbeExecConfigSerializerV2'
+          - type: 'null'
+          description: Exec probe configuration
+        failure_threshold:
+          description: The number of consecutive probe failures that mark the container as unhealthy.
+          examples:
+          - 3
+          minimum: 1
+          title: Failure Threshold
+          type: integer
+        http_get:
+          anyOf:
+          - $ref: '#/components/schemas/PatchContainerProbeHttpGetConfigSerializerV2'
+          - type: 'null'
+          description: HTTP GET probe configuration
+        initial_delay_seconds:
+          description: The initial delay before starting the first probe.
+          examples:
+          - 0
+          - 10
+          minimum: 0
+          title: Initial Delay Seconds
+          type: integer
+        period_seconds:
+          description: How often (in seconds) to perform the probe.
+          examples:
+          - 5
+          - 10
+          minimum: 1
+          title: Period Seconds
+          type: integer
+        success_threshold:
+          description: The number of consecutive successful probes that mark the container as healthy.
+          examples:
+          - 1
+          minimum: 1
+          title: Success Threshold
+          type: integer
+        tcp_socket:
+          anyOf:
+          - $ref: '#/components/schemas/PatchContainerProbeTcpSocketConfigSerializerV2'
+          - type: 'null'
+          description: TCP socket probe configuration
+        timeout_seconds:
+          description: The timeout for each probe.
+          examples:
+          - 1
+          - 5
+          minimum: 1
+          title: Timeout Seconds
+          type: integer
+      title: PatchContainerProbeInSerializerV2
+      type: object
+    InferenceContainerScalePricingV2Serializer:
+      properties:
+        max:
+          description: Maximum number of containers
+          examples:
+          - 3
+          maximum: 1.0e+16
+          minimum: 1
+          title: Max
+          type: integer
+      required:
+      - max
+      title: InferenceContainerScalePricingV2Serializer
+      type: object
+    ContainerScaleTriggersThresholdOutSerializer:
+      properties:
+        threshold:
+          description: Threshold value for the trigger in percentage
+          examples:
+          - 75
+          title: Threshold
+          type: integer
+      required:
+      - threshold
+      title: ContainerScaleTriggersThresholdOutSerializer
+      type: object
+    ContainerScaleUpdateSerializerV3:
+      properties:
+        cooldown_period:
+          description: Cooldown period between scaling actions in seconds
+          examples:
+          - 60
+          maximum: 3600
+          minimum: 1
+          title: Cooldown Period
+          type: integer
+        max:
+          description: Maximum scale for the container
+          examples:
+          - 3
+          maximum: 300
+          title: Max
+          type: integer
+        min:
+          description: Minimum scale for the container
+          examples:
+          - 1
+          minimum: 0
+          title: Min
+          type: integer
+        polling_interval:
+          description: Polling interval for scaling triggers in seconds
+          examples:
+          - 30
+          maximum: 3600
+          minimum: 5
+          title: Polling Interval
+          type: integer
+        triggers:
+          $ref: '#/components/schemas/ContainerScaleTriggersSerializer'
+          description: Triggers for scaling actions
+          examples:
+          - cpu:
+              threshold: 75
+      required:
+      - min
+      - max
+      title: ContainerScaleUpdateSerializerV3
+      type: object
+    MLCatalogModelCardListSerializerV3:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/MLCatalogModelCardSerializerV3'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: MLCatalogModelCardListSerializerV3
+      type: object
+    InferenceInstanceOutSerializerV3:
+      properties:
+        address:
+          anyOf:
+          - format: uri
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: Address of the inference instance
+          examples:
+          - https://example.com
+          title: Address
+        api_keys:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          description: List of API keys for the inference instance
+          examples:
+          - - key1
+            - key2
+          title: Api Keys
+        auth_enabled:
+          deprecated: true
+          description: '`true` if instance uses API key authentication. `"Authorization": "Bearer *****"` or `"X-Api-Key": "*****"` header is required for the requests to the instance if enabled.'
+          examples:
+          - false
+          title: Auth Enabled
+          type: boolean
+        command:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Command to be executed when running a container from an image.
+          examples:
+          - - nginx
+            - -g
+            - daemon off;
+          title: Command
+        containers:
+          description: List of containers for the inference instance
+          examples:
+          - - deploy_status:
+                ready: 1
+                total: 3
+              region_id: 1
+              scale:
+                cooldown_period: 60
+                max: 3
+                min: 1
+                triggers:
+                  cpu:
+                    threshold: 80
+                  memory:
+                    threshold: 70
+          items:
+            $ref: '#/components/schemas/ContainerOutSerializerV3'
+          title: Containers
+          type: array
+        created_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Inference instance creation date in ISO 8601 format.
+          examples:
+          - '2023-08-22T11:21:00Z'
+          title: Created At
+        credentials_name:
+          description: Registry credentials name
+          examples:
+          - dockerhub
+          title: Credentials Name
+          type: string
+        description:
+          description: Inference instance description.
+          examples:
+          - My first instance
+          title: Description
+          type: string
+        envs:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          description: Environment variables for the inference instance
+          examples:
+          - DEBUG_MODE: 'False'
+            KEY: '12345'
+          title: Envs
+        flavor_name:
+          description: Flavor name for the inference instance
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Flavor Name
+          type: string
+        image:
+          description: Docker image for the inference instance. This field should contain the image name and tag in the format 'name:tag', e.g., 'nginx:latest'. It defaults to Docker Hub as the image registry, but any accessible Docker image URL can be specified.
+          examples:
+          - nginx:latest
+          title: Image
+          type: string
+        ingress_opts:
+          anyOf:
+          - $ref: '#/components/schemas/IngressOptsOutSerializer'
+          - type: 'null'
+          description: Ingress options for the inference instance
+          examples:
+          - disable_response_buffering: true
+        listening_port:
+          description: Listening port for the inference instance.
+          examples:
+          - 8080
+          title: Listening Port
+          type: integer
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingOutSerializer'
+          - type: 'null'
+          description: Logging configuration for the inference instance
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+        name:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          title: Name
+          type: string
+        object_references:
+          description: Indicates to which parent object this inference belongs to.
+          items:
+            $ref: '#/components/schemas/InferenceObjectReferenceSerializer'
+          title: Object References
+          type: array
+        probes:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceProbesOutSerializerV2'
+          - type: 'null'
+          description: Probes configured for all containers of the inference instance.
+        project_id:
+          description: Project ID. If not provided, your default project ID will be used.
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+        status:
+          $ref: '#/components/schemas/InferenceInstanceStatusV3'
+          description: "Inference instance status.\n\n  Value can be one of the following:\n  - `DEPLOYING` - The instance is being deployed. Containers are not yet created.\n  - `PARTIALLYDEPLOYED` - All containers have been created, but some may not be ready yet. Instances stuck in this state typically indicate either image being pulled, or a failure of some kind. In the latter case, the `error_message` field of the respective container object in the `containers` collection explains the failure reason.\n  - `ACTIVE` - The instance is running and ready to accept requests.\n  - `DISABLED` - The instance is disabled and not accepting any requests.\n  - `PENDING` - The instance is running but scaled to zero. It will be automatically scaled up when a request is made.\n  - `FAILED` - The instance has a persistent failure. A short error does not cause this status. The `error_message` field of the respective container object in the `containers` collection explains the failure reason.\n  - `DELETING` - The instance is being deleted."
+          examples:
+          - ACTIVE
+        timeout:
+          anyOf:
+          - minimum: 0
+            type: integer
+          - type: 'null'
+          description: Specifies the duration in seconds without any requests after which the containers will be downscaled to their minimum scale value as defined by `scale.min`. If set, this helps in optimizing resource usage by reducing the number of container instances during periods of inactivity.
+          examples:
+          - 120
+          title: Timeout
+      required:
+      - project_id
+      - name
+      - description
+      - image
+      - listening_port
+      - created_at
+      - status
+      - auth_enabled
+      - address
+      - containers
+      - timeout
+      - envs
+      - flavor_name
+      - command
+      - credentials_name
+      - logging
+      - probes
+      - ingress_opts
+      - object_references
+      title: InferenceInstanceOutSerializerV3
+      type: object
+    ContainerScaleTriggersSqsSerializer:
+      properties:
+        activation_queue_length:
+          description: Number of messages for activation
+          minimum: 1
+          title: Activation Queue Length
+          type: integer
+        aws_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Custom AWS endpoint
+          title: Aws Endpoint
+        aws_region:
+          description: AWS region
+          examples:
+          - us-east-1
+          minLength: 1
+          title: Aws Region
+          type: string
+        queue_length:
+          description: Number of messages for one replica
+          examples:
+          - 10
+          minimum: 1
+          title: Queue Length
+          type: integer
+        queue_url:
+          description: SQS queue URL
+          examples:
+          - https://sqs.us-east-1.amazonaws.com/123456789012/MyQueue
+          minLength: 1
+          title: Queue Url
+          type: string
+        scale_on_delayed:
+          default: false
+          description: Scale on delayed messages
+          title: Scale On Delayed
+          type: boolean
+        scale_on_flight:
+          default: false
+          description: Scale on in-flight messages
+          title: Scale On Flight
+          type: boolean
+        secret_name:
+          description: Auth secret name
+          minLength: 1
+          title: Secret Name
+          type: string
+      required:
+      - queue_url
+      - queue_length
+      - activation_queue_length
+      - aws_region
+      - secret_name
+      title: ContainerScaleTriggersSqsSerializer
+      type: object
+    InferenceObjectReferenceSerializer:
+      properties:
+        kind:
+          $ref: '#/components/schemas/InferenceKind'
+          description: Kind of the inference object to be referenced
+          examples:
+          - AppDeployment
+        name:
+          description: Name of the inference object to be referenced
+          examples:
+          - my-inference-app
+          title: Name
+          type: string
+      required:
+      - name
+      - kind
+      title: InferenceObjectReferenceSerializer
+      type: object
+    ContainerInUpdateSerializerV3:
+      properties:
+        region_id:
+          description: Region id for the container
+          examples:
+          - '1337'
+          title: Region Id
+          type: integer
+        scale:
+          $ref: '#/components/schemas/ContainerScaleUpdateSerializerV3'
+          description: Scale for the container
+          examples:
+          - max: 3
+            min: 1
+      required:
+      - region_id
+      - scale
+      title: ContainerInUpdateSerializerV3
+      type: object
+    ContainerProbeOutSerializerV2:
+      properties:
+        exec:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerProbeExecConfigOutSerializerV2'
+          - type: 'null'
+          description: Exec probe configuration
+        failure_threshold:
+          description: The number of consecutive probe failures that mark the container as unhealthy.
+          examples:
+          - 3
+          title: Failure Threshold
+          type: integer
+        http_get:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerProbeHttpGetConfigOutSerializerV2'
+          - type: 'null'
+          description: HTTP GET probe configuration
+        initial_delay_seconds:
+          description: The initial delay before starting the first probe.
+          examples:
+          - 0
+          - 10
+          title: Initial Delay Seconds
+          type: integer
+        period_seconds:
+          description: How often (in seconds) to perform the probe.
+          examples:
+          - 5
+          - 10
+          title: Period Seconds
+          type: integer
+        success_threshold:
+          description: The number of consecutive successful probes that mark the container as healthy.
+          examples:
+          - 1
+          title: Success Threshold
+          type: integer
+        tcp_socket:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerProbeTcpSocketConfigOutSerializerV2'
+          - type: 'null'
+          description: TCP socket probe configuration
+        timeout_seconds:
+          description: The timeout for each probe.
+          examples:
+          - 1
+          - 5
+          title: Timeout Seconds
+          type: integer
+      required:
+      - failure_threshold
+      - initial_delay_seconds
+      - period_seconds
+      - timeout_seconds
+      - success_threshold
+      - exec
+      - tcp_socket
+      - http_get
+      title: ContainerProbeOutSerializerV2
+      type: object
+    InferenceInstanceOutSerializerV3List:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/InferenceInstanceOutSerializerV3'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: InferenceInstanceOutSerializerV3List
+      type: object
+    InferenceFlavorOutSerializerV3List:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/InferenceFlavorOutSerializerV3'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: InferenceFlavorOutSerializerV3List
+      type: object
+    PatchContainerProbeHttpGetConfigSerializerV2:
+      properties:
+        headers:
+          additionalProperties:
+            type: string
+          description: HTTP headers to be sent with the request.
+          examples:
+          - Authorization: Bearer token 123
+          title: Headers
+          type: object
+        host:
+          description: Host name to send HTTP request to.
+          examples:
+          - 127.0.0.1
+          title: Host
+          type: string
+        path:
+          description: The endpoint to send the HTTP request to.
+          examples:
+          - /healthz
+          - /readiness
+          title: Path
+          type: string
+        port:
+          description: Port number the probe should connect to.
+          examples:
+          - 80
+          - 8080
+          maximum: 65535
+          minimum: 1
+          title: Port
+          type: integer
+        schema:
+          description: Schema to use for the HTTP request.
+          examples:
+          - HTTP
+          - HTTPS
+          pattern: ^(HTTP|HTTPS)$
+          title: Schema
+          type: string
+      title: PatchContainerProbeHttpGetConfigSerializerV2
+      type: object
+    InferenceLogsOrderByChoices:
+      enum:
+      - time.asc
+      - time.desc
+      title: InferenceLogsOrderByChoices
+      type: string
+    ContainerScaleTriggersSqsOutSerializer:
+      properties:
+        activation_queue_length:
+          description: Number of messages for activation
+          examples:
+          - 5
+          title: Activation Queue Length
+          type: integer
+        aws_endpoint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Custom AWS endpoint
+          title: Aws Endpoint
+        aws_region:
+          description: AWS region
+          examples:
+          - us-east-1
+          title: Aws Region
+          type: string
+        queue_length:
+          description: Number of messages for one replica
+          examples:
+          - 10
+          title: Queue Length
+          type: integer
+        queue_url:
+          description: SQS queue URL
+          examples:
+          - https://sqs.us-east-1.amazonaws.com/123456789012/MyQueue
+          title: Queue Url
+          type: string
+        scale_on_delayed:
+          description: Scale on delayed messages
+          examples:
+          - true
+          - false
+          title: Scale On Delayed
+          type: boolean
+        scale_on_flight:
+          description: Scale on in-flight messages
+          examples:
+          - true
+          - false
+          title: Scale On Flight
+          type: boolean
+        secret_name:
+          description: Auth secret name
+          title: Secret Name
+          type: string
+      required:
+      - queue_url
+      - queue_length
+      - activation_queue_length
+      - scale_on_flight
+      - scale_on_delayed
+      - aws_region
+      - aws_endpoint
+      - secret_name
+      title: ContainerScaleTriggersSqsOutSerializer
+      type: object
+    CapacityDetailsSerializer:
+      properties:
+        capacity:
+          description: Available capacity.
+          examples:
+          - 42
+          minimum: 0
+          title: Capacity
+          type: integer
+        flavor_name:
+          description: Flavor name.
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Flavor Name
+          type: string
+      required:
+      - flavor_name
+      - capacity
+      title: CapacityDetailsSerializer
+      type: object
+    MLCatalogModelCardSerializerV3:
+      properties:
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Category of the model.
+          examples:
+          - Text Classification
+          title: Category
+        default_flavor_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Default flavor for the model.
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Default Flavor Name
+        description:
+          description: Description of the model.
+          examples:
+          - My first model
+          title: Description
+          type: string
+        developer:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Developer of the model.
+          examples:
+          - Stability AI
+          title: Developer
+        documentation_page:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Path to the documentation page.
+          examples:
+          - /docs
+          title: Documentation Page
+        eula_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: URL to the EULA text.
+          examples:
+          - https://example.com/eula
+          title: Eula Url
+        example_curl_request:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Example curl request to the model.
+          examples:
+          - 'curl -X POST http://localhost:8080/predict -d ''{"data": "sample"}'''
+          title: Example Curl Request
+        has_eula:
+          description: Whether the model has an EULA.
+          examples:
+          - true
+          title: Has Eula
+          type: boolean
+        id:
+          description: Model ID.
+          examples:
+          - 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          format: uuid
+          title: Id
+          type: string
+        image_registry_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Image registry of the model.
+          examples:
+          - 123e4567-e89b-12d3-a456-426614174999
+          title: Image Registry Id
+        image_url:
+          description: Image URL of the model.
+          examples:
+          - registry.hub.docker.com/my_model:latest
+          title: Image Url
+          type: string
+        inference_backend:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Describing underlying inference engine.
+          examples:
+          - torch
+          - tensorflow
+          title: Inference Backend
+        inference_frontend:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Describing model frontend type.
+          examples:
+          - gradio
+          - vllm
+          - triton
+          title: Inference Frontend
+        model_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Model name to perform inference call.
+          examples:
+          - mistralai/Pixtral-12B-2409
+          title: Model Id
+        name:
+          description: Name of the model.
+          examples:
+          - model1
+          title: Name
+          type: string
+        openai_compatibility:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: OpenAI compatibility level.
+          examples:
+          - full
+          - partial
+          - none
+          title: Openai Compatibility
+        port:
+          description: Port on which the model runs.
+          examples:
+          - 8080
+          title: Port
+          type: integer
+        version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Version of the model.
+          examples:
+          - v0.1
+          title: Version
+      required:
+      - id
+      - name
+      - description
+      - image_registry_id
+      - image_url
+      - port
+      - default_flavor_name
+      - example_curl_request
+      - version
+      - developer
+      - category
+      - has_eula
+      - eula_url
+      - model_id
+      - inference_frontend
+      - inference_backend
+      - openai_compatibility
+      - documentation_page
+      title: MLCatalogModelCardSerializerV3
+      type: object
+    InferenceRegistryCredentialInUpdateSerializer:
+      properties:
+        password:
+          description: Registry password.
+          examples:
+          - password
+          title: Password
+          type: string
+        registry_url:
+          description: Registry URL.
+          examples:
+          - registry.example.com
+          title: Registry Url
+          type: string
+        username:
+          description: Registry username.
+          examples:
+          - username
+          title: Username
+          type: string
+      required:
+      - username
+      - password
+      - registry_url
+      title: InferenceRegistryCredentialInUpdateSerializer
+      type: object
+    LaasIndexRetentionPolicyPydanticSerializer:
+      properties:
+        period:
+          anyOf:
+          - exclusiveMinimum: 0
+            maximum: 1825
+            type: integer
+          - type: 'null'
+          description: Duration of days for which logs must be kept.
+          examples:
+          - 45
+          title: Period
+      required:
+      - period
+      title: LaasIndexRetentionPolicyPydanticSerializer
+      type: object
+    IngressOptsOutSerializer:
+      properties:
+        disable_response_buffering:
+          description: Disable response buffering if true. A client usually has a much slower connection and can not consume the response data as fast as it is produced by an upstream application. Ingress tries to buffer the whole response in order to release the upstream application as soon as possible.By default, the response buffering is enabled.
+          examples:
+          - true
+          - false
+          title: Disable Response Buffering
+          type: boolean
+      required:
+      - disable_response_buffering
+      title: IngressOptsOutSerializer
+      type: object
+    InferenceBoxSecretsSerializer:
+      properties:
+        data:
+          $ref: '#/components/schemas/AwsIamData'
+          description: Secret data.
+          examples:
+          - aws_access_key_id: fake-key-id
+            aws_secret_access_key: fake-secret
+        name:
+          description: Secret name.
+          examples:
+          - aws-dev
+          minLength: 4
+          title: Name
+          type: string
+        type:
+          description: Secret type.
+          examples:
+          - aws-iam
+          title: Type
+          type: string
+      required:
+      - name
+      - type
+      - data
+      title: InferenceBoxSecretsSerializer
+      type: object
+    LoggingInSerializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: ID of the region in which the logs will be stored
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          default: false
+          description: Enable or disable log streaming
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: Logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - maxLength: 223
+            minLength: 1
+            pattern: ^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9](?:[-a-z0-9]*[a-z0-9])*)*$
+            type: string
+          - type: 'null'
+          default: null
+          description: The topic name to stream logs to
+          examples:
+          - my-log-name
+          title: Topic Name
+      title: LoggingInSerializer
+      type: object
+    ContainerInSerializerV3:
+      properties:
+        region_id:
+          description: Region id for the container
+          examples:
+          - 1337
+          title: Region Id
+          type: integer
+        scale:
+          $ref: '#/components/schemas/ContainerScaleSerializerV3'
+          description: Scale for the container
+          examples:
+          - max: 3
+            min: 1
+      required:
+      - region_id
+      - scale
+      title: ContainerInSerializerV3
+      type: object
+    IngressOptsSerializer:
+      properties:
+        disable_response_buffering:
+          default: false
+          description: Disable response buffering if true. A client usually has a much slower connection and can not consume the response data as fast as it is produced by an upstream application. Ingress tries to buffer the whole response in order to release the upstream application as soon as possible.By default, the response buffering is enabled.
+          examples:
+          - true
+          - false
+          title: Disable Response Buffering
+          type: boolean
+      title: IngressOptsSerializer
+      type: object
+    ContainerOutSerializerV3:
+      properties:
+        address:
+          anyOf:
+          - format: uri
+            minLength: 1
+            type: string
+          - type: 'null'
+          description: Address of the inference instance
+          examples:
+          - https://example.com
+          title: Address
+        deploy_status:
+          $ref: '#/components/schemas/DeployStatusSerializer'
+          description: Status of the containers deployment
+          examples:
+          - ready: 1
+            total: 3
+        error_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Error message if the container deployment failed
+          examples:
+          - Failed to pull image
+          - No capacity available in the region
+          title: Error Message
+        region_id:
+          description: Region name for the container
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+        scale:
+          $ref: '#/components/schemas/ContainerScaleOutSerializerV3'
+          description: Scale for the container
+          examples:
+          - cooldown_period: 60
+            max: 3
+            min: 1
+            triggers:
+              cpu:
+                threshold: 80
+              memory:
+                threshold: 70
+      required:
+      - region_id
+      - address
+      - scale
+      - deploy_status
+      - error_message
+      title: ContainerOutSerializerV3
+      type: object
+    RegionCapacityOutSerializerV3:
+      properties:
+        capacity:
+          description: List of capacities by flavor.
+          examples:
+          - - capacity: 42
+              flavor_name: inference-16vcpu-232gib-1xh100-80gb
+          items:
+            $ref: '#/components/schemas/CapacityDetailsSerializer'
+          title: Capacity
+          type: array
+        region_id:
+          description: Region ID.
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      required:
+      - region_id
+      - capacity
+      title: RegionCapacityOutSerializerV3
+      type: object
+    RegionCapacityOutSerializerV3List:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RegionCapacityOutSerializerV3'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RegionCapacityOutSerializerV3List
+      type: object
+    AwsIamData:
+      properties:
+        aws_access_key_id:
+          description: AWS IAM key ID.
+          examples:
+          - fake-key-id
+          title: Aws Access Key Id
+          type: string
+        aws_secret_access_key:
+          description: AWS IAM secret key.
+          examples:
+          - fake-secret
+          title: Aws Secret Access Key
+          type: string
+      required:
+      - aws_access_key_id
+      - aws_secret_access_key
+      title: AwsIamData
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    ContainerProbeSerializerV2:
+      properties:
+        exec:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerProbeExecConfigSerializerV2'
+          - type: 'null'
+          default: null
+          description: Exec probe configuration
+        failure_threshold:
+          default: 3
+          description: The number of consecutive probe failures that mark the container as unhealthy.
+          examples:
+          - 3
+          minimum: 1
+          title: Failure Threshold
+          type: integer
+        http_get:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerProbeHttpGetConfigSerializerV2'
+          - type: 'null'
+          default: null
+          description: HTTP GET probe configuration
+        initial_delay_seconds:
+          default: 0
+          description: The initial delay before starting the first probe.
+          examples:
+          - 0
+          - 10
+          minimum: 0
+          title: Initial Delay Seconds
+          type: integer
+        period_seconds:
+          default: 10
+          description: How often (in seconds) to perform the probe.
+          examples:
+          - 5
+          - 10
+          minimum: 1
+          title: Period Seconds
+          type: integer
+        success_threshold:
+          default: 1
+          description: The number of consecutive successful probes that mark the container as healthy.
+          examples:
+          - 1
+          minimum: 1
+          title: Success Threshold
+          type: integer
+        tcp_socket:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerProbeTcpSocketConfigSerializerV2'
+          - type: 'null'
+          default: null
+          description: TCP socket probe configuration
+        timeout_seconds:
+          default: 3
+          description: The timeout for each probe.
+          examples:
+          - 1
+          - 5
+          minimum: 1
+          title: Timeout Seconds
+          type: integer
+      title: ContainerProbeSerializerV2
+      type: object
+    ContainerScaleOutSerializerV3:
+      properties:
+        cooldown_period:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Cooldown period between scaling actions in seconds
+          examples:
+          - 60
+          title: Cooldown Period
+        max:
+          description: Maximum scale for the container
+          examples:
+          - 3
+          title: Max
+          type: integer
+        min:
+          description: Minimum scale for the container
+          examples:
+          - 1
+          title: Min
+          type: integer
+        polling_interval:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Polling interval for scaling triggers in seconds
+          examples:
+          - 30
+          title: Polling Interval
+        triggers:
+          $ref: '#/components/schemas/ContainerScaleTriggersOutSerializer'
+          description: Triggers for scaling actions
+          examples:
+          - cpu:
+              threshold: 75
+      required:
+      - min
+      - max
+      - cooldown_period
+      - polling_interval
+      - triggers
+      title: ContainerScaleOutSerializerV3
+      type: object
+    PatchInferenceInstanceContainerProbeConfigurationInSerializerV2:
+      properties:
+        enabled:
+          description: Whether the probe is enabled or not.
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        probe:
+          $ref: '#/components/schemas/PatchContainerProbeInSerializerV2'
+          description: Probe configuration (exec, http_get or tcp_socket)
+      title: PatchInferenceInstanceContainerProbeConfigurationInSerializerV2
+      type: object
+    InferenceSecretInUpdateSerializer:
+      properties:
+        data:
+          $ref: '#/components/schemas/AwsIamData'
+          description: Secret data.
+          examples:
+          - aws_access_key_id: fake-key-id
+            aws_secret_access_key: fake-secret
+        type:
+          description: Secret type.
+          examples:
+          - aws-iam
+          pattern: ^aws-iam$
+          title: Type
+          type: string
+      required:
+      - type
+      - data
+      title: InferenceSecretInUpdateSerializer
+      type: object
+    CreateApiKeyResponseSerializer:
+      properties:
+        created_at:
+          description: Timestamp when the API Key was created.
+          examples:
+          - '2023-10-01T12:00:00Z'
+          title: Created At
+          type: string
+        deployment_names:
+          description: List of inference deployment names to which this API Key has been attached.
+          examples:
+          - - inference-1
+            - inference-2
+          items:
+            type: string
+          title: Deployment Names
+          type: array
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Description of the API Key.
+          examples:
+          - This key is used for accessing the inference service.
+          title: Description
+        expires_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Timestamp when the API Key will expire.
+          examples:
+          - '2024-10-01T12:00:00Z'
+          title: Expires At
+        name:
+          description: API Key name.
+          examples:
+          - my-api-key
+          title: Name
+          type: string
+        secret:
+          description: The actual API Key secret.
+          examples:
+          - qLyjWDarjtT1zdp7dc
+          title: Secret
+          type: string
+      required:
+      - name
+      - description
+      - secret
+      - created_at
+      - expires_at
+      - deployment_names
+      title: CreateApiKeyResponseSerializer
+      type: object
+    InferenceInstanceInSerializerV3:
+      properties:
+        api_keys:
+          description: List of API keys for the inference instance. Multiple keys can be attached to one deployment.If `auth_enabled` and `api_keys` are both specified, a ValidationError will be raised.
+          examples:
+          - - key1
+            - key2
+          items:
+            type: string
+          title: Api Keys
+          type: array
+        auth_enabled:
+          default: false
+          deprecated: true
+          description: 'Set to `true` to enable API key authentication for the inference instance. `"Authorization": "Bearer *****"` or `"X-Api-Key": "*****"` header is required for the requests to the instance if enabled. This field is deprecated and will be removed in the future. Use `api_keys` field instead.If `auth_enabled` and `api_keys` are both specified, a ValidationError will be raised.'
+          examples:
+          - false
+          title: Auth Enabled
+          type: boolean
+        command:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          default: null
+          description: Command to be executed when running a container from an image.
+          examples:
+          - - nginx
+            - -g
+            - daemon off;
+          title: Command
+        containers:
+          description: List of containers for the inference instance.
+          examples:
+          - - region_id: 1
+              scale:
+                cooldown_period: 60
+                max: 3
+                min: 1
+                triggers:
+                  cpu:
+                    threshold: 80
+                  memory:
+                    threshold: 70
+          items:
+            $ref: '#/components/schemas/ContainerInSerializerV3'
+          minItems: 1
+          title: Containers
+          type: array
+        credentials_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: ''
+          description: Registry credentials name
+          examples:
+          - dockerhub
+          title: Credentials Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: ''
+          description: Inference instance description.
+          examples:
+          - My first instance
+          title: Description
+        envs:
+          additionalProperties:
+            type: string
+          default: {}
+          description: Environment variables for the inference instance.
+          examples:
+          - DEBUG_MODE: 'False'
+            KEY: '12345'
+          title: Envs
+          type: object
+        flavor_name:
+          description: Flavor name for the inference instance.
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          minLength: 1
+          title: Flavor Name
+          type: string
+        image:
+          description: Docker image for the inference instance. This field should contain the image name and tag in the format 'name:tag', e.g., 'nginx:latest'. It defaults to Docker Hub as the image registry, but any accessible Docker image URL can be specified.
+          examples:
+          - nginx:latest
+          pattern: ^(?:(?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*)(?::[A-Za-z0-9_][A-Za-z0-9_.-]{0,127})?$
+          title: Image
+          type: string
+        ingress_opts:
+          anyOf:
+          - $ref: '#/components/schemas/IngressOptsSerializer'
+          - type: 'null'
+          default: null
+          description: Ingress options for the inference instance
+          examples:
+          - disable_response_buffering: true
+        listening_port:
+          description: Listening port for the inference instance.
+          examples:
+          - 80
+          maximum: 65535
+          minimum: 1
+          title: Listening Port
+          type: integer
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingInSerializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration for the inference instance
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 42
+            topic_name: my-log-name
+          - enabled: false
+        name:
+          description: Inference instance name.
+          examples:
+          - my-instance
+          maxLength: 30
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Name
+          type: string
+        probes:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceProbesSerializerV2'
+          - type: 'null'
+          default: null
+          description: Probes configured for all containers of the inference instance. If probes are not provided, and the image_name is from a the Model Catalog registry, the default probes will be used.
+        timeout:
+          anyOf:
+          - minimum: 0
+            type: integer
+          - type: 'null'
+          default: 120
+          description: Specifies the duration in seconds without any requests after which the containers will be downscaled to their minimum scale value as defined by `scale.min`. If set, this helps in optimizing resource usage by reducing the number of container instances during periods of inactivity. The default value when the parameter is not set is 120.
+          examples:
+          - 120
+          title: Timeout
+      required:
+      - name
+      - image
+      - listening_port
+      - containers
+      - flavor_name
+      title: InferenceInstanceInSerializerV3
+      type: object
+    InferenceInstanceContainerProbeConfigurationSerializerV2:
+      properties:
+        enabled:
+          description: Whether the probe is enabled or not.
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        probe:
+          $ref: '#/components/schemas/ContainerProbeSerializerV2'
+          description: Probe configuration (exec, http_get or tcp_socket)
+      required:
+      - enabled
+      title: InferenceInstanceContainerProbeConfigurationSerializerV2
+      type: object
+    InferenceInstanceStatusV3:
+      enum:
+      - ACTIVE
+      - DELETING
+      - DEPLOYING
+      - DISABLED
+      - FAILED
+      - PARTIALLYDEPLOYED
+      - PENDING
+      title: InferenceInstanceStatusV3
+      type: string
+    InferenceInstanceContainerProbeConfigurationOutSerializerV2:
+      properties:
+        enabled:
+          description: Whether the probe is enabled or not.
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        probe:
+          anyOf:
+          - $ref: '#/components/schemas/ContainerProbeOutSerializerV2'
+          - type: 'null'
+          description: Probe configuration (exec, http_get or tcp_socket)
+      required:
+      - enabled
+      - probe
+      title: InferenceInstanceContainerProbeConfigurationOutSerializerV2
+      type: object
+    ContainerProbeExecConfigSerializerV2:
+      properties:
+        command:
+          description: Command to be executed inside the running container.
+          examples:
+          - - ls
+            - -l
+          items:
+            type: string
+          title: Command
+          type: array
+      required:
+      - command
+      title: ContainerProbeExecConfigSerializerV2
+      type: object
+    InferenceInstanceProbesSerializerV2:
+      additionalProperties: false
+      properties:
+        liveness_probe:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceContainerProbeConfigurationSerializerV2'
+          - type: 'null'
+          description: Liveness probe configuration
+        readiness_probe:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceContainerProbeConfigurationSerializerV2'
+          - type: 'null'
+          description: Readiness probe configuration
+        startup_probe:
+          anyOf:
+          - $ref: '#/components/schemas/InferenceInstanceContainerProbeConfigurationSerializerV2'
+          - type: 'null'
+          description: Startup probe configuration
+      title: InferenceInstanceProbesSerializerV2
+      type: object
+    InferenceRegistryCredentialInSerializer:
+      properties:
+        name:
+          description: Registry credential name.
+          examples:
+          - docker-io
+          minLength: 4
+          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$
+          title: Name
+          type: string
+        password:
+          description: Registry password.
+          examples:
+          - password
+          minLength: 1
+          title: Password
+          type: string
+        registry_url:
+          description: Registry URL.
+          examples:
+          - registry.example.com
+          minLength: 1
+          title: Registry Url
+          type: string
+        username:
+          description: Registry username.
+          examples:
+          - username
+          minLength: 1
+          title: Username
+          type: string
+      required:
+      - name
+      - username
+      - password
+      - registry_url
+      title: InferenceRegistryCredentialInSerializer
+      type: object
+    CheckQuotaBeforeInferenceCreationSerializer:
+      properties:
+        containers:
+          description: List of containers for the inference instance.
+          examples:
+          - - region_id: 1
+              scale:
+                max: 3
+                min: 1
+          items:
+            $ref: '#/components/schemas/ContainerInSerializerV3'
+          minItems: 1
+          title: Containers
+          type: array
+        flavor_name:
+          description: Inference flavor name.
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          minLength: 1
+          title: Flavor Name
+          type: string
+      required:
+      - flavor_name
+      - containers
+      title: CheckQuotaBeforeInferenceCreationSerializer
+      type: object
+    ContainerScaleTriggersRateOutSerializer:
+      properties:
+        rate:
+          description: Request count per 'window' seconds for the http trigger
+          examples:
+          - 1
+          title: Rate
+          type: integer
+        window:
+          description: Time window for rate calculation in seconds
+          examples:
+          - 60
+          title: Window
+          type: integer
+      required:
+      - rate
+      - window
+      title: ContainerScaleTriggersRateOutSerializer
+      type: object
+    ContainerProbeExecConfigOutSerializerV2:
+      properties:
+        command:
+          description: Command to be executed inside the running container.
+          examples:
+          - - ls
+            - -l
+          items:
+            type: string
+          title: Command
+          type: array
+      required:
+      - command
+      title: ContainerProbeExecConfigOutSerializerV2
+      type: object
+    InferenceKind:
+      enum:
+      - AppDeployment
+      title: InferenceKind
+      type: string

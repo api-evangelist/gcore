@@ -1,0 +1,1952 @@
+openapi: 3.2.0
+info:
+  title: Cloud Security Groups API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Security Groups
+paths:
+  /v2/security_groups/{project_id}/{region_id}:
+    post:
+      operationId: SecurityGroupViewSetV2.post
+      summary: Create security group
+      description: 'Creates a new security group. Rule handling depends on the `rules` field:
+
+        - omitted: the default template (ingress + egress allow-all) is applied;
+
+        - non-empty list: exactly those rules are created (nothing is appended);
+
+        - empty list `[]`: no rules are created.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSecurityGroupSerializerV2'
+      tags:
+      - Security Groups
+  /v2/security_groups/{project_id}/{region_id}/{group_id}:
+    patch:
+      operationId: SecurityGroupInstanceViewSetV2.patch
+      summary: Update security group
+      description: 'Updates the specified security group with the provided changes.
+
+
+        **Behavior:**
+
+        - Simple fields (name, description) will be updated if provided
+
+        - Undefined fields will remain unchanged
+
+        - If no change is detected for a specific field compared to the current security group state,
+
+        that field will be skipped
+
+        - If no changes are detected at all across all fields, no task will be created and
+
+        an empty task list will be returned
+
+
+        **Important - Security Group Rules:**
+
+        - Rules must be specified completely as the desired final state
+
+        - The system compares the provided rules against the current state
+
+        - Rules that exist in the request but not in the current state will be added
+
+        - Rules that exist in the current state but not in the request will be removed
+
+        - To keep existing rules, they must be included in the request alongside any new rules'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSecurityGroupSerializerV2'
+      tags:
+      - Security Groups
+  /v2/security_groups/{project_id}/{region_id}/{group_id}/rules:
+    post:
+      operationId: SecurityGroupRulesViewSetV2.post
+      summary: Create security group rule
+      description: 'Add a new rule to an existing security group.
+
+        Returns a task ID for tracking the asynchronous operation.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSecurityGroupRuleSerializerV2'
+      tags:
+      - Security Groups
+  /v2/security_groups/{project_id}/{region_id}/{group_id}/rules/{rule_id}:
+    delete:
+      operationId: SecurityGroupRuleInstanceViewSetV2.delete
+      summary: Delete security group rule
+      description: 'Delete a specific rule from a security group.
+
+        Returns a task ID for tracking the asynchronous operation.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Group Id
+          type: string
+      - in: path
+        name: rule_id
+        required: true
+        description: Security group rule ID
+        schema:
+          description: Security group rule ID
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Rule Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Security Groups
+  /v1/securitygroups/{project_id}/{region_id}:
+    get:
+      operationId: SecurityGroupViewSet.get
+      summary: List security groups
+      description: List all security groups in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Limit of items on a single page
+        schema:
+          default: 10
+          description: Limit of items on a single page
+          examples:
+          - 10
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Optional. Filter by name. Must be specified a full name of the security group.
+        schema:
+          description: Optional. Filter by name. Must be specified a full name of the security group.
+          examples:
+          - my_security_group
+          title: Name
+          type: string
+      - in: query
+        name: offset
+        required: false
+        description: Offset in results list
+        schema:
+          default: 0
+          description: Offset in results list
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: tag_key
+        required: false
+        description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+        schema:
+          description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+          examples:
+          - - key1
+            - key2
+          items:
+            description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+            examples:
+            - my-tag
+            maxLength: 255
+            minLength: 1
+            pattern: ^[^\s=]+$
+            type: string
+          title: Tag Key
+          type: array
+      - in: query
+        name: tag_key_value
+        required: false
+        description: Optional. Filter by tag key-value pairs.
+        schema:
+          contentMediaType: application/json
+          contentSchema:
+            propertyNames:
+              description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^\s=]+$
+            type: object
+            additionalProperties:
+              description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag-value
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+              type: string
+          description: Optional. Filter by tag key-value pairs.
+          examples:
+          - key: value
+          title: Tag Key Value
+          type: string
+      responses:
+        '200':
+          description: Security groups
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupCollectionSerializer'
+      tags:
+      - Security Groups
+    post:
+      operationId: SecurityGroupViewSet.post
+      summary: Create security group
+      description: '**Deprecated** Use `/v2/security_groups//` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Security group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSecurityGroupSerializer'
+      tags:
+      - Security Groups
+  /v1/securitygroups/{project_id}/{region_id}/{group_id}:
+    get:
+      operationId: SecurityGroupInstanceViewSet.get
+      summary: Get security group
+      description: Get detailed information about a specific security group.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Security group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupSerializer'
+      tags:
+      - Security Groups
+    delete:
+      operationId: SecurityGroupInstanceViewSet.delete
+      summary: Delete security group
+      description: Delete a specific security group and all its associated rules.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Security Groups
+    patch:
+      operationId: SecurityGroupInstanceViewSet.patch
+      summary: Update security group
+      description: '**Deprecated** Use `/v2/security_groups///` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Security group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSecurityGroupSerializer'
+      tags:
+      - Security Groups
+  /v1/securitygroups/{project_id}/{region_id}/{group_id}/copy:
+    post:
+      operationId: SecurityGroupCopy.post
+      summary: Copy security group
+      description: Create a deep copy of an existing security group.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Security group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NameSerializerPydantic'
+      tags:
+      - Security Groups
+  /v1/securitygroups/{project_id}/{region_id}/{group_id}/revert:
+    post:
+      operationId: SecurityGroupRestore.post
+      summary: Revert security group
+      description: Revert a security group to its previous state.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Security group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupSerializer'
+      tags:
+      - Security Groups
+  /v1/securitygrouprules/{project_id}/{region_id}/{rule_id}:
+    put:
+      operationId: SecurityGroupRuleInstanceViewSet.put
+      summary: Update security group rule
+      description: 'Update the configuration of an existing security group rule.
+
+
+        **Deprecated** Use `/v2/security_groups////rules/`
+
+        to delete and `/v2/security_groups////rules` to create a new rule.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: rule_id
+        required: true
+        description: Rule ID
+        schema:
+          description: Rule ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Rule Id
+          type: string
+      responses:
+        '200':
+          description: Security group rule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupRuleSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSecurityGroupRuleSerializer'
+      tags:
+      - Security Groups
+    delete:
+      operationId: SecurityGroupRuleInstanceViewSet.delete
+      summary: Delete security group rule
+      description: 'Delete a specific rule from a security group.
+
+
+        **Deprecated** Use `/v2/security_groups////rules/` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: rule_id
+        required: true
+        description: Rule ID
+        schema:
+          description: Rule ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Rule Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      tags:
+      - Security Groups
+  /v1/securitygroups/{project_id}/{region_id}/{group_id}/metadata:
+    post:
+      operationId: SecurityGroupMetadataHandler.post
+      summary: Create or update security group tags
+      description: 'Add or update tags for a security group.
+
+
+        **Deprecated**: Use `PATCH /v1/securitygroups/{project_id}/{region_id}/{group_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagsSerializer'
+      tags:
+      - Security Groups
+    get:
+      operationId: SecurityGroupMetadataHandler.get
+      summary: List security group tags
+      description: 'List all tags associated with a security group.
+
+
+        **Deprecated**: Use `GET /v1/securitygroups/{project_id}/{region_id}/{group_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Key-value tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagCollectionSerializer'
+      deprecated: true
+      tags:
+      - Security Groups
+    put:
+      operationId: SecurityGroupMetadataHandler.put
+      summary: Replace security group tags
+      description: 'Replace all tags for a security group.
+
+
+        **Deprecated**: Use `PATCH /v1/securitygroups/{project_id}/{region_id}/{group_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTagsSerializer'
+      tags:
+      - Security Groups
+  /v1/securitygroups/{project_id}/{region_id}/{group_id}/metadata_item:
+    get:
+      operationId: SecurityGroupMetadataItemHandler.get
+      summary: Get security group tag
+      description: Please use `/v1/securitygroups/{project_id}/{region_id}/{group_id}` instead
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key
+        schema:
+          description: Tag key
+          examples:
+          - key1
+          title: Key
+          type: string
+      responses:
+        '200':
+          description: Security group tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagSerializer'
+      deprecated: true
+      tags:
+      - Security Groups
+    delete:
+      operationId: SecurityGroupMetadataItemHandler.delete
+      summary: Delete security group tag
+      description: Please use PATCH `/v1/securitygroups/{project_id}/{region_id}/{group_id}` instead
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key
+        schema:
+          description: Tag key
+          examples:
+          - key1
+          title: Key
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      tags:
+      - Security Groups
+  /v1/securitygroups/{project_id}/{region_id}/{group_id}/rules:
+    post:
+      operationId: SecurityRulesView.post
+      summary: Add security group rule
+      description: 'Add a new rule to an existing security group.
+
+
+        **Deprecated** Use `/v2/security_groups////rules` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: group_id
+        required: true
+        description: Security group ID
+        schema:
+          description: Security group ID
+          examples:
+          - 024a29e9-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Group Id
+          type: string
+      responses:
+        '200':
+          description: Security group rule
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityGroupRuleSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSecurityGroupRuleSerializer'
+      tags:
+      - Security Groups
+components:
+  schemas:
+    CreateSecurityGroupRuleSerializer:
+      properties:
+        description:
+          default: ''
+          description: Rule description
+          examples:
+          - Some description
+          maxLength: 255
+          title: Description
+          type: string
+        direction:
+          description: Ingress or egress, which is the direction in which the security group is applied
+          enum:
+          - egress
+          - ingress
+          examples:
+          - ingress
+          title: Direction
+          type: string
+        ethertype:
+          default: IPv4
+          description: Ether type
+          enum:
+          - IPv4
+          - IPv6
+          examples:
+          - IPv4
+          title: Ethertype
+          type: string
+        port_range_max:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: The maximum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Max
+        port_range_min:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: The minimum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Min
+        protocol:
+          anyOf:
+          - $ref: '#/components/schemas/SecurityGroupProtocolEnum'
+          - type: 'null'
+          default: null
+          description: Protocol
+          examples:
+          - tcp
+        remote_group_id:
+          description: The remote group UUID to associate with this security group
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Remote Group Id
+          type: string
+        remote_ip_prefix:
+          anyOf:
+          - format: ipvanynetwork
+            type: string
+          - type: 'null'
+          default: null
+          description: The remote IP prefix that is matched by this security group rule
+          examples:
+          - 10.0.0.0/8
+          title: Remote Ip Prefix
+      required:
+      - direction
+      title: CreateSecurityGroupRuleSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    CreateSecurityGroupSerializerV2:
+      properties:
+        description:
+          default: ''
+          description: Security group description
+          examples:
+          - My security group description
+          title: Description
+          type: string
+        name:
+          description: Security group name
+          examples:
+          - my_security_group
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        rules:
+          description: Security group rules. Omit to apply the default template (ingress + egress); send [] to create no rules.
+          items:
+            $ref: '#/components/schemas/CreateSecurityGroupRuleSerializerV2'
+          maxItems: 250
+          title: Rules
+          type: array
+        tags:
+          $ref: '#/components/schemas/CreateTagsSerializer'
+          description: Key-value tags to associate with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Both tag keys and values have a maximum length of 255 characters. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - my-tag: my-tag-value
+      required:
+      - name
+      title: CreateSecurityGroupSerializerV2
+      type: object
+    UpdateSecurityGroupRuleSerializer:
+      discriminator:
+        mapping:
+          create: '#/components/schemas/CreateSecurityGroupRuleActionSerializer'
+          delete: '#/components/schemas/DeleteSecurityGroupRuleSerializer'
+        propertyName: action
+      oneOf:
+      - $ref: '#/components/schemas/CreateSecurityGroupRuleActionSerializer'
+      - $ref: '#/components/schemas/DeleteSecurityGroupRuleSerializer'
+      title: UpdateSecurityGroupRuleSerializer
+    CreateSecurityGroupSerializer:
+      properties:
+        instances:
+          description: List of instances
+          examples:
+          - - 00000000-0000-4000-8000-000000000000
+          items:
+            type: string
+          title: Instances
+          type: array
+        security_group:
+          $ref: '#/components/schemas/SingleCreateSecurityGroupSerializer'
+          description: Security group
+      required:
+      - security_group
+      title: CreateSecurityGroupSerializer
+      type: object
+    NameSerializerPydantic:
+      properties:
+        name:
+          description: Name.
+          examples:
+          - some_name
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+      required:
+      - name
+      title: NameSerializerPydantic
+      type: object
+    CreateTagsSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: CreateTagsSerializer
+      type: object
+      additionalProperties:
+        description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag-value
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+        type: string
+    SecurityGroupRuleSerializer:
+      properties:
+        created_at:
+          description: Datetime when the rule was created
+          examples:
+          - 2019-06-18T11:56:16+0000
+          format: date-time
+          title: Created At
+          type: string
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Rule description
+          examples:
+          - Some description
+          title: Description
+        direction:
+          description: Ingress or egress, which is the direction in which the security group rule is applied
+          enum:
+          - egress
+          - ingress
+          title: Direction
+          type: string
+        ethertype:
+          description: Must be IPv4 or IPv6, and addresses represented in CIDR must match the ingress or egress rules.
+          enum:
+          - IPv4
+          - IPv6
+          examples:
+          - IPv4
+          title: Ethertype
+          type: string
+        id:
+          description: The ID of the security group rule
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Id
+          type: string
+        port_range_max:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          description: The maximum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Max
+        port_range_min:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          description: The minimum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Min
+        protocol:
+          anyOf:
+          - $ref: '#/components/schemas/SecurityGroupProtocolEnum'
+          - type: 'null'
+          description: Protocol
+          examples:
+          - tcp
+        remote_group_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The remote group UUID to associate with this security group rule
+          examples:
+          - - 00000000-0000-4000-8000-000000000000
+          title: Remote Group Id
+        remote_ip_prefix:
+          anyOf:
+          - format: ipvanynetwork
+            type: string
+          - type: 'null'
+          description: The remote IP prefix that is matched by this security group rule
+          examples:
+          - 10.0.0.0/8
+          title: Remote Ip Prefix
+        revision_number:
+          description: The revision number of the resource
+          examples:
+          - 0
+          title: Revision Number
+          type: integer
+        security_group_id:
+          description: The security group ID to associate with this security group rule
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Security Group Id
+          type: string
+        updated_at:
+          description: Datetime when the rule was last updated
+          examples:
+          - 2019-06-18T11:57:00+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - id
+      - security_group_id
+      - created_at
+      - updated_at
+      - revision_number
+      - ethertype
+      - description
+      - remote_group_id
+      - port_range_min
+      - port_range_max
+      - remote_ip_prefix
+      - protocol
+      - direction
+      title: SecurityGroupRuleSerializer
+      type: object
+    SecurityGroupProtocolEnum:
+      enum:
+      - ah
+      - any
+      - dccp
+      - egp
+      - esp
+      - gre
+      - icmp
+      - igmp
+      - ipencap
+      - ipip
+      - ipv6-encap
+      - ipv6-frag
+      - ipv6-icmp
+      - ipv6-nonxt
+      - ipv6-opts
+      - ipv6-route
+      - ospf
+      - pgm
+      - rsvp
+      - sctp
+      - tcp
+      - udp
+      - udplite
+      - vrrp
+      title: SecurityGroupProtocolEnum
+      type: string
+    UpdateTagsSerializer:
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: UpdateTagsSerializer
+      type: object
+      additionalProperties:
+        anyOf:
+        - maxLength: 255
+          minLength: 1
+          pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+          type: string
+        - type: 'null'
+        description: Tag value. Maximum 255 characters. Cannot contain tabs, newlines, empty string or start/end with whitespace. Trailing or leading whitespaces will be stripped. Set to `null` in order to delete this tag.
+        examples:
+        - my-tag-value
+    SecurityGroupSerializer:
+      properties:
+        created_at:
+          description: Datetime when the security group was created
+          examples:
+          - 2019-06-18T11:56:16+0000
+          format: date-time
+          title: Created At
+          type: string
+        description:
+          description: Security group description
+          examples:
+          - Some description
+          title: Description
+          type: string
+        id:
+          description: Security group ID
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Id
+          type: string
+        name:
+          description: Security group name
+          examples:
+          - my_security_group
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        revision_number:
+          description: The number of revisions
+          examples:
+          - 1
+          title: Revision Number
+          type: integer
+        security_group_rules:
+          description: Security group rules
+          items:
+            $ref: '#/components/schemas/SecurityGroupRuleSerializer'
+          title: Security Group Rules
+          type: array
+        tags_v2:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags V2
+          type: array
+        updated_at:
+          description: Datetime when the security group was last updated
+          examples:
+          - 2019-06-18T11:57:00+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - id
+      - name
+      - description
+      - security_group_rules
+      - created_at
+      - updated_at
+      - revision_number
+      - tags_v2
+      title: SecurityGroupSerializer
+      type: object
+    TagCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: TagCollectionSerializer
+      type: object
+    SecurityGroupCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/SecurityGroupSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: SecurityGroupCollectionSerializer
+      type: object
+    SecurityGroupProtocolEnumV2:
+      description: V2 protocol enum without 'any'. Use null for all protocols instead.
+      enum:
+      - ah
+      - dccp
+      - egp
+      - esp
+      - gre
+      - icmp
+      - igmp
+      - ipencap
+      - ipip
+      - ipv6-encap
+      - ipv6-frag
+      - ipv6-icmp
+      - ipv6-nonxt
+      - ipv6-opts
+      - ipv6-route
+      - ospf
+      - pgm
+      - rsvp
+      - sctp
+      - tcp
+      - udp
+      - udplite
+      - vrrp
+      title: SecurityGroupProtocolEnumV2
+      type: string
+    UpdateSecurityGroupSerializerV2:
+      properties:
+        description:
+          description: Security group description
+          examples:
+          - Some description
+          title: Description
+          type: string
+        name:
+          description: Name
+          examples:
+          - some_name
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        rules:
+          description: Security group rules
+          items:
+            $ref: '#/components/schemas/CreateSecurityGroupRuleSerializerV2'
+          maxItems: 250
+          title: Rules
+          type: array
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: UpdateSecurityGroupSerializerV2
+      type: object
+    DeleteSecurityGroupRuleSerializer:
+      properties:
+        action:
+          const: delete
+          description: Action for a rule
+          examples:
+          - delete
+          title: Action
+          type: string
+        security_group_rule_id:
+          description: UUID of rule to be deleted
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Security Group Rule Id
+          type: string
+      required:
+      - action
+      - security_group_rule_id
+      title: DeleteSecurityGroupRuleSerializer
+      type: object
+    CreateSecurityGroupRuleSerializerV2:
+      properties:
+        description:
+          default: ''
+          description: Rule description
+          examples:
+          - Some description
+          maxLength: 255
+          title: Description
+          type: string
+        direction:
+          description: Ingress or egress, which is the direction in which the security group is applied
+          enum:
+          - egress
+          - ingress
+          examples:
+          - ingress
+          title: Direction
+          type: string
+        ethertype:
+          default: IPv4
+          description: Ether type
+          enum:
+          - IPv4
+          - IPv6
+          examples:
+          - IPv4
+          title: Ethertype
+          type: string
+        port_range_max:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: The maximum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Max
+        port_range_min:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: The minimum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Min
+        protocol:
+          anyOf:
+          - $ref: '#/components/schemas/SecurityGroupProtocolEnumV2'
+          - type: 'null'
+          default: null
+          description: Protocol. Use null for all protocols.
+          examples:
+          - tcp
+        remote_group_id:
+          description: The remote group UUID to associate with this security group
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Remote Group Id
+          type: string
+        remote_ip_prefix:
+          anyOf:
+          - format: ipvanynetwork
+            type: string
+          - type: 'null'
+          default: null
+          description: The remote IP prefix that is matched by this security group rule
+          examples:
+          - 10.0.0.0/8
+          title: Remote Ip Prefix
+      required:
+      - direction
+      title: CreateSecurityGroupRuleSerializerV2
+      type: object
+    UpdateSecurityGroupSerializer:
+      properties:
+        changed_rules:
+          description: List of rules to create or delete
+          items:
+            $ref: '#/components/schemas/UpdateSecurityGroupRuleSerializer'
+          maxItems: 500
+          title: Changed Rules
+          type: array
+        name:
+          description: Name
+          examples:
+          - some_name
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: UpdateSecurityGroupSerializer
+      type: object
+    SingleCreateSecurityGroupSerializer:
+      properties:
+        description:
+          default: ''
+          description: Security group description
+          examples:
+          - Some description
+          title: Description
+          type: string
+        name:
+          description: Security group name
+          examples:
+          - my_security_group
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        security_group_rules:
+          description: Security group rules
+          items:
+            $ref: '#/components/schemas/CreateSecurityGroupRuleSerializer'
+          maxItems: 250
+          title: Security Group Rules
+          type: array
+        tags:
+          $ref: '#/components/schemas/CreateTagsSerializer'
+          description: Key-value tags to associate with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Both tag keys and values have a maximum length of 255 characters. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - my-tag: my-tag-value
+      required:
+      - name
+      title: SingleCreateSecurityGroupSerializer
+      type: object
+    TagSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      properties:
+        key:
+          description: Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag
+          title: Key
+          type: string
+        read_only:
+          description: If true, the tag is read-only and cannot be modified by the user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        value:
+          description: Tag value. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag-value
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      - read_only
+      title: TagSerializer
+      type: object
+    CreateSecurityGroupRuleActionSerializer:
+      properties:
+        action:
+          const: create
+          description: Action for a rule
+          examples:
+          - create
+          title: Action
+          type: string
+        description:
+          default: ''
+          description: Rule description
+          examples:
+          - Some description
+          maxLength: 255
+          title: Description
+          type: string
+        direction:
+          description: Ingress or egress, which is the direction in which the security group is applied
+          enum:
+          - egress
+          - ingress
+          examples:
+          - ingress
+          title: Direction
+          type: string
+        ethertype:
+          default: IPv4
+          description: Ether type
+          enum:
+          - IPv4
+          - IPv6
+          examples:
+          - IPv4
+          title: Ethertype
+          type: string
+        port_range_max:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: The maximum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Max
+        port_range_min:
+          anyOf:
+          - maximum: 65535
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: The minimum port number in the range that is matched by the security group rule
+          examples:
+          - 80
+          title: Port Range Min
+        protocol:
+          anyOf:
+          - $ref: '#/components/schemas/SecurityGroupProtocolEnum'
+          - type: 'null'
+          default: null
+          description: Protocol
+          examples:
+          - tcp
+        remote_group_id:
+          description: The remote group UUID to associate with this security group
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Remote Group Id
+          type: string
+        remote_ip_prefix:
+          anyOf:
+          - format: ipvanynetwork
+            type: string
+          - type: 'null'
+          default: null
+          description: The remote IP prefix that is matched by this security group rule
+          examples:
+          - 10.0.0.0/8
+          title: Remote Ip Prefix
+      required:
+      - direction
+      - action
+      title: CreateSecurityGroupRuleActionSerializer
+      type: object

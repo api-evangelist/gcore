@@ -1,0 +1,1112 @@
+openapi: 3.2.0
+info:
+  title: Cloud Routers API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Routers
+paths:
+  /v1/routers/{project_id}/{region_id}:
+    post:
+      operationId: RouterViewSet.post
+      summary: Create router
+      description: Create a new router with the specified configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRouterSerializer'
+      tags:
+      - Routers
+    get:
+      operationId: RouterViewSet.get
+      summary: List routers
+      description: List all routers in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Limit of items on a single page
+        schema:
+          default: 1000
+          description: Limit of items on a single page
+          examples:
+          - 10
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Optional. Filter routers by name
+        schema:
+          description: Optional. Filter routers by name
+          examples:
+          - router-name
+          title: Name
+          type: string
+      - in: query
+        name: offset
+        required: false
+        description: Offset in results list
+        schema:
+          default: 0
+          description: Offset in results list
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: Routers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterCollectionSerializer'
+      tags:
+      - Routers
+  /v2/routers/{project_id}/{region_id}/{router_id}:
+    patch:
+      operationId: RouterRouterViewSetV2.patch
+      summary: Update router
+      description: 'Update the configuration of an existing router.
+
+        Fields that already match the current router state are skipped. If no fields
+
+        change, no task is created and an empty task list is returned.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: router_id
+        required: true
+        description: Router ID
+        schema:
+          description: Router ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Router Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchRouterSerializerV2'
+      tags:
+      - Routers
+  /v1/routers/{project_id}/{region_id}/{router_id}:
+    get:
+      operationId: RouterRouterViewSet.get
+      summary: Get router
+      description: Get detailed information about a specific router.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: router_id
+        required: true
+        description: Router ID
+        schema:
+          description: Router ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Router Id
+          type: string
+      responses:
+        '200':
+          description: Router
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterSerializer'
+      tags:
+      - Routers
+    delete:
+      operationId: RouterRouterViewSet.delete
+      summary: Delete router
+      description: Delete a specific router and all its associated resources.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: router_id
+        required: true
+        description: Router ID
+        schema:
+          description: Router ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Router Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Routers
+    patch:
+      operationId: RouterRouterViewSet.patch
+      summary: Update router
+      description: 'Update the configuration of an existing router.
+
+
+        **Deprecated**: Use `PATCH /v2/routers/{project_id}/{region_id}/{router_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: router_id
+        required: true
+        description: Router ID
+        schema:
+          description: Router ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Router Id
+          type: string
+      responses:
+        '200':
+          description: Router
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchRouterSerializer'
+      tags:
+      - Routers
+  /v1/routers/{project_id}/{region_id}/{router_id}/attach:
+    post:
+      operationId: RouterAttachViewSet.post
+      summary: Attach subnet to router
+      description: Attach a subnet to an existing router.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: router_id
+        required: true
+        description: Router ID
+        schema:
+          description: Router ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Router Id
+          type: string
+      responses:
+        '200':
+          description: Router
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRouterInterfaceSerializer'
+      tags:
+      - Routers
+  /v1/routers/{project_id}/{region_id}/{router_id}/detach:
+    post:
+      operationId: RouterDetachViewSet.post
+      summary: Detach subnet from router
+      description: Detach a subnet from an existing router.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: router_id
+        required: true
+        description: Router ID
+        schema:
+          description: Router ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Router Id
+          type: string
+      responses:
+        '200':
+          description: Router
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubnetIdSerializer'
+      tags:
+      - Routers
+  /v1/routers/{project_id}/{region_id}/{router_id}/metrics:
+    post:
+      operationId: RouterMetricsViewSet.post
+      summary: Get router metrics
+      description: Get the network traffic of each router interface, in bits and packets per second.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: router_id
+        required: true
+        description: Router ID
+        schema:
+          description: Router ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Router Id
+          type: string
+      responses:
+        '200':
+          description: Router metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RouterMetricsCollectionSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouterMetricsRequestSerializer'
+      tags:
+      - Routers
+components:
+  schemas:
+    RouterMetricsCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RouterInterfaceMetricsSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RouterMetricsCollectionSerializer
+      type: object
+    RouterMetricsRequestSerializer:
+      properties:
+        time_interval:
+          description: Time interval
+          examples:
+          - 6
+          title: Time Interval
+          type: integer
+        time_unit:
+          $ref: '#/components/schemas/InstanceMetricsTimeUnitEnum'
+          description: Time interval unit
+          examples:
+          - hour
+      required:
+      - time_interval
+      - time_unit
+      title: RouterMetricsRequestSerializer
+      type: object
+    CreateRouterInterfaceSubnetSerializer:
+      properties:
+        subnet_id:
+          description: id of the subnet to attach to.
+          examples:
+          - 3d1e9779-b8ad-4c8e-a1a4-0a03671f07f5
+          format: uuid4
+          title: Subnet Id
+          type: string
+        type:
+          const: subnet
+          default: subnet
+          description: must be 'subnet'.
+          examples:
+          - subnet
+          title: Type
+          type: string
+      required:
+      - subnet_id
+      title: CreateRouterInterfaceSubnetSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    PatchRouterSerializerV2:
+      properties:
+        external_gateway_info:
+          anyOf:
+          - $ref: '#/components/schemas/RouterExternalManualGwSerializer'
+          - type: 'null'
+          description: New external gateway configuration. Only type 'manual' is accepted on update, so you must provide the `network_id` of the external network. Set to null to remove the external gateway.
+          examples:
+          - enable_snat: false
+            network_id: d7745dcf-b302-4795-9d61-6cc52487af48
+            type: manual
+        name:
+          description: New name of router
+          examples:
+          - my_renamed_router
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        routes:
+          description: List of custom routes.
+          examples:
+          - - destination: 10.0.3.0/24
+              nexthop: 10.0.0.13
+          items:
+            $ref: '#/components/schemas/RouteInSerializer'
+          title: Routes
+          type: array
+      title: PatchRouterSerializerV2
+      type: object
+    CreateRouterSerializer:
+      properties:
+        external_gateway_info:
+          anyOf:
+          - $ref: '#/components/schemas/RouterExternalManualGwSerializer'
+          - $ref: '#/components/schemas/RouterExternalDefaultGwSerializer'
+          - type: 'null'
+          default: null
+          description: External gateway configuration. Use type 'default' to let the platform automatically select the external network, or type 'manual' to specify a particular external network via `network_id`. If omitted, the router is created without an external gateway.
+          examples:
+          - enable_snat: true
+            type: default
+          title: External Gateway Info
+        interfaces:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CreateRouterInterfaceSubnetSerializer'
+            type: array
+          - type: 'null'
+          default: null
+          description: List of interfaces to attach to router immediately after creation.
+          examples:
+          - - subnet_id: 3ed9e2ce-f906-47fb-ba32-c25a3f63df4f
+              type: subnet
+          title: Interfaces
+        name:
+          description: name of router
+          examples:
+          - my_wonderful_router
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        routes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RouteInSerializer'
+            type: array
+          - type: 'null'
+          default: null
+          description: List of custom routes.
+          examples:
+          - - destination: 10.0.3.0/24
+              nexthop: 10.0.0.13
+          title: Routes
+      required:
+      - name
+      title: CreateRouterSerializer
+      type: object
+    RouterInterfaceMetricsSerializer:
+      properties:
+        interface_type:
+          $ref: '#/components/schemas/RouterInterfaceType'
+          description: Interface type. The public interface includes the router gateway and the floating IPs. A private interface connects the router to a subnet.
+          examples:
+          - public
+        ip_addresses:
+          description: IP addresses of the port
+          examples:
+          - - 10.0.0.1
+          items:
+            format: ipvanyaddress
+            type: string
+          title: Ip Addresses
+          type: array
+        metrics:
+          description: Traffic metrics of the interface, in order of time
+          items:
+            $ref: '#/components/schemas/RouterMetricPointSerializer'
+          title: Metrics
+          type: array
+        network_id:
+          description: Network ID
+          examples:
+          - ccd5b925-e35c-4611-a511-67ab503104c8
+          format: uuid4
+          title: Network Id
+          type: string
+        port_id:
+          description: Port ID
+          examples:
+          - 013e399e-a9f1-4b5c-9e2d-3f4a5b6c7d8e
+          format: uuid4
+          title: Port Id
+          type: string
+      required:
+      - interface_type
+      - port_id
+      - network_id
+      - ip_addresses
+      - metrics
+      title: RouterInterfaceMetricsSerializer
+      type: object
+    SubnetIdSerializer:
+      properties:
+        subnet_id:
+          description: Target IP is identified by it's subnet
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      title: SubnetIdSerializer
+      type: object
+    RouterExternalDefaultGwSerializer:
+      properties:
+        enable_snat:
+          default: true
+          description: Is SNAT enabled. Defaults to true.
+          examples:
+          - true
+          title: Enable Snat
+          type: boolean
+        type:
+          const: default
+          default: default
+          description: Gateway type. Use 'default' to let the platform automatically select the external network for the router's region. No `network_id` is needed. Only valid on create.
+          examples:
+          - default
+          title: Type
+          type: string
+      title: RouterExternalDefaultGwSerializer
+      type: object
+    RouterInterfaceType:
+      enum:
+      - private
+      - public
+      title: RouterInterfaceType
+      type: string
+    ExternalGatewaySerializer:
+      properties:
+        enable_snat:
+          description: Is SNAT enabled.
+          examples:
+          - true
+          title: Enable Snat
+          type: boolean
+        external_fixed_ips:
+          description: List of external IPs that emit SNAT-ed traffic.
+          examples:
+          - - ip_address: 172.24.4.6
+              subnet_id: b930d7f6-ceb7-40a0-8b81-a425dd994ccf
+          items:
+            $ref: '#/components/schemas/PortIpSubnetIdSerializer'
+          title: External Fixed Ips
+          type: array
+        network_id:
+          description: Id of the external network.
+          examples:
+          - ae34051f-aa6c-4c75-abf5-50dc9ac99ef3
+          format: uuid4
+          title: Network Id
+          type: string
+      required:
+      - network_id
+      - enable_snat
+      - external_fixed_ips
+      title: ExternalGatewaySerializer
+      type: object
+    RouterMetricPointSerializer:
+      properties:
+        network_bps_egress:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Network out, bits per second. Null when no data point is available.
+          examples:
+          - 816.0
+          title: Network Bps Egress
+        network_bps_ingress:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Network in, bits per second. Null when no data point is available.
+          examples:
+          - 816.0
+          title: Network Bps Ingress
+        network_pps_egress:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Network out, packets per second. Null when no data point is available.
+          examples:
+          - 0.7
+          title: Network Pps Egress
+        network_pps_ingress:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Network in, packets per second. Null when no data point is available.
+          examples:
+          - 0.7
+          title: Network Pps Ingress
+        time:
+          description: Timestamp
+          examples:
+          - '2020-07-07T12:57:00Z'
+          title: Time
+          type: string
+      required:
+      - time
+      - network_bps_ingress
+      - network_bps_egress
+      - network_pps_ingress
+      - network_pps_egress
+      title: RouterMetricPointSerializer
+      type: object
+    RouterCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/RouterSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: RouterCollectionSerializer
+      type: object
+    PortIpSubnetIdSerializer:
+      properties:
+        ip_address:
+          description: IP address
+          examples:
+          - 192.168.123.20
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        subnet_id:
+          description: ID of the subnet that allocated the IP
+          examples:
+          - 351b0dd7-ca09-431c-be53-935db3785067
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      - ip_address
+      title: PortIpSubnetIdSerializer
+      type: object
+    PortSerializer:
+      properties:
+        ip_assignments:
+          description: IP addresses assigned to this port
+          examples:
+          - - ip_address: 192.168.123.20
+              subnet_id: 351b0dd7-ca09-431c-be53-935db3785067
+            - ip_address: 192.168.120.16
+              subnet_id: 0a641ef8-62dc-4146-91e5-6ab4b464df6d
+          items:
+            $ref: '#/components/schemas/PortIpSubnetIdSerializer'
+          title: Ip Assignments
+          type: array
+        mac_address:
+          description: MAC address of the virtual port
+          examples:
+          - 00:16:3e:f2:87:16
+          title: Mac Address
+          type: string
+        network_id:
+          description: ID of the network the port is attached to
+          examples:
+          - bc688791-f1b0-44eb-97d4-07697294b1e1
+          format: uuid4
+          title: Network Id
+          type: string
+        port_id:
+          description: ID of virtual ethernet port object
+          examples:
+          - 1f0ca628-a73b-42c0-bdac-7b10d023e097
+          format: uuid4
+          title: Port Id
+          type: string
+      required:
+      - port_id
+      - mac_address
+      - ip_assignments
+      - network_id
+      title: PortSerializer
+      type: object
+    RouteInSerializer:
+      properties:
+        destination:
+          description: CIDR of destination IPv4 or IPv6 subnet.
+          examples:
+          - 10.0.3.0/24
+          format: ipvanynetwork
+          title: Destination
+          type: string
+        nexthop:
+          description: IPv4 or IPv6 address to forward traffic to if it's destination IP matches 'destination' CIDR.
+          examples:
+          - 10.0.0.13
+          format: ipvanyaddress
+          title: Nexthop
+          type: string
+      required:
+      - destination
+      - nexthop
+      title: RouteInSerializer
+      type: object
+    RouterSerializer:
+      properties:
+        created_at:
+          description: Datetime when the router was created
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity. Null when the router wasn't created via a tracked task.
+          title: Creator Task Id
+        distributed:
+          description: Whether the router is distributed or centralized.
+          examples:
+          - true
+          - false
+          title: Distributed
+          type: boolean
+        external_gateway_info:
+          anyOf:
+          - $ref: '#/components/schemas/ExternalGatewaySerializer'
+          - type: 'null'
+          description: State of this router's external gateway. Null when the router has no external gateway.
+        id:
+          description: Router ID
+          format: uuid4
+          title: Id
+          type: string
+        interfaces:
+          description: List of router interfaces.
+          items:
+            $ref: '#/components/schemas/PortSerializer'
+          title: Interfaces
+          type: array
+        name:
+          description: Router name
+          title: Name
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        routes:
+          description: List of custom routes.
+          items:
+            $ref: '#/components/schemas/RouteOutSerializer'
+          title: Routes
+          type: array
+        status:
+          description: Status of the router.
+          title: Status
+          type: string
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          title: Task Id
+        updated_at:
+          description: Datetime when the router was last updated
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - id
+      - name
+      - status
+      - distributed
+      - external_gateway_info
+      - interfaces
+      - routes
+      - created_at
+      - updated_at
+      - creator_task_id
+      - task_id
+      title: RouterSerializer
+      type: object
+    PatchRouterSerializer:
+      properties:
+        external_gateway_info:
+          anyOf:
+          - $ref: '#/components/schemas/RouterExternalManualGwSerializer'
+          - type: 'null'
+          default: null
+          description: New external gateway configuration. Only type 'manual' is accepted on update, so you must provide the `network_id` of the external network. Set to null to remove the external gateway.
+          examples:
+          - enable_snat: false
+            network_id: d7745dcf-b302-4795-9d61-6cc52487af48
+            type: manual
+        name:
+          anyOf:
+          - pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+            type: string
+          - type: 'null'
+          default: null
+          description: New name of router
+          examples:
+          - my_renamed_router
+          title: Name
+        routes:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/RouteInSerializer'
+            type: array
+          - type: 'null'
+          default: null
+          description: List of custom routes.
+          examples:
+          - - destination: 10.0.3.0/24
+              nexthop: 10.0.0.13
+          title: Routes
+      title: PatchRouterSerializer
+      type: object
+    AddRouterInterfaceSerializer:
+      properties:
+        ip_address:
+          description: IP address to assign for router's interface, if not specified, address will be selected automatically
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        subnet_id:
+          description: Subnet ID on which router interface will be created
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      title: AddRouterInterfaceSerializer
+      type: object
+    InstanceMetricsTimeUnitEnum:
+      enum:
+      - day
+      - hour
+      title: InstanceMetricsTimeUnitEnum
+      type: string
+    RouteOutSerializer:
+      properties:
+        destination:
+          description: CIDR of destination IPv4 or IPv6 subnet.
+          examples:
+          - 10.0.3.0/24
+          format: ipvanynetwork
+          title: Destination
+          type: string
+        nexthop:
+          description: IPv4 or IPv6 address to forward traffic to if it's destination IP matches 'destination' CIDR.
+          examples:
+          - 10.0.0.13
+          format: ipvanyaddress
+          title: Nexthop
+          type: string
+      required:
+      - destination
+      - nexthop
+      title: RouteOutSerializer
+      type: object
+    RouterExternalManualGwSerializer:
+      properties:
+        enable_snat:
+          default: true
+          description: Is SNAT enabled. Defaults to true.
+          examples:
+          - true
+          title: Enable Snat
+          type: boolean
+        network_id:
+          description: ID of the external network to connect the router to.
+          examples:
+          - 3d1e9779-b8ad-4c8e-a1a4-0a03671f07f7
+          format: uuid4
+          title: Network Id
+          type: string
+        type:
+          const: manual
+          default: manual
+          description: Gateway type. Use 'manual' to explicitly specify which external network the router connects to via `network_id`. Required for PATCH/update operations.
+          examples:
+          - manual
+          title: Type
+          type: string
+      required:
+      - network_id
+      title: RouterExternalManualGwSerializer
+      type: object

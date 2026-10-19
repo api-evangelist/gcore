@@ -1,0 +1,3903 @@
+openapi: 3.2.0
+info:
+  title: Cloud Bare Metal API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Bare Metal
+paths:
+  /v2/baremetal/{project_id}/{region_id}/{server_id}/action:
+    post:
+      operationId: BMInstancesActionHandler.post
+      summary: Execute bare metal server action
+      description: 'The action can be one of: start, stop, reboot or reboot_hard.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: server_id
+        required: true
+        description: Server ID
+        schema:
+          description: Server ID
+          examples:
+          - 024a29e-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Server Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BareMetalActionSerializer'
+      tags:
+      - Bare Metal
+  /v3/baremetal/{project_id}/{region_id}/{server_id}/get_console:
+    get:
+      operationId: BMInstanceConsoleHandler.get
+      summary: Get bare metal server console URL
+      description: Returns a URL to access the remote console for a bare metal server.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: server_id
+        required: true
+        description: Server ID
+        schema:
+          description: Server ID
+          examples:
+          - 024a29e-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Server Id
+          type: string
+      - in: query
+        name: console_type
+        required: false
+        description: Console type you expect the server to give. The server hardware sets the available types. A value that the hardware does not give causes an error. Omit this parameter to accept the type of the server.
+        schema:
+          $ref: '#/components/schemas/BareMetalConsoleType'
+          description: Console type you expect the server to give. The server hardware sets the available types. A value that the hardware does not give causes an error. Omit this parameter to accept the type of the server.
+          examples:
+          - vnc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemoteConsoleSerializer'
+      tags:
+      - Bare Metal
+  /v1/bmcapacity/{project_id}/{region_id}:
+    get:
+      operationId: BmCapacityHandler.get
+      summary: Get bare metal capacity
+      description: 'Get the number of available bare metal nodes per flavor
+
+        in the specified project and region.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BmCapacityResponse'
+      tags:
+      - Bare Metal
+  /v2/bmcapacity/{region_id}:
+    get:
+      operationId: ClientBmCapacityHandler.get
+      summary: Get bare metal capacity from default project
+      description: 'Get the number of available bare metal nodes without
+
+        client''s reservations in the default project.'
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BmCapacityResponse'
+      tags:
+      - Bare Metal
+  /v1/bmflavors/{project_id}/{region_id}:
+    get:
+      operationId: BmFlavorsViewSet.get
+      summary: List bare metal flavors
+      description: 'List all available bare metal flavors in the specified project and region.
+
+        When include_prices is specified, the list includes pricing information.
+
+        A client in trial mode gets all price values as 0. If you get Pricing Error contact the support.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: query
+        name: disabled
+        required: false
+        description: Flag for filtering disabled flavors in the region
+        schema:
+          default: true
+          description: Flag for filtering disabled flavors in the region
+          title: Disabled
+          type: boolean
+      - in: query
+        name: exclude_linux
+        required: false
+        description: Set to true to exclude flavors dedicated to linux images
+        schema:
+          default: false
+          description: Set to true to exclude flavors dedicated to linux images
+          title: Exclude Linux
+          type: boolean
+      - in: query
+        name: exclude_windows
+        required: false
+        description: Set to true to exclude flavors dedicated to windows images
+        schema:
+          default: false
+          description: Set to true to exclude flavors dedicated to windows images
+          title: Exclude Windows
+          type: boolean
+      - in: query
+        name: include_capacity
+        required: false
+        description: Set to true if the response should include flavor capacity
+        schema:
+          default: false
+          description: Set to true if the response should include flavor capacity
+          title: Include Capacity
+          type: boolean
+      - in: query
+        name: include_prices
+        required: false
+        description: Set to true if the response should include flavor prices
+        schema:
+          default: false
+          deprecated: true
+          description: Set to true if the response should include flavor prices
+          title: Include Prices
+          type: boolean
+      - in: query
+        name: include_reservation_stock
+        required: false
+        description: Optional. Set to true if flavor listing should include count of reserved resources in stock.
+        schema:
+          default: false
+          description: Optional. Set to true if flavor listing should include count of reserved resources in stock.
+          title: Include Reservation Stock
+          type: boolean
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BareMetalFlavorExtendedCollectionSerializer'
+      tags:
+      - Bare Metal
+  /v1/bmflavors/{region_id}:
+    get:
+      operationId: DefaultBmFlavorsViewSet.get
+      summary: List bare metal flavors from default project
+      description: 'List all available bare metal flavors in the default project.
+
+        When include_prices is specified, the list includes pricing information.
+
+        A client in trial mode gets all price values as 0. If you get Pricing Error contact the support.'
+      parameters:
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+      - in: query
+        name: client_id
+        required: false
+        description: Client identifier. Must be used for users w/o client_id in jwt
+        schema:
+          description: Client identifier. Must be used for users w/o client_id in jwt
+          title: Client Id
+          type: integer
+      - in: query
+        name: disabled
+        required: false
+        description: Flag for filtering disabled flavors in the region
+        schema:
+          default: true
+          description: Flag for filtering disabled flavors in the region
+          title: Disabled
+          type: boolean
+      - in: query
+        name: exclude_linux
+        required: false
+        description: Set to true to exclude flavors dedicated to linux images
+        schema:
+          default: false
+          description: Set to true to exclude flavors dedicated to linux images
+          title: Exclude Linux
+          type: boolean
+      - in: query
+        name: exclude_windows
+        required: false
+        description: Set to true to exclude flavors dedicated to windows images
+        schema:
+          default: false
+          description: Set to true to exclude flavors dedicated to windows images
+          title: Exclude Windows
+          type: boolean
+      - in: query
+        name: include_capacity
+        required: false
+        description: Set to true if the response should include flavor capacity
+        schema:
+          default: false
+          description: Set to true if the response should include flavor capacity
+          title: Include Capacity
+          type: boolean
+      - in: query
+        name: include_prices
+        required: false
+        description: Set to true if the response should include flavor prices
+        schema:
+          default: false
+          deprecated: true
+          description: Set to true if the response should include flavor prices
+          title: Include Prices
+          type: boolean
+      - in: query
+        name: include_reservation_stock
+        required: false
+        description: Optional. Set to true if flavor listing should include count of reserved resources in stock.
+        schema:
+          default: false
+          description: Optional. Set to true if flavor listing should include count of reserved resources in stock.
+          title: Include Reservation Stock
+          type: boolean
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BareMetalFlavorExtendedCollectionSerializer'
+      tags:
+      - Bare Metal
+  /v1/bminstances/{project_id}/{region_id}:
+    post:
+      operationId: BmInstanceCreateSet.post
+      summary: Create bare metal server
+      description: 'Create a new bare metal server with the specified configuration.
+
+
+        How to get access:
+
+
+        For Linux,
+
+
+        - Use the `user_data` field to provide a
+
+        cloud-init script
+
+        in base64 to apply configurations to the instance.
+
+        - Specify the `username` and `password` to create a new user.
+
+        - When only `password` is provided, it is set as the password for the default user of the image.
+
+        - The `user_data` is ignored when the `password` is specified.
+
+
+        For Windows,
+
+
+        - Use the `user_data` field to provide a
+
+        cloudbase-init script
+
+        in base64 to create new users on Windows.
+
+        - Use the `password` field to set the password for the ''Admin'' user on Windows.
+
+        - The password of the Admin user cannot be updated via `user_data`.
+
+        - The `username` cannot be specified in the request.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBareMetalServerSerializer'
+      tags:
+      - Bare Metal
+    get:
+      operationId: BmInstanceCreateSet.get
+      summary: List bare metal servers
+      description: 'List all bare metal servers in the specified project and region.
+
+        Results can be filtered by various parameters like name, status, and IP address.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: changes-before
+        required: false
+        description: Filters the instances by a date and time stamp when the instances last changed.
+        schema:
+          description: Filters the instances by a date and time stamp when the instances last changed.
+          examples:
+          - '2025-10-01T12:00:00Z'
+          format: date-time
+          title: Changes-Before
+          type: string
+      - in: query
+        name: changes-since
+        required: false
+        description: Filters the instances by a date and time stamp when the instances last changed status.
+        schema:
+          description: Filters the instances by a date and time stamp when the instances last changed status.
+          examples:
+          - '2025-10-01T12:00:00Z'
+          format: date-time
+          title: Changes-Since
+          type: string
+      - in: query
+        name: flavor_id
+        required: false
+        description: Filter out instances by flavor_id. Flavor id must match exactly.
+        schema:
+          description: Filter out instances by flavor_id. Flavor id must match exactly.
+          examples:
+          - bm2-hf-small
+          title: Flavor Id
+          type: string
+      - in: query
+        name: flavor_prefix
+        required: false
+        description: Filter out instances by flavor_prefix.
+        schema:
+          description: Filter out instances by flavor_prefix.
+          examples:
+          - bm2-
+          - bm2-hf
+          title: Flavor Prefix
+          type: string
+      - in: query
+        name: include_k8s
+        required: false
+        description: Include managed k8s worker nodes
+        schema:
+          default: true
+          description: Include managed k8s worker nodes
+          title: Include K8S
+          type: boolean
+      - in: query
+        name: ip
+        required: false
+        description: 'An IPv4 address to filter results by. Note: partial matches are allowed. For example, searching for 192.168.0.1 will return 192.168.0.1, 192.168.0.10, 192.168.0.110, and so on.'
+        schema:
+          description: 'An IPv4 address to filter results by. Note: partial matches are allowed. For example, searching for 192.168.0.1 will return 192.168.0.1, 192.168.0.10, 192.168.0.110, and so on.'
+          examples:
+          - 192.168.0.1
+          title: Ip
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Filter instances by name. You can provide a full or partial name, instances with matching names will be returned. For example, entering 'test' will return all instances that contain 'test' in their name.
+        schema:
+          description: Filter instances by name. You can provide a full or partial name, instances with matching names will be returned. For example, entering 'test' will return all instances that contain 'test' in their name.
+          title: Name
+          type: string
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: only_isolated
+        required: false
+        description: Include only isolated instances
+        schema:
+          default: false
+          description: Include only isolated instances
+          title: Only Isolated
+          type: boolean
+      - in: query
+        name: only_with_fixed_external_ip
+        required: false
+        description: Return bare metals only with external fixed IP addresses.
+        schema:
+          description: Return bare metals only with external fixed IP addresses.
+          examples:
+          - true
+          title: Only With Fixed External Ip
+          type: boolean
+      - in: query
+        name: order_by
+        required: false
+        description: Order by field and direction.
+        schema:
+          $ref: '#/components/schemas/BareMetalOrderByChoices'
+          default: created.desc
+          description: Order by field and direction.
+          examples:
+          - name.asc
+      - in: query
+        name: profile_name
+        required: false
+        description: Filter result by ddos protection profile name. Effective only with with_ddos set to true.
+        schema:
+          description: Filter result by ddos protection profile name. Effective only with with_ddos set to true.
+          examples:
+          - profile_name
+          title: Profile Name
+          type: string
+      - in: query
+        name: protection_status
+        required: false
+        description: Filter result by DDoS protection_status. Effective only with with_ddos set to true. (Active, Queued or Error)
+        schema:
+          description: Filter result by DDoS protection_status. Effective only with with_ddos set to true. (Active, Queued or Error)
+          enum:
+          - Active
+          - Queued
+          - Error
+          examples:
+          - Active
+          title: Protection Status
+          type: string
+      - in: query
+        name: status
+        required: false
+        description: Filters instances by a server status, as a string.
+        schema:
+          $ref: '#/components/schemas/BareMetalStatusQueryChoices'
+          description: Filters instances by a server status, as a string.
+          examples:
+          - ACTIVE
+      - in: query
+        name: tag_key_value
+        required: false
+        description: Optional. Filter by tag key-value pairs.
+        schema:
+          contentMediaType: application/json
+          contentSchema:
+            propertyNames:
+              description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^\s=]+$
+            type: object
+            additionalProperties:
+              description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag-value
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+              type: string
+          description: Optional. Filter by tag key-value pairs.
+          examples:
+          - key: value
+          title: Tag Key Value
+          type: string
+      - in: query
+        name: tag_value
+        required: false
+        description: Optional. Filter by tag values. ?tag_value=value1&tag_value=value2
+        schema:
+          description: Optional. Filter by tag values. ?tag_value=value1&tag_value=value2
+          examples:
+          - - value1
+            - value2
+          items:
+            description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+            examples:
+            - my-tag-value
+            maxLength: 255
+            minLength: 1
+            pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+            type: string
+          title: Tag Value
+          type: array
+      - in: query
+        name: type_ddos_profile
+        required: false
+        description: Return bare metals either only with advanced or only basic DDoS protection. Effective only with with_ddos set to true. (advanced or basic)
+        schema:
+          description: Return bare metals either only with advanced or only basic DDoS protection. Effective only with with_ddos set to true. (advanced or basic)
+          enum:
+          - basic
+          - advanced
+          examples:
+          - advanced
+          title: Type Ddos Profile
+          type: string
+      - in: query
+        name: uuid
+        required: false
+        description: Filter the server list result by the UUID of the server. Allowed UUID part
+        schema:
+          description: Filter the server list result by the UUID of the server. Allowed UUID part
+          examples:
+          - b5b4d65d-945f-4b98-ab6f-332319c724ef
+          maxLength: 36
+          title: Uuid
+          type: string
+      - in: query
+        name: with_ddos
+        required: false
+        description: Include DDoS profile information for bare-metal servers in the response when set to `true`. Otherwise, the `ddos_profile` field in the response is `null` by default.
+        schema:
+          default: false
+          description: Include DDoS profile information for bare-metal servers in the response when set to `true`. Otherwise, the `ddos_profile` field in the response is `null` by default.
+          examples:
+          - true
+          title: With Ddos
+          type: boolean
+      - in: query
+        name: with_interfaces_name
+        required: false
+        description: Include `interface_name` in the addresses
+        schema:
+          default: false
+          description: Include `interface_name` in the addresses
+          examples:
+          - true
+          title: With Interfaces Name
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BareMetalServerCollectionSerializer'
+      tags:
+      - Bare Metal
+  /v1/bminstances/{project_id}/{region_id}/{server_id}:
+    get:
+      operationId: BMInstancesViewSet.get
+      summary: Get bare metal server
+      description: 'Retrieve detailed information about a specific baremetal instance.
+
+        This endpoint always returns `ddos_profile` (if present) and therefore always requires `DDOS_READ`.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: server_id
+        required: true
+        description: Server ID
+        schema:
+          description: Server ID
+          examples:
+          - 024a29e-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Server Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BareMetalServerSerializer'
+      tags:
+      - Bare Metal
+    patch:
+      operationId: BMInstancesViewSet.patch
+      summary: Update bare metal server
+      description: Rename bare metal server or update tags
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: server_id
+        required: true
+        description: Server ID
+        schema:
+          description: Server ID
+          examples:
+          - 024a29e-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Server Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BareMetalServerSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBareMetalServerSerializer'
+      tags:
+      - Bare Metal
+    delete:
+      operationId: BMInstancesViewSet.delete
+      summary: Delete bare metal server
+      description: Delete a bare metal server and it's associated resources
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: server_id
+        required: true
+        description: Server ID
+        schema:
+          description: Server ID
+          examples:
+          - 024a29e-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Server Id
+          type: string
+      - in: query
+        name: all_floating_ips
+        required: false
+        description: True if it is required to delete floating IPs assigned to the instance. Can't be used with `floating_ip_ids`.
+        schema:
+          default: false
+          description: True if it is required to delete floating IPs assigned to the instance. Can't be used with `floating_ip_ids`.
+          title: All Floating Ips
+          type: boolean
+      - in: query
+        name: all_reserved_fixed_ips
+        required: false
+        description: True if it is required to delete reserved fixed IPs assigned to the instance. Can't be used with `reserved_fixed_ip_ids`.
+        schema:
+          default: false
+          description: True if it is required to delete reserved fixed IPs assigned to the instance. Can't be used with `reserved_fixed_ip_ids`.
+          title: All Reserved Fixed Ips
+          type: boolean
+      - in: query
+        name: floating_ip_ids
+        required: false
+        description: Comma separated list of floating ids that should be deleted. Can't be used with `all_floating_ips`.
+        schema:
+          description: Comma separated list of floating ids that should be deleted. Can't be used with `all_floating_ips`.
+          title: Floating Ip Ids
+          type: string
+      - in: query
+        name: reserved_fixed_ip_ids
+        required: false
+        description: Comma separated list of port IDs to be deleted with the instance
+        schema:
+          description: Comma separated list of port IDs to be deleted with the instance
+          title: Reserved Fixed Ip Ids
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Bare Metal
+  /v1/bminstances/{project_id}/{region_id}/{server_id}/rebuild:
+    post:
+      operationId: BmInstanceRebuildHandler.post
+      summary: Rebuild bare metal server
+      description: Rebuild a bare metal server with a new image while preserving its configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: server_id
+        required: true
+        description: Server ID
+        schema:
+          description: Server ID
+          examples:
+          - 024a29e-b4b7-4c91-9a46-505be123d9f8
+          format: uuid4
+          title: Server Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RebuildBaremetalSerializer'
+      tags:
+      - Bare Metal
+  /v1/bminstances/{project_id}/{region_id}/available_flavors:
+    post:
+      operationId: BMInstanceAvailableFlavorsHandler.post
+      summary: List flavors matching image requirements
+      description: List all flavors that are suitable for creating a bare metal server with the specified image.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: include_prices
+        required: false
+        description: Set to true if flavor listing should include flavor prices.
+        schema:
+          description: Set to true if flavor listing should include flavor prices.
+          title: Include Prices
+          type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BareMetalFlavorExtendedCollectionSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AvailableBaremetalFlavorsBodySerializer'
+      tags:
+      - Bare Metal
+  /v1/bminstances/{project_id}/{region_id}/check_limits:
+    post:
+      operationId: BMInstanceCheckLimitsHandler.post
+      summary: Check bare metal quota
+      description: 'Check if the regional quota is exceeded for bare metal server creation.
+
+        If exceeded, calculate additional quotas needed.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionRequestedQuotasSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckQuotaBeforeBMCreationSerializer'
+      tags:
+      - Bare Metal
+components:
+  schemas:
+    CreateBareMetalInterfaceSerializers:
+      discriminator:
+        mapping:
+          any_subnet: '#/components/schemas/CreateBareMetalAnySubnetInterfaceSerializer'
+          external: '#/components/schemas/CreateBareMetalExternalInterfaceSerializer'
+          reserved_fixed_ip: '#/components/schemas/CreateBareMetalReservedFixedIpInterfaceSerializer'
+          subnet: '#/components/schemas/CreateBareMetalSubnetInterfaceSerializer'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/CreateBareMetalExternalInterfaceSerializer'
+      - $ref: '#/components/schemas/CreateBareMetalSubnetInterfaceSerializer'
+      - $ref: '#/components/schemas/CreateBareMetalAnySubnetInterfaceSerializer'
+      - $ref: '#/components/schemas/CreateBareMetalReservedFixedIpInterfaceSerializer'
+      title: CreateBareMetalInterfaceSerializers
+    BmCapacityResponse:
+      properties:
+        capacity:
+          additionalProperties:
+            type: integer
+          description: Bare metal capacity. Keys are flavor names, values are available node counts.
+          title: Capacity
+          type: object
+        reserved_capacity:
+          additionalProperties:
+            type: integer
+          description: Reserved capacity. Keys are flavor names, values are reserved node counts.
+          title: Reserved Capacity
+          type: object
+      required:
+      - capacity
+      - reserved_capacity
+      title: BmCapacityResponse
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    BareMetalFlavorExtendedSerializer:
+      description: Bare metal flavor schema
+      properties:
+        architecture:
+          description: Flavor architecture type
+          examples:
+          - x86_64
+          title: Architecture
+          type: string
+        capacity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of available instances of given configuration
+          examples:
+          - 1
+          title: Capacity
+        currency_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Currency code. Shown if the include_prices query parameter if set to true
+          examples:
+          - USD
+          title: Currency Code
+        disabled:
+          description: Disabled flavor flag
+          examples:
+          - false
+          title: Disabled
+          type: boolean
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        hardware_description:
+          additionalProperties:
+            type: string
+          default: {}
+          description: Additional hardware description
+          title: Hardware Description
+          type: object
+        os_type:
+          description: Flavor operating system
+          examples:
+          - linux
+          title: Os Type
+          type: string
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Price per hour. Shown if the include_prices query parameter if set to true
+          examples:
+          - 1
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Price per month. Shown if the include_prices query parameter if set to true
+          examples:
+          - 720
+          title: Price Per Month
+        price_status:
+          anyOf:
+          - $ref: '#/components/schemas/PriceDisplayStatus'
+          - type: 'null'
+          default: null
+          description: Price status for the UI
+          examples:
+          - show
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        reserved_capacity:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Number of available instances of given flavor from reservations
+          examples:
+          - 5
+          title: Reserved Capacity
+        resource_class:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Flavor resource class for mapping to hardware capacity
+          examples:
+          - bm1-ai-small
+          title: Resource Class
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      - disabled
+      - os_type
+      - architecture
+      - resource_class
+      title: Bare metal flavor schema
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    BareMetalServerCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/BareMetalServerSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: BareMetalServerCollectionSerializer
+      type: object
+    GetClientProfileSerializer:
+      properties:
+        fields:
+          description: List of configured field values for the protection profile
+          items:
+            $ref: '#/components/schemas/ClientProfileFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection profile
+          examples:
+          - 0
+          title: Id
+          type: integer
+        options:
+          $ref: '#/components/schemas/ProfileOptionsSerializer'
+          description: Configuration options controlling profile activation and BGP routing
+          examples:
+          - active: true
+            bgp: true
+        profile_template:
+          anyOf:
+          - $ref: '#/components/schemas/ClientProfileTemplateSerializer'
+          - type: 'null'
+          description: Complete template configuration data used for this profile
+        profile_template_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description of the protection template used for this profile
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Profile Template Description
+        protocols:
+          description: List of network protocols and ports configured for protection
+          examples:
+          - - port: '80'
+              protocols:
+              - TCP
+              - HTTP
+            - port: '53'
+              protocols:
+              - UDP
+          items:
+            $ref: '#/components/schemas/ProtocolsOnPortSerializer'
+          title: Protocols
+          type: array
+        site:
+          description: Geographic site identifier where the protection is deployed
+          examples:
+          - ED
+          maxLength: 50
+          title: Site
+          type: string
+        status:
+          $ref: '#/components/schemas/DdosProfileStatusSerializer'
+          description: Current operational status and any error information for the profile
+          examples:
+          - error_description: ''
+            status: Updated
+      required:
+      - id
+      - options
+      - site
+      - protocols
+      - status
+      - profile_template_description
+      - profile_template
+      - fields
+      title: GetClientProfileSerializer
+      type: object
+    CreateBareMetalSubnetInterfaceSerializer:
+      description: 'The instance will get an IP address from the selected network.
+
+        If you choose to add a floating IP, the instance will be reachable from the internet.
+
+        Otherwise, it will only have a private IP within the network.'
+      examples:
+      - floating_ip:
+          existing_floating_id: 57be69f6-6f6a-4f03-a4ad-8eb86c69ec0a
+          source: existing
+        network_id: 59905c8e-2619-420a-b046-536096473370
+        subnet_id: e3c6ee77-48cb-416b-b204-11b492cc776e3
+        type: subnet
+      properties:
+        floating_ip:
+          description: Allows the instance to have a public IP that can be reached from the internet.
+          discriminator:
+            mapping:
+              existing: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+              new: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+            propertyName: source
+          oneOf:
+          - $ref: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+          - $ref: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+          title: Floating Ip
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        network_id:
+          description: The network where the instance will be connected.
+          format: uuid4
+          title: Network Id
+          type: string
+        port_group:
+          default: 0
+          description: Specifies the trunk group to which this interface belongs. Applicable only for bare metal servers. Each unique port group is mapped to a separate trunk port. Use this to control how interfaces are grouped across trunks.
+          maximum: 3
+          minimum: 0
+          title: Port Group
+          type: integer
+        subnet_id:
+          description: The instance will get an IP address from this subnet.
+          format: uuid4
+          title: Subnet Id
+          type: string
+        type:
+          const: subnet
+          description: The instance will get an IP address from the selected network. If you choose to add a floating IP, the instance will be reachable from the internet. Otherwise, it will only have a private IP within the network.
+          title: Type
+          type: string
+      required:
+      - type
+      - network_id
+      - subnet_id
+      title: CreateBareMetalSubnetInterfaceSerializer
+      type: object
+    ClientProfileTemplateFieldSerializer:
+      properties:
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      title: ClientProfileTemplateFieldSerializer
+      type: object
+    RemoteConsoleData:
+      properties:
+        protocol:
+          title: Protocol
+          type: string
+        type:
+          title: Type
+          type: string
+        url:
+          format: uri
+          minLength: 1
+          title: Url
+          type: string
+      required:
+      - protocol
+      - type
+      - url
+      title: RemoteConsoleData
+      type: object
+    NewInterfaceAnySubnetFipSerializerPydantic:
+      examples:
+      - floating_ip:
+          existing_floating_id: 57be69f6-6f6a-4f03-a4ad-8eb86c69ec0a
+          source: existing
+        interface_name: my-any-subnet-interface
+        ip_address: 192.168.6.9
+        network_id: 59905c8e-2619-420a-b046-536096473370
+        type: any_subnet
+      properties:
+        floating_ip:
+          description: Allows the instance to have a public IP that can be reached from the internet.
+          discriminator:
+            mapping:
+              existing: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+              new: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+            propertyName: source
+          oneOf:
+          - $ref: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+          - $ref: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+          title: Floating Ip
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        ip_address:
+          description: You can specify a specific IP address from your subnet.
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        ip_family:
+          anyOf:
+          - $ref: '#/components/schemas/InterfaceIPFamily'
+          - type: 'null'
+          default: ipv4
+          description: Specify `ipv4`, `ipv6`, or `dual` to enable both.
+        network_id:
+          description: The network where the instance will be connected.
+          format: uuid4
+          title: Network Id
+          type: string
+        security_groups:
+          description: Security group UUIDs applied to this interface. If omitted (or empty), the top-level `security_groups` value applies; if both are omitted, the project's default security group is applied.
+          items:
+            $ref: '#/components/schemas/MandatoryIdSerializerPydantic'
+          title: Security Groups
+          type: array
+        type:
+          const: any_subnet
+          description: Instance will be attached to a subnet with the largest count of free IPs.
+          title: Type
+          type: string
+      required:
+      - type
+      - network_id
+      title: NewInterfaceAnySubnetFipSerializerPydantic
+      type: object
+    CreateTagsSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: CreateTagsSerializer
+      type: object
+      additionalProperties:
+        description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag-value
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+        type: string
+    RegionRequestedQuotasSerializer:
+      properties:
+        baremetal_basic_count_limit:
+          description: Basic bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Basic Count Limit
+          type: integer
+        baremetal_basic_count_requested:
+          description: Basic bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Basic Count Requested
+          type: integer
+        baremetal_basic_count_usage:
+          description: Basic bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Basic Count Usage
+          type: integer
+        baremetal_gpu_a100_count_limit:
+          description: Bare metal A100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu A100 Count Limit
+          type: integer
+        baremetal_gpu_a100_count_requested:
+          description: Bare metal A100 GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu A100 Count Requested
+          type: integer
+        baremetal_gpu_a100_count_usage:
+          description: Bare metal A100 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu A100 Count Usage
+          type: integer
+        baremetal_gpu_h100_count_limit:
+          description: Bare metal H100 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H100 Count Limit
+          type: integer
+        baremetal_gpu_h100_count_requested:
+          description: Bare metal H100 GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu H100 Count Requested
+          type: integer
+        baremetal_gpu_h100_count_usage:
+          description: Bare metal H100 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu H100 Count Usage
+          type: integer
+        baremetal_gpu_h200_count_limit:
+          description: Bare metal H200 GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu H200 Count Limit
+          type: integer
+        baremetal_gpu_h200_count_requested:
+          description: Bare metal H200 GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu H200 Count Requested
+          type: integer
+        baremetal_gpu_h200_count_usage:
+          description: Bare metal H200 GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu H200 Count Usage
+          type: integer
+        baremetal_gpu_l40s_count_limit:
+          description: Bare metal L40S GPU server count limit
+          examples:
+          - 0
+          title: Baremetal Gpu L40S Count Limit
+          type: integer
+        baremetal_gpu_l40s_count_requested:
+          description: Bare metal L40S GPU server count requested
+          examples:
+          - 1
+          title: Baremetal Gpu L40S Count Requested
+          type: integer
+        baremetal_gpu_l40s_count_usage:
+          description: Bare metal L40S GPU server count usage
+          examples:
+          - 0
+          title: Baremetal Gpu L40S Count Usage
+          type: integer
+        baremetal_hf_count_limit:
+          description: High-frequency bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Hf Count Limit
+          type: integer
+        baremetal_hf_count_requested:
+          description: High-frequency bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Hf Count Requested
+          type: integer
+        baremetal_hf_count_usage:
+          description: High-frequency bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Hf Count Usage
+          type: integer
+        baremetal_infrastructure_count_limit:
+          description: Infrastructure bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Infrastructure Count Limit
+          type: integer
+        baremetal_infrastructure_count_requested:
+          description: Infrastructure bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Infrastructure Count Requested
+          type: integer
+        baremetal_infrastructure_count_usage:
+          description: Infrastructure bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Infrastructure Count Usage
+          type: integer
+        baremetal_network_count_limit:
+          description: Bare metal Network Count limit
+          examples:
+          - 0
+          title: Baremetal Network Count Limit
+          type: integer
+        baremetal_network_count_requested:
+          description: Bare metal Network Count requested
+          examples:
+          - 1
+          title: Baremetal Network Count Requested
+          type: integer
+        baremetal_network_count_usage:
+          description: Bare metal Network Count usage
+          examples:
+          - 0
+          title: Baremetal Network Count Usage
+          type: integer
+        baremetal_storage_count_limit:
+          description: Storage bare metal servers count limit
+          examples:
+          - 0
+          title: Baremetal Storage Count Limit
+          type: integer
+        baremetal_storage_count_requested:
+          description: Storage bare metal servers count requested
+          examples:
+          - 1
+          title: Baremetal Storage Count Requested
+          type: integer
+        baremetal_storage_count_usage:
+          description: Storage bare metal servers count usage
+          examples:
+          - 0
+          title: Baremetal Storage Count Usage
+          type: integer
+        caas_container_count_limit:
+          description: Containers count limit
+          examples:
+          - 0
+          title: Caas Container Count Limit
+          type: integer
+        caas_container_count_requested:
+          description: Containers count requested
+          examples:
+          - 1
+          title: Caas Container Count Requested
+          type: integer
+        caas_container_count_usage:
+          description: Containers count usage
+          examples:
+          - 0
+          title: Caas Container Count Usage
+          type: integer
+        caas_cpu_count_limit:
+          description: mCPU count for containers limit
+          examples:
+          - 0
+          title: Caas Cpu Count Limit
+          type: integer
+        caas_cpu_count_requested:
+          description: mCPU count for containers requested
+          examples:
+          - 1
+          title: Caas Cpu Count Requested
+          type: integer
+        caas_cpu_count_usage:
+          description: mCPU count for containers usage
+          examples:
+          - 0
+          title: Caas Cpu Count Usage
+          type: integer
+        caas_gpu_count_limit:
+          description: Containers gpu count limit
+          examples:
+          - 0
+          title: Caas Gpu Count Limit
+          type: integer
+        caas_gpu_count_requested:
+          description: Containers gpu count requested
+          examples:
+          - 1
+          title: Caas Gpu Count Requested
+          type: integer
+        caas_gpu_count_usage:
+          description: Containers gpu count usage
+          examples:
+          - 0
+          title: Caas Gpu Count Usage
+          type: integer
+        caas_ram_size_limit:
+          description: MiB memory count for containers limit
+          examples:
+          - 0
+          title: Caas Ram Size Limit
+          type: integer
+        caas_ram_size_requested:
+          description: MiB memory count for containers requested
+          examples:
+          - 1
+          title: Caas Ram Size Requested
+          type: integer
+        caas_ram_size_usage:
+          description: MiB memory count for containers usage
+          examples:
+          - 0
+          title: Caas Ram Size Usage
+          type: integer
+        cluster_count_limit:
+          description: K8s clusters count limit
+          examples:
+          - 0
+          title: Cluster Count Limit
+          type: integer
+        cluster_count_requested:
+          description: K8s clusters count requested
+          examples:
+          - 1
+          title: Cluster Count Requested
+          type: integer
+        cluster_count_usage:
+          description: K8s clusters count usage
+          examples:
+          - 0
+          title: Cluster Count Usage
+          type: integer
+        cpu_count_limit:
+          description: vCPU Count limit
+          examples:
+          - 0
+          title: Cpu Count Limit
+          type: integer
+        cpu_count_requested:
+          description: vCPU Count requested
+          examples:
+          - 1
+          title: Cpu Count Requested
+          type: integer
+        cpu_count_usage:
+          description: vCPU Count usage
+          examples:
+          - 0
+          title: Cpu Count Usage
+          type: integer
+        dbaas_postgres_cluster_count_limit:
+          description: DBaaS cluster count limit
+          examples:
+          - 0
+          title: Dbaas Postgres Cluster Count Limit
+          type: integer
+        dbaas_postgres_cluster_count_requested:
+          description: DBaaS cluster count requested
+          examples:
+          - 1
+          title: Dbaas Postgres Cluster Count Requested
+          type: integer
+        dbaas_postgres_cluster_count_usage:
+          description: DBaaS cluster count usage
+          examples:
+          - 0
+          title: Dbaas Postgres Cluster Count Usage
+          type: integer
+        external_ip_count_limit:
+          description: External IP Count limit
+          examples:
+          - 0
+          title: External Ip Count Limit
+          type: integer
+        external_ip_count_requested:
+          description: External IP Count requested
+          examples:
+          - 1
+          title: External Ip Count Requested
+          type: integer
+        external_ip_count_usage:
+          description: External IP Count usage
+          examples:
+          - 0
+          title: External Ip Count Usage
+          type: integer
+        faas_cpu_count_limit:
+          description: mCPU count for functions limit
+          examples:
+          - 0
+          title: Faas Cpu Count Limit
+          type: integer
+        faas_cpu_count_requested:
+          description: mCPU count for functions requested
+          examples:
+          - 1
+          title: Faas Cpu Count Requested
+          type: integer
+        faas_cpu_count_usage:
+          description: mCPU count for functions usage
+          examples:
+          - 0
+          title: Faas Cpu Count Usage
+          type: integer
+        faas_function_count_limit:
+          description: Functions count limit
+          examples:
+          - 0
+          title: Faas Function Count Limit
+          type: integer
+        faas_function_count_requested:
+          description: Functions count requested
+          examples:
+          - 1
+          title: Faas Function Count Requested
+          type: integer
+        faas_function_count_usage:
+          description: Functions count usage
+          examples:
+          - 0
+          title: Faas Function Count Usage
+          type: integer
+        faas_namespace_count_limit:
+          description: Functions namespace count limit
+          examples:
+          - 0
+          title: Faas Namespace Count Limit
+          type: integer
+        faas_namespace_count_requested:
+          description: Functions namespace count requested
+          examples:
+          - 1
+          title: Faas Namespace Count Requested
+          type: integer
+        faas_namespace_count_usage:
+          description: Functions namespace count usage
+          examples:
+          - 0
+          title: Faas Namespace Count Usage
+          type: integer
+        faas_ram_size_limit:
+          description: MiB memory count for functions limit
+          examples:
+          - 0
+          title: Faas Ram Size Limit
+          type: integer
+        faas_ram_size_requested:
+          description: MiB memory count for functions requested
+          examples:
+          - 1
+          title: Faas Ram Size Requested
+          type: integer
+        faas_ram_size_usage:
+          description: MiB memory count for functions usage
+          examples:
+          - 0
+          title: Faas Ram Size Usage
+          type: integer
+        firewall_count_limit:
+          description: Firewalls Count limit
+          examples:
+          - 0
+          title: Firewall Count Limit
+          type: integer
+        firewall_count_requested:
+          description: Firewalls Count requested
+          examples:
+          - 1
+          title: Firewall Count Requested
+          type: integer
+        firewall_count_usage:
+          description: Firewalls Count usage
+          examples:
+          - 0
+          title: Firewall Count Usage
+          type: integer
+        floating_count_limit:
+          description: Floating IP Count limit
+          examples:
+          - 0
+          title: Floating Count Limit
+          type: integer
+        floating_count_requested:
+          description: Floating IP Count requested
+          examples:
+          - 1
+          title: Floating Count Requested
+          type: integer
+        floating_count_usage:
+          description: Floating IP Count usage
+          examples:
+          - 0
+          title: Floating Count Usage
+          type: integer
+        gpu_count_limit:
+          description: GPU Count limit
+          examples:
+          - 0
+          title: Gpu Count Limit
+          type: integer
+        gpu_count_requested:
+          description: GPU Count requested
+          examples:
+          - 1
+          title: Gpu Count Requested
+          type: integer
+        gpu_count_usage:
+          description: GPU Count usage
+          examples:
+          - 0
+          title: Gpu Count Usage
+          type: integer
+        gpu_virtual_a100_count_limit:
+          description: Virtual A100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual A100 Count Limit
+          type: integer
+        gpu_virtual_a100_count_requested:
+          description: Virtual A100 GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual A100 Count Requested
+          type: integer
+        gpu_virtual_a100_count_usage:
+          description: Virtual A100 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual A100 Count Usage
+          type: integer
+        gpu_virtual_h100_count_limit:
+          description: Virtual H100 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H100 Count Limit
+          type: integer
+        gpu_virtual_h100_count_requested:
+          description: Virtual H100 GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual H100 Count Requested
+          type: integer
+        gpu_virtual_h100_count_usage:
+          description: Virtual H100 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual H100 Count Usage
+          type: integer
+        gpu_virtual_h200_count_limit:
+          description: Virtual H200 GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual H200 Count Limit
+          type: integer
+        gpu_virtual_h200_count_requested:
+          description: Virtual H200 GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual H200 Count Requested
+          type: integer
+        gpu_virtual_h200_count_usage:
+          description: Virtual H200 GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual H200 Count Usage
+          type: integer
+        gpu_virtual_l40s_count_limit:
+          description: Virtual L40S GPU card count limit
+          examples:
+          - 0
+          title: Gpu Virtual L40S Count Limit
+          type: integer
+        gpu_virtual_l40s_count_requested:
+          description: Virtual L40S GPU card count requested
+          examples:
+          - 1
+          title: Gpu Virtual L40S Count Requested
+          type: integer
+        gpu_virtual_l40s_count_usage:
+          description: Virtual L40S GPU card count usage
+          examples:
+          - 0
+          title: Gpu Virtual L40S Count Usage
+          type: integer
+        image_count_limit:
+          description: Images Count limit
+          examples:
+          - 0
+          title: Image Count Limit
+          type: integer
+        image_count_requested:
+          description: Images Count requested
+          examples:
+          - 1
+          title: Image Count Requested
+          type: integer
+        image_count_usage:
+          description: Images Count usage
+          examples:
+          - 0
+          title: Image Count Usage
+          type: integer
+        image_size_limit:
+          description: Images Size, bytes limit
+          examples:
+          - 0
+          title: Image Size Limit
+          type: integer
+        image_size_requested:
+          description: Images Size, bytes requested
+          examples:
+          - 1
+          title: Image Size Requested
+          type: integer
+        image_size_usage:
+          description: Images Size, bytes usage
+          examples:
+          - 0
+          title: Image Size Usage
+          type: integer
+        ipu_count_limit:
+          description: IPU Count limit
+          examples:
+          - 0
+          title: Ipu Count Limit
+          type: integer
+        ipu_count_requested:
+          description: IPU Count requested
+          examples:
+          - 1
+          title: Ipu Count Requested
+          type: integer
+        ipu_count_usage:
+          description: IPU Count usage
+          examples:
+          - 0
+          title: Ipu Count Usage
+          type: integer
+        laas_topic_count_limit:
+          description: LaaS Topics Count limit
+          examples:
+          - 0
+          title: Laas Topic Count Limit
+          type: integer
+        laas_topic_count_requested:
+          description: LaaS Topics Count requested
+          examples:
+          - 1
+          title: Laas Topic Count Requested
+          type: integer
+        laas_topic_count_usage:
+          description: LaaS Topics Count usage
+          examples:
+          - 0
+          title: Laas Topic Count Usage
+          type: integer
+        loadbalancer_count_limit:
+          description: Load Balancers Count limit
+          examples:
+          - 0
+          title: Loadbalancer Count Limit
+          type: integer
+        loadbalancer_count_requested:
+          description: Load Balancers Count requested
+          examples:
+          - 1
+          title: Loadbalancer Count Requested
+          type: integer
+        loadbalancer_count_usage:
+          description: Load Balancers Count usage
+          examples:
+          - 0
+          title: Loadbalancer Count Usage
+          type: integer
+        network_count_limit:
+          description: Networks Count limit
+          examples:
+          - 0
+          title: Network Count Limit
+          type: integer
+        network_count_requested:
+          description: Networks Count requested
+          examples:
+          - 1
+          title: Network Count Requested
+          type: integer
+        network_count_usage:
+          description: Networks Count usage
+          examples:
+          - 0
+          title: Network Count Usage
+          type: integer
+        ram_limit:
+          description: RAM Size, MiB limit
+          examples:
+          - 0
+          title: Ram Limit
+          type: integer
+        ram_requested:
+          description: RAM Size, MiB requested
+          examples:
+          - 1
+          title: Ram Requested
+          type: integer
+        ram_usage:
+          description: RAM Size, MiB usage
+          examples:
+          - 0
+          title: Ram Usage
+          type: integer
+        registry_count_limit:
+          description: Registries count limit
+          examples:
+          - 0
+          title: Registry Count Limit
+          type: integer
+        registry_count_requested:
+          description: Registries count requested
+          examples:
+          - 1
+          title: Registry Count Requested
+          type: integer
+        registry_count_usage:
+          description: Registries count usage
+          examples:
+          - 0
+          title: Registry Count Usage
+          type: integer
+        registry_storage_limit:
+          description: Registries volume usage, GiB limit
+          examples:
+          - 0
+          title: Registry Storage Limit
+          type: integer
+        registry_storage_requested:
+          description: Registries volume usage, GiB requested
+          examples:
+          - 1
+          title: Registry Storage Requested
+          type: integer
+        registry_storage_usage:
+          description: Registries volume usage, GiB usage
+          examples:
+          - 0
+          title: Registry Storage Usage
+          type: integer
+        router_count_limit:
+          description: Routers Count limit
+          examples:
+          - 0
+          title: Router Count Limit
+          type: integer
+        router_count_requested:
+          description: Routers Count requested
+          examples:
+          - 1
+          title: Router Count Requested
+          type: integer
+        router_count_usage:
+          description: Routers Count usage
+          examples:
+          - 0
+          title: Router Count Usage
+          type: integer
+        secret_count_limit:
+          description: Secret Count limit
+          examples:
+          - 0
+          title: Secret Count Limit
+          type: integer
+        secret_count_requested:
+          description: Secret Count requested
+          examples:
+          - 1
+          title: Secret Count Requested
+          type: integer
+        secret_count_usage:
+          description: Secret Count usage
+          examples:
+          - 0
+          title: Secret Count Usage
+          type: integer
+        servergroup_count_limit:
+          description: Placement Group Count limit
+          examples:
+          - 0
+          title: Servergroup Count Limit
+          type: integer
+        servergroup_count_requested:
+          description: Placement Group Count requested
+          examples:
+          - 1
+          title: Servergroup Count Requested
+          type: integer
+        servergroup_count_usage:
+          description: Placement Group Count usage
+          examples:
+          - 0
+          title: Servergroup Count Usage
+          type: integer
+        sfs_count_limit:
+          description: Shared file system Count limit
+          examples:
+          - 0
+          title: Sfs Count Limit
+          type: integer
+        sfs_count_requested:
+          description: Shared file system Count requested
+          examples:
+          - 1
+          title: Sfs Count Requested
+          type: integer
+        sfs_count_usage:
+          description: Shared file system Count usage
+          examples:
+          - 0
+          title: Sfs Count Usage
+          type: integer
+        sfs_size_limit:
+          description: Shared file system Size, GiB limit
+          examples:
+          - 0
+          title: Sfs Size Limit
+          type: integer
+        sfs_size_requested:
+          description: Shared file system Size, GiB requested
+          examples:
+          - 1
+          title: Sfs Size Requested
+          type: integer
+        sfs_size_usage:
+          description: Shared file system Size, GiB usage
+          examples:
+          - 0
+          title: Sfs Size Usage
+          type: integer
+        shared_vm_count_limit:
+          description: Basic VMs Count limit
+          examples:
+          - 0
+          title: Shared Vm Count Limit
+          type: integer
+        shared_vm_count_requested:
+          description: Basic VMs Count requested
+          examples:
+          - 1
+          title: Shared Vm Count Requested
+          type: integer
+        shared_vm_count_usage:
+          description: Basic VMs Count usage
+          examples:
+          - 0
+          title: Shared Vm Count Usage
+          type: integer
+        slurm_cluster_count_limit:
+          description: Slurm cluster count limit for this region. 0 disables Slurm in this region.
+          examples:
+          - 0
+          title: Slurm Cluster Count Limit
+          type: integer
+        slurm_cluster_count_requested:
+          description: Slurm cluster count requested
+          examples:
+          - 1
+          title: Slurm Cluster Count Requested
+          type: integer
+        slurm_cluster_count_usage:
+          description: Slurm cluster count usage
+          examples:
+          - 0
+          title: Slurm Cluster Count Usage
+          type: integer
+        snapshot_schedule_count_limit:
+          description: Snapshot Schedules Count limit
+          examples:
+          - 0
+          title: Snapshot Schedule Count Limit
+          type: integer
+        snapshot_schedule_count_requested:
+          description: Snapshot Schedules Count requested
+          examples:
+          - 1
+          title: Snapshot Schedule Count Requested
+          type: integer
+        snapshot_schedule_count_usage:
+          description: Snapshot Schedules Count usage
+          examples:
+          - 0
+          title: Snapshot Schedule Count Usage
+          type: integer
+        subnet_count_limit:
+          description: Subnets Count limit
+          examples:
+          - 0
+          title: Subnet Count Limit
+          type: integer
+        subnet_count_requested:
+          description: Subnets Count requested
+          examples:
+          - 1
+          title: Subnet Count Requested
+          type: integer
+        subnet_count_usage:
+          description: Subnets Count usage
+          examples:
+          - 0
+          title: Subnet Count Usage
+          type: integer
+        vm_count_limit:
+          description: Instances Dedicated Count limit
+          examples:
+          - 0
+          title: Vm Count Limit
+          type: integer
+        vm_count_requested:
+          description: Instances Dedicated Count requested
+          examples:
+          - 1
+          title: Vm Count Requested
+          type: integer
+        vm_count_usage:
+          description: Instances Dedicated Count usage
+          examples:
+          - 0
+          title: Vm Count Usage
+          type: integer
+        volume_count_limit:
+          description: Volumes Count limit
+          examples:
+          - 0
+          title: Volume Count Limit
+          type: integer
+        volume_count_requested:
+          description: Volumes Count requested
+          examples:
+          - 1
+          title: Volume Count Requested
+          type: integer
+        volume_count_usage:
+          description: Volumes Count usage
+          examples:
+          - 0
+          title: Volume Count Usage
+          type: integer
+        volume_size_limit:
+          description: Volumes Size, GiB limit
+          examples:
+          - 0
+          title: Volume Size Limit
+          type: integer
+        volume_size_requested:
+          description: Volumes Size, GiB requested
+          examples:
+          - 1
+          title: Volume Size Requested
+          type: integer
+        volume_size_usage:
+          description: Volumes Size, GiB usage
+          examples:
+          - 0
+          title: Volume Size Usage
+          type: integer
+        volume_snapshots_count_limit:
+          description: Snapshots Count limit
+          examples:
+          - 0
+          title: Volume Snapshots Count Limit
+          type: integer
+        volume_snapshots_count_requested:
+          description: Snapshots Count requested
+          examples:
+          - 1
+          title: Volume Snapshots Count Requested
+          type: integer
+        volume_snapshots_count_usage:
+          description: Snapshots Count usage
+          examples:
+          - 0
+          title: Volume Snapshots Count Usage
+          type: integer
+        volume_snapshots_size_limit:
+          description: Snapshots Size, GiB limit
+          examples:
+          - 0
+          title: Volume Snapshots Size Limit
+          type: integer
+        volume_snapshots_size_requested:
+          description: Snapshots Size, GiB requested
+          examples:
+          - 1
+          title: Volume Snapshots Size Requested
+          type: integer
+        volume_snapshots_size_usage:
+          description: Snapshots Size, GiB usage
+          examples:
+          - 0
+          title: Volume Snapshots Size Usage
+          type: integer
+      title: RegionRequestedQuotasSerializer
+      type: object
+    DdosProfileStatusSerializer:
+      properties:
+        error_description:
+          description: Detailed error message describing any issues with the profile operation
+          examples:
+          - An error occured while deleting profile
+          title: Error Description
+          type: string
+        status:
+          description: Current operational status of the DDoS protection profile
+          examples:
+          - Error Deleting
+          maxLength: 30
+          minLength: 3
+          title: Status
+          type: string
+      required:
+      - status
+      - error_description
+      title: DdosProfileStatusSerializer
+      type: object
+    RebuildBaremetalSerializer:
+      properties:
+        image_id:
+          description: Image ID
+          examples:
+          - b5b4d65d-945f-4b98-ab6f-332319c724ef
+          title: Image Id
+          type: string
+        user_data:
+          description: 'String in base64 format. Must not be passed together with ''username'' or ''password''. Examples of the user_data: https://cloudinit.readthedocs.io/en/latest/topics/examples.html'
+          examples:
+          - aGVsbG9fd29ybGQ=
+          title: User Data
+          type: string
+      title: RebuildBaremetalSerializer
+      type: object
+    UpdateTagsSerializer:
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: UpdateTagsSerializer
+      type: object
+      additionalProperties:
+        anyOf:
+        - maxLength: 255
+          minLength: 1
+          pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+          type: string
+        - type: 'null'
+        description: Tag value. Maximum 255 characters. Cannot contain tabs, newlines, empty string or start/end with whitespace. Trailing or leading whitespaces will be stripped. Set to `null` in order to delete this tag.
+        examples:
+        - my-tag-value
+    CheckQuotaBeforeBMCreationSerializer:
+      properties:
+        flavor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Bare metal flavor name.
+          examples:
+          - bm1-basic-medium
+          title: Flavor
+        interfaces:
+          description: Subnet IPs and floating IPs
+          examples:
+          - - network_id: 024a29e9-b4b7-4c91-9a46-505be123d9f8
+              subnet_id: 91200a6c-07e0-42aa-98da-32d1f6545ae7
+              type: subnet
+          items:
+            $ref: '#/components/schemas/NewVmInterfaceSerializersPydantic'
+          title: Interfaces
+          type: array
+        name_templates:
+          description: A list of instance name templates. Either this or `names` must be specified.
+          examples:
+          - - my-instance-{ip_octets}
+          items:
+            anyOf:
+            - type: string
+            - type: 'null'
+          title: Name Templates
+          type: array
+        names:
+          description: A list of instance names. Either this or `name_templates` must be specified.
+          examples:
+          - - my-instance-1
+          items:
+            type: string
+          title: Names
+          type: array
+      title: CheckQuotaBeforeBMCreationSerializer
+      type: object
+    BlackholePortSerializer:
+      properties:
+        AlarmEnd:
+          description: A date-time string giving the time that the alarm ended. If not yet ended, time will be given as 0001-01-01T00:00:00Z
+          examples:
+          - '2025-02-05 12:04:30'
+          format: date-time
+          title: Alarmend
+          type: string
+        AlarmStart:
+          description: A date-time string giving the time that the alarm started
+          examples:
+          - '2025-02-05 12:04:11'
+          format: date-time
+          title: Alarmstart
+          type: string
+        AlarmState:
+          $ref: '#/components/schemas/BlackholePortAlarmState'
+          description: Current state of alarm
+          examples:
+          - alarm
+        AlertDuration:
+          description: Total alert duration
+          examples:
+          - 2 hours
+          title: Alertduration
+          type: string
+        DestinationIP:
+          description: Notification destination IP address
+          examples:
+          - 80.240.114.116
+          title: Destinationip
+          type: string
+        ID:
+          description: ''
+          title: Id
+          type: integer
+      required:
+      - ID
+      - AlarmState
+      - AlarmStart
+      - AlarmEnd
+      - AlertDuration
+      - DestinationIP
+      title: BlackholePortSerializer
+      type: object
+    CreateBareMetalExternalInterfaceSerializer:
+      description: Instance will be attached to default external network
+      examples:
+      - interface_name: eth0
+        ip_family: ipv4
+        type: external
+      properties:
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        ip_family:
+          anyOf:
+          - $ref: '#/components/schemas/InterfaceIPFamily'
+          - type: 'null'
+          default: ipv4
+          description: Specify `ipv4`, `ipv6`, or `dual` to enable both.
+        port_group:
+          default: 0
+          description: Specifies the trunk group to which this interface belongs. Applicable only for bare metal servers. Each unique port group is mapped to a separate trunk port. Use this to control how interfaces are grouped across trunks.
+          maximum: 3
+          minimum: 0
+          title: Port Group
+          type: integer
+        type:
+          const: external
+          description: A public IP address will be assigned to the instance.
+          title: Type
+          type: string
+      required:
+      - type
+      title: CreateBareMetalExternalInterfaceSerializer
+      type: object
+    BareMetalFlavorExtendedCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/BareMetalFlavorExtendedSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: BareMetalFlavorExtendedCollectionSerializer
+      type: object
+    BareMetalActionSerializer:
+      anyOf:
+      - $ref: '#/components/schemas/StartActionInstanceSerializer'
+      - $ref: '#/components/schemas/BasicBareMetalActionInstanceSerializer'
+      title: BareMetalActionSerializer
+    BareMetalServerSerializer:
+      properties:
+        addresses:
+          additionalProperties:
+            items:
+              anyOf:
+              - $ref: '#/components/schemas/BareMetalFloatingAddressSerializer'
+              - $ref: '#/components/schemas/BareMetalFixedAddressSerializer'
+            type: array
+          description: Map of network_name to list of addresses in that network
+          title: Addresses
+          type: object
+        blackhole_ports:
+          description: IP addresses of the instances that are blackholed by DDoS mitigation system
+          items:
+            $ref: '#/components/schemas/BlackholePortSerializer'
+          title: Blackhole Ports
+          type: array
+        created_at:
+          description: Datetime when bare metal server was created
+          examples:
+          - '2023-11-29T10:56:49Z'
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Task that created this entity
+          title: Creator Task Id
+        ddos_profile:
+          anyOf:
+          - $ref: '#/components/schemas/GetClientProfileSerializer'
+          - type: 'null'
+          description: Bare metal advanced DDoS protection profile. It is always `null` if query parameter `with_ddos=true` is not set.
+        fixed_ip_assignments:
+          description: Fixed IP assigned to instance
+          items:
+            $ref: '#/components/schemas/IpAssignmentsSerializer'
+          title: Fixed Ip Assignments
+          type: array
+        flavor:
+          $ref: '#/components/schemas/BareMetalFlavorSerializer'
+          description: Flavor details
+        id:
+          description: Bare metal server ID
+          examples:
+          - 6c6aa80f-7836-4dc2-a2ae-125e248be476
+          format: uuid4
+          title: Id
+          type: string
+        instance_isolation:
+          anyOf:
+          - $ref: '#/components/schemas/IsolationSerializer'
+          - type: 'null'
+          description: Instance isolation information
+        name:
+          description: Bare metal server name
+          examples:
+          - my-server-1
+          title: Name
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+        ssh_key_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: SSH key assigned to bare metal server
+          title: Ssh Key Name
+        status:
+          $ref: '#/components/schemas/InstanceStatus'
+          description: Bare metal server status
+          examples:
+          - ACTIVE
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        task_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Task state
+          title: Task State
+        vm_state:
+          $ref: '#/components/schemas/InstanceVMState'
+          description: Bare metal server state
+          examples:
+          - active
+      required:
+      - id
+      - name
+      - created_at
+      - status
+      - vm_state
+      - flavor
+      - tags
+      - addresses
+      - ssh_key_name
+      - creator_task_id
+      - task_state
+      - task_id
+      - blackhole_ports
+      - fixed_ip_assignments
+      - instance_isolation
+      - ddos_profile
+      - region
+      - region_id
+      - project_id
+      title: Bare metal server
+      type: object
+    BlackholePortAlarmState:
+      enum:
+      - ALARM
+      - CLEAR
+      - MANUAL_CLEAR
+      - MANUAL_START
+      title: BlackholePortAlarmState
+      type: string
+    NewVmInterfaceSerializersPydantic:
+      discriminator:
+        mapping:
+          any_subnet: '#/components/schemas/NewInterfaceAnySubnetFipSerializerPydantic'
+          external: '#/components/schemas/NewInterfaceExternalSerializerPydantic'
+          reserved_fixed_ip: '#/components/schemas/NewInterfaceReservedFixedIpFipSerializerPydantic'
+          subnet: '#/components/schemas/NewInterfaceSpecificSubnetFipSerializerPydantic'
+        propertyName: type
+      oneOf:
+      - $ref: '#/components/schemas/NewInterfaceExternalSerializerPydantic'
+      - $ref: '#/components/schemas/NewInterfaceSpecificSubnetFipSerializerPydantic'
+      - $ref: '#/components/schemas/NewInterfaceAnySubnetFipSerializerPydantic'
+      - $ref: '#/components/schemas/NewInterfaceReservedFixedIpFipSerializerPydantic'
+      title: NewVmInterfaceSerializersPydantic
+    InstanceStatus:
+      enum:
+      - ACTIVE
+      - BUILD
+      - DELETED
+      - ERROR
+      - HARD_REBOOT
+      - MIGRATING
+      - PASSWORD
+      - PAUSED
+      - REBOOT
+      - REBUILD
+      - RESCUE
+      - RESIZE
+      - REVERT_RESIZE
+      - SHELVED
+      - SHELVED_OFFLOADED
+      - SHUTOFF
+      - SOFT_DELETED
+      - SUSPENDED
+      - UNKNOWN
+      - VERIFY_RESIZE
+      title: InstanceStatus
+      type: string
+    BareMetalFixedAddressSerializer:
+      description: IP addresses of the trunk port and its subports.
+      properties:
+        addr:
+          description: Address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        interface_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Interface name. This field will be `null` if `with_interfaces_name=true` is not set in the request when listing servers. It will also be `null` if the `interface_name` was not specified during server creation or when attaching the interface.
+          examples:
+          - my-interface
+          title: Interface Name
+        subnet_id:
+          description: The unique identifier of the subnet associated with this address.
+          examples:
+          - ba83aec4-7bc1-4979-b934-a11fc1d36cf3
+          title: Subnet Id
+          type: string
+        subnet_name:
+          description: The name of the subnet associated with this address.
+          examples:
+          - my-subnet
+          title: Subnet Name
+          type: string
+        type:
+          const: fixed
+          description: Type of the address
+          examples:
+          - fixed
+          title: Type
+          type: string
+      required:
+      - type
+      - addr
+      - interface_name
+      - subnet_name
+      - subnet_id
+      title: Fixed IP Address
+      type: object
+    CreateBareMetalServerSerializer:
+      examples:
+      - flavor: bm2-hf-medium
+        image_id: b5b4d65d-945f-4b98-ab6f-332319c724ef
+        interfaces:
+        - type: external
+        name: my-bare-metal
+        ssh_key_name: my-ssh-key
+      properties:
+        app_config:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: Parameters for the application template if creating the instance from an `apptemplate`.
+          title: App Config
+        apptemplate_id:
+          description: Apptemplate ID. Either `image_id` or `apptemplate_id` is required.
+          title: Apptemplate Id
+          type: string
+        ddos_profile:
+          $ref: '#/components/schemas/BaseCreateClientProfileSerializer'
+          description: Enable advanced DDoS protection for the server
+        flavor:
+          description: The flavor of the instance.
+          examples:
+          - bm2-hf-medium
+          title: Flavor
+          type: string
+        image_id:
+          description: Image ID. Either `image_id` or `apptemplate_id` is required.
+          format: uuid4
+          title: Image Id
+          type: string
+        interfaces:
+          description: A list of network interfaces for the server. You can create one or more interfaces - private, public, or both.
+          items:
+            $ref: '#/components/schemas/CreateBareMetalInterfaceSerializers'
+          minItems: 1
+          title: Interfaces
+          type: array
+        name:
+          description: Server name.
+          examples:
+          - my-bare-metal
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        name_template:
+          description: 'If you want server names to be automatically generated based on IP addresses, you can provide a name template instead of specifying the name manually. The template should include a placeholder that will be replaced during provisioning. Supported placeholders are: `{ip_octets}` (last 3 octets of the IP), `{two_ip_octets}`, and `{one_ip_octet}`.'
+          examples:
+          - - my-bare-metal-{ip_octets}
+          pattern: ^[a-zA-Z0-9{][a-zA-Z 0-9._\-}{]{1,61}[a-zA-Z0-9._}]$
+          title: Name Template
+          type: string
+        password:
+          description: For Linux instances, 'username' and 'password' are used to create a new user. When only 'password' is provided, it is set as the password for the default user of the image. For Windows instances, 'username' cannot be specified. Use the 'password' field to set the password for the 'Admin' user on Windows. Use the 'user_data' field to provide a script to create new users on Windows. The password of the Admin user cannot be updated via 'user_data'.
+          title: Password
+          type: string
+        ssh_key_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: "Specifies the name of the SSH keypair, created via the\n        <a href=\"#operation/SSHKeyCollectionViewSet.post\">/v1/ssh_keys endpoint</a>."
+          examples:
+          - my-ssh-key
+          title: Ssh Key Name
+        tags:
+          $ref: '#/components/schemas/CreateTagsSerializer'
+          description: Key-value tags to associate with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Both tag keys and values have a maximum length of 255 characters. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - my-tag: my-tag-value
+        user_data:
+          description: 'String in base64 format. For Linux instances, ''user_data'' is ignored when ''password'' field is provided. For Windows instances, Admin user password is set by ''password'' field and cannot be updated via ''user_data''. Examples of the user_data: https://cloudinit.readthedocs.io/en/latest/topics/examples.html'
+          title: User Data
+          type: string
+        username:
+          description: For Linux instances, 'username' and 'password' are used to create a new user. For Windows instances, 'username' cannot be specified. Use 'password' field to set the password for the 'Admin' user on Windows.
+          title: Username
+          type: string
+      required:
+      - interfaces
+      - flavor
+      title: CreateBareMetalServerSerializer
+      type: object
+    BareMetalOrderByChoices:
+      enum:
+      - created.asc
+      - created.desc
+      - name.asc
+      - name.desc
+      - status.asc
+      - status.desc
+      title: BareMetalOrderByChoices
+      type: string
+    IpAssignmentsSerializer:
+      properties:
+        external:
+          description: Is network external
+          title: External
+          type: boolean
+        ip_address:
+          description: Ip address
+          examples:
+          - 123.123.123.1
+          title: Ip Address
+          type: string
+        subnet_id:
+          description: Interface subnet id
+          examples:
+          - eaafdc3c-f48b-4eb4-826f-057dfc7d6476
+          title: Subnet Id
+          type: string
+      required:
+      - subnet_id
+      - ip_address
+      - external
+      title: IpAssignmentsSerializer
+      type: object
+    MandatoryIdSerializerPydantic:
+      properties:
+        id:
+          description: Resource ID
+          examples:
+          - ae74714c-c380-48b4-87f8-758d656cdad6
+          format: uuid4
+          title: Id
+          type: string
+      required:
+      - id
+      title: MandatoryIdSchema schema
+      type: object
+    InstanceVMState:
+      enum:
+      - active
+      - building
+      - deleted
+      - error
+      - paused
+      - rescued
+      - resized
+      - shelved
+      - shelved_offloaded
+      - soft-deleted
+      - stopped
+      - suspended
+      title: InstanceVMState
+      type: string
+    CreateClientProfileFieldSerializer:
+      properties:
+        base_field:
+          description: Unique identifier of the DDoS protection field being configured
+          examples:
+          - 123
+          title: Base Field
+          type: integer
+        field_value:
+          anyOf:
+          - items: {}
+            type: array
+          - type: integer
+          - type: string
+          - type: 'null'
+          description: Complex value for the DDoS profile field
+          examples:
+          - null
+          - - 100001
+          title: Field Value
+      required:
+      - base_field
+      title: CreateClientProfileFieldSerializer
+      type: object
+    ClientProfileTemplateSerializer:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description explaining the template's purpose and use cases
+          examples:
+          - description
+          title: Description
+        fields:
+          description: List of configurable fields that define the template's protection parameters
+          items:
+            $ref: '#/components/schemas/ClientProfileTemplateFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection template
+          examples:
+          - 123
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection template
+          examples:
+          - ICMP port
+          maxLength: 100
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - fields
+      title: ClientProfileTemplateSerializer
+      type: object
+    ExistingInstanceFloatingIpInterfaceSerializer:
+      properties:
+        existing_floating_id:
+          description: An existing available floating IP id must be specified if the source is set to `existing`
+          examples:
+          - e3c6ee77-48cb-416b-b204-11b492cc776e3
+          format: uuid4
+          title: Existing Floating Id
+          type: string
+        source:
+          const: existing
+          description: An existing available floating IP will be attached to the instance. A floating IP is a public IP that makes the instance accessible from the internet, even if it only has a private IP. It works like SNAT, allowing outgoing and incoming traffic.
+          examples:
+          - existing
+          title: Source
+          type: string
+      required:
+      - source
+      - existing_floating_id
+      title: Existing floating IP
+      type: object
+    NewInterfaceExternalSerializerPydantic:
+      description: Instance will be attached to default external network
+      examples:
+      - interface_name: eth0
+        ip_family: ipv4
+        type: external
+      properties:
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        ip_family:
+          anyOf:
+          - $ref: '#/components/schemas/InterfaceIPFamily'
+          - type: 'null'
+          default: ipv4
+          description: Specify `ipv4`, `ipv6`, or `dual` to enable both.
+        security_groups:
+          description: Security group UUIDs applied to this interface. If omitted (or empty), the top-level `security_groups` value applies; if both are omitted, the project's default security group is applied.
+          items:
+            $ref: '#/components/schemas/MandatoryIdSerializerPydantic'
+          title: Security Groups
+          type: array
+        type:
+          const: external
+          description: A public IP address will be assigned to the instance.
+          title: Type
+          type: string
+      required:
+      - type
+      title: NewInterfaceExternalSerializerPydantic
+      type: object
+    AvailableBaremetalFlavorsBodySerializer:
+      properties:
+        apptemplate_id:
+          description: Apptemplate ID. Either `image_id` or `apptemplate_id` is required
+          examples:
+          - tf2server
+          title: Apptemplate Id
+          type: string
+        image_id:
+          description: Image ID. Either `image_id` or `apptemplate_id` is required
+          examples:
+          - b5b4d65d-945f-4b98-ab6f-332319c724ef
+          title: Image Id
+          type: string
+      title: AvailableBaremetalFlavorsBodySerializer
+      type: object
+    RemoteConsoleSerializer:
+      properties:
+        remote_console:
+          $ref: '#/components/schemas/RemoteConsoleData'
+          description: Remote console information
+          examples:
+          - protocol: vnc
+            type: novnc
+            url: https://console-novnc.example.com/vnc_auto.html?path=%3Ftoken%3Df445c4b6-0a77-4fae-bc0e-147201dbfbea
+      required:
+      - remote_console
+      title: RemoteConsoleSerializer
+      type: object
+    ProtocolsOnPortSerializer:
+      properties:
+        port:
+          description: Network port number for which protocols are configured
+          examples:
+          - '80'
+          title: Port
+          type: string
+        protocols:
+          description: List of network protocols enabled on the specified port
+          examples:
+          - - TCP
+            - HTTP
+          items:
+            type: string
+          title: Protocols
+          type: array
+      required:
+      - port
+      - protocols
+      title: ProtocolsOnPortSerializer
+      type: object
+    IsolationSerializer:
+      properties:
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: The reason of instance isolation if it is isolated from external internet.
+          examples:
+          - Suspicious activities
+          title: Reason
+      title: IsolationSerializer
+      type: object
+    InterfaceIPFamily:
+      enum:
+      - dual
+      - ipv4
+      - ipv6
+      title: InterfaceIPFamily
+      type: string
+    BareMetalFlavorSerializer:
+      description: Bare metal flavor schema embedded into instance schema
+      properties:
+        architecture:
+          description: CPU architecture
+          examples:
+          - x86_64
+          title: Architecture
+          type: string
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        hardware_description:
+          $ref: '#/components/schemas/BareMetalFlavorHardwareDescriptionSerializer'
+          description: Additional hardware description
+        os_type:
+          description: Operating system
+          examples:
+          - linux
+          title: Os Type
+          type: string
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        resource_class:
+          description: Flavor resource class for mapping to hardware capacity
+          examples:
+          - bm2-hf-medium
+          title: Resource Class
+          type: string
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      - hardware_description
+      - os_type
+      - architecture
+      - resource_class
+      title: Bare metal flavor
+      type: object
+    ProfileOptionsSerializer:
+      properties:
+        active:
+          description: Controls whether the DDoS protection profile is enabled and actively protecting the resource
+          examples:
+          - true
+          title: Active
+          type: boolean
+        bgp:
+          description: Enables Border Gateway Protocol (BGP) routing for DDoS protection traffic
+          examples:
+          - true
+          title: Bgp
+          type: boolean
+      required:
+      - active
+      - bgp
+      title: ProfileOptionsSerializer
+      type: object
+    BaseCreateClientProfileSerializer:
+      properties:
+        fields:
+          description: List of field configurations that customize the protection parameters for this profile
+          examples:
+          - - base_field: 10
+              field_value:
+              - 45046
+              - 45047
+          items:
+            $ref: '#/components/schemas/CreateClientProfileFieldSerializer'
+          title: Fields
+          type: array
+        profile_template:
+          description: Unique identifier of the DDoS protection template to use for this profile
+          examples:
+          - 123
+          title: Profile Template
+          type: integer
+      required:
+      - profile_template
+      title: BaseCreateClientProfileSerializer
+      type: object
+    CreateBareMetalAnySubnetInterfaceSerializer:
+      examples:
+      - floating_ip:
+          existing_floating_id: 57be69f6-6f6a-4f03-a4ad-8eb86c69ec0a
+          source: existing
+        interface_name: my-any-subnet-interface
+        ip_address: 192.168.6.9
+        network_id: 59905c8e-2619-420a-b046-536096473370
+        type: any_subnet
+      properties:
+        floating_ip:
+          description: Allows the instance to have a public IP that can be reached from the internet.
+          discriminator:
+            mapping:
+              existing: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+              new: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+            propertyName: source
+          oneOf:
+          - $ref: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+          - $ref: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+          title: Floating Ip
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        ip_address:
+          description: You can specify a specific IP address from your subnet.
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        ip_family:
+          anyOf:
+          - $ref: '#/components/schemas/InterfaceIPFamily'
+          - type: 'null'
+          default: ipv4
+          description: Specify `ipv4`, `ipv6`, or `dual` to enable both.
+        network_id:
+          description: The network where the instance will be connected.
+          format: uuid4
+          title: Network Id
+          type: string
+        port_group:
+          default: 0
+          description: Specifies the trunk group to which this interface belongs. Applicable only for bare metal servers. Each unique port group is mapped to a separate trunk port. Use this to control how interfaces are grouped across trunks.
+          maximum: 3
+          minimum: 0
+          title: Port Group
+          type: integer
+        type:
+          const: any_subnet
+          description: Instance will be attached to a subnet with the largest count of free IPs.
+          title: Type
+          type: string
+      required:
+      - type
+      - network_id
+      title: CreateBareMetalAnySubnetInterfaceSerializer
+      type: object
+    NewInterfaceSpecificSubnetFipSerializerPydantic:
+      description: 'The instance will get an IP address from the selected network.
+
+        If you choose to add a floating IP, the instance will be reachable from the internet.
+
+        Otherwise, it will only have a private IP within the network.'
+      examples:
+      - floating_ip:
+          existing_floating_id: 57be69f6-6f6a-4f03-a4ad-8eb86c69ec0a
+          source: existing
+        network_id: 59905c8e-2619-420a-b046-536096473370
+        subnet_id: e3c6ee77-48cb-416b-b204-11b492cc776e3
+        type: subnet
+      properties:
+        floating_ip:
+          description: Allows the instance to have a public IP that can be reached from the internet.
+          discriminator:
+            mapping:
+              existing: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+              new: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+            propertyName: source
+          oneOf:
+          - $ref: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+          - $ref: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+          title: Floating Ip
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        network_id:
+          description: The network where the instance will be connected.
+          format: uuid4
+          title: Network Id
+          type: string
+        security_groups:
+          description: Security group UUIDs applied to this interface. If omitted (or empty), the top-level `security_groups` value applies; if both are omitted, the project's default security group is applied.
+          items:
+            $ref: '#/components/schemas/MandatoryIdSerializerPydantic'
+          title: Security Groups
+          type: array
+        subnet_id:
+          description: The instance will get an IP address from this subnet.
+          format: uuid4
+          title: Subnet Id
+          type: string
+        type:
+          const: subnet
+          description: The instance will get an IP address from the selected network. If you choose to add a floating IP, the instance will be reachable from the internet. Otherwise, it will only have a private IP within the network.
+          title: Type
+          type: string
+      required:
+      - type
+      - network_id
+      - subnet_id
+      title: NewInterfaceSpecificSubnetFipSerializerPydantic
+      type: object
+    BareMetalConsoleType:
+      enum:
+      - serial
+      - vnc
+      title: BareMetalConsoleType
+      type: string
+    CreateBareMetalReservedFixedIpInterfaceSerializer:
+      examples:
+      - floating_ip:
+          source: new
+        interface_name: my-interface
+        port_id: 59905c8e-2619-420a-b046-536096473370
+        type: reserved_fixed_ip
+      properties:
+        floating_ip:
+          description: Allows the instance to have a public IP that can be reached from the internet.
+          discriminator:
+            mapping:
+              existing: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+              new: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+            propertyName: source
+          oneOf:
+          - $ref: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+          - $ref: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+          title: Floating Ip
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        port_group:
+          default: 0
+          description: Specifies the trunk group to which this interface belongs. Applicable only for bare metal servers. Each unique port group is mapped to a separate trunk port. Use this to control how interfaces are grouped across trunks.
+          maximum: 3
+          minimum: 0
+          title: Port Group
+          type: integer
+        port_id:
+          description: Network ID the subnet belongs to. Port will be plugged in this network.
+          title: Port Id
+          type: string
+        type:
+          const: reserved_fixed_ip
+          description: An existing available reserved fixed IP will be attached to the instance. If the reserved IP is not public and you choose to add a floating IP, the instance will be accessible from the internet.
+          title: Type
+          type: string
+      required:
+      - type
+      - port_id
+      title: CreateBareMetalReservedFixedIpInterfaceSerializer
+      type: object
+    BasicBareMetalActionInstanceSerializer:
+      properties:
+        action:
+          description: Instance action name
+          enum:
+          - reboot
+          - reboot_hard
+          - stop
+          examples:
+          - stop
+          title: Action
+          type: string
+      required:
+      - action
+      title: BasicBareMetalActionInstanceSerializer
+      type: object
+    NewInstanceFloatingIpInterfaceSerializer:
+      properties:
+        source:
+          const: new
+          description: A new floating IP will be created and attached to the instance. A floating IP is a public IP that makes the instance accessible from the internet, even if it only has a private IP. It works like SNAT, allowing outgoing and incoming traffic.
+          examples:
+          - new
+          title: Source
+          type: string
+      required:
+      - source
+      title: New floating IP
+      type: object
+    UpdateBareMetalServerSerializer:
+      properties:
+        name:
+          description: Name
+          examples:
+          - server_name
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: UpdateBareMetalServerSerializer
+      type: object
+    NewInterfaceReservedFixedIpFipSerializerPydantic:
+      examples:
+      - floating_ip:
+          source: new
+        interface_name: my-interface
+        port_id: 59905c8e-2619-420a-b046-536096473370
+        type: reserved_fixed_ip
+      properties:
+        floating_ip:
+          description: Allows the instance to have a public IP that can be reached from the internet.
+          discriminator:
+            mapping:
+              existing: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+              new: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+            propertyName: source
+          oneOf:
+          - $ref: '#/components/schemas/NewInstanceFloatingIpInterfaceSerializer'
+          - $ref: '#/components/schemas/ExistingInstanceFloatingIpInterfaceSerializer'
+          title: Floating Ip
+        interface_name:
+          description: Interface name. Defaults to `null` and is returned as `null` in the API response if not set.
+          maxLength: 37
+          title: Interface Name
+          type: string
+        port_id:
+          description: Network ID the subnet belongs to. Port will be plugged in this network.
+          title: Port Id
+          type: string
+        security_groups:
+          description: Security group UUIDs applied to this interface. If omitted (or empty), the top-level `security_groups` value applies; if both are omitted, the project's default security group is applied.
+          items:
+            $ref: '#/components/schemas/MandatoryIdSerializerPydantic'
+          title: Security Groups
+          type: array
+        type:
+          const: reserved_fixed_ip
+          description: An existing available reserved fixed IP will be attached to the instance. If the reserved IP is not public and you choose to add a floating IP, the instance will be accessible from the internet.
+          title: Type
+          type: string
+      required:
+      - type
+      - port_id
+      title: NewInterfaceReservedFixedIpFipSerializerPydantic
+      type: object
+    BareMetalFlavorHardwareDescriptionSerializer:
+      properties:
+        cpu:
+          description: Human-readable CPU description
+          examples:
+          - 1x Intel Xeon 4C/8T 3.7 GHz
+          title: Cpu
+          type: string
+        disk:
+          description: Human-readable disk description
+          examples:
+          - 2x 250GiB SSD
+          title: Disk
+          type: string
+        license:
+          description: If the flavor is licensed, this field contains the license type
+          examples:
+          - Windows License
+          title: License
+          type: string
+        network:
+          description: Human-readable NIC description
+          examples:
+          - 1x 500Mbps
+          title: Network
+          type: string
+        ram:
+          description: Human-readable RAM description
+          examples:
+          - 32 GiB
+          title: Ram
+          type: string
+      required:
+      - cpu
+      - ram
+      - disk
+      - license
+      - network
+      title: Detailed flavor hardware description of bare metal server flavor
+      type: object
+    StartActionInstanceSerializer:
+      properties:
+        action:
+          const: start
+          description: Instance action name
+          examples:
+          - start
+          title: Action
+          type: string
+        activate_profile:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: true
+          description: Used on start instance to activate Advanced DDoS profile
+          examples:
+          - true
+          title: Activate Profile
+      required:
+      - action
+      title: StartActionInstanceSerializer
+      type: object
+    TagSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      properties:
+        key:
+          description: Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag
+          title: Key
+          type: string
+        read_only:
+          description: If true, the tag is read-only and cannot be modified by the user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        value:
+          description: Tag value. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag-value
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      - read_only
+      title: TagSerializer
+      type: object
+    ClientProfileFieldSerializer:
+      properties:
+        base_field:
+          description: ID of DDoS profile field
+          examples:
+          - 10
+          title: Base Field
+          type: integer
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        field_value:
+          description: Complex value for the DDoS profile field
+          examples:
+          - 45046
+          - 45047
+          title: Field Value
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      - field_value
+      - base_field
+      title: ClientProfileFieldSerializer
+      type: object
+    BareMetalStatusQueryChoices:
+      enum:
+      - ACTIVE
+      - BUILD
+      - ERROR
+      - HARD_REBOOT
+      - REBOOT
+      - REBUILD
+      - RESCUE
+      - SHUTOFF
+      - SUSPENDED
+      title: BareMetalStatusQueryChoices
+      type: string
+    BareMetalFloatingAddressSerializer:
+      properties:
+        addr:
+          description: Address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        type:
+          const: floating
+          description: Type of the address
+          examples:
+          - floating
+          title: Type
+          type: string
+      required:
+      - type
+      - addr
+      title: Floating IP Address
+      type: object

@@ -1,0 +1,90 @@
+openapi: 3.2.0
+info:
+  title: Cloud IP Ranges API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: IP Ranges
+paths:
+  /public/v1/ipranges/egress:
+    get:
+      operationId: EgressIPRangesViewSet.get
+      summary: List cloud egress public IPs
+      description: 'Returns the complete list of IPv4 and IPv6 address ranges that Cloud uses for outbound (egress) traffic.
+
+
+        Typical reasons to call this endpoint:
+
+        - Host-file delivery workflows - You upload images or other assets to the Cloud and share a download link
+
+        that points to your own infrastructure. Add these egress prefixes to your firewall or object-storage allow-list
+
+        so our clients can fetch the files without being blocked.
+
+        - Push integrations / webhooks - You subscribe to the user-actions event log and Cloud pushes events to your
+
+        listener endpoint. Whitelisting the egress IP ranges lets you accept only traffic that originates from us.
+
+        - General security controls, audit tooling, or SIEM rules that need to verify that traffic truly comes
+
+        from the Cloud.
+
+
+        The list is global (covers all regions) and refreshed automatically whenever the provider allocates
+
+        new egress IP space. The response is an array of CIDR blocks; duplicate prefixes are not returned.'
+      parameters: []
+      responses:
+        '200':
+          description: IP ranges
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IPRangesSerializer'
+      tags:
+      - IP Ranges
+components:
+  schemas:
+    IPRangesSerializer:
+      properties:
+        ranges:
+          description: IP ranges list
+          examples:
+          - - 203.0.113.0/24
+          items:
+            anyOf:
+            - format: ipv4interface
+              type: string
+            - format: ipv6interface
+              type: string
+          title: Ranges
+          type: array
+      required:
+      - ranges
+      title: IPRangesSerializer
+      type: object

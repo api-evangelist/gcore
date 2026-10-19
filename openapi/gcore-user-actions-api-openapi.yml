@@ -1,0 +1,1201 @@
+openapi: 3.2.0
+info:
+  title: Cloud User Actions API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: User Actions
+paths:
+  /v1/user_actions:
+    get:
+      operationId: UserActionLogClientViewSet.get
+      summary: List user actions
+      description: Retrieve user action log for one client or a set of projects
+      parameters:
+      - in: query
+        name: action_type
+        required: false
+        description: User action type. Several options can be specified.
+        schema:
+          description: User action type. Several options can be specified.
+          examples:
+          - - activate
+            - delete
+          items:
+            $ref: '#/components/schemas/ActionType'
+          title: Action Type
+          type: array
+      - in: query
+        name: api_group
+        required: false
+        description: API group that requested action belongs to. Several options can be specified.
+        schema:
+          description: API group that requested action belongs to. Several options can be specified.
+          examples:
+          - - ai_cluster
+            - image
+          items:
+            enum:
+            - ai_cluster
+            - baremetal
+            - basic_vm
+            - caas_container
+            - caas_key
+            - caas_pull_secret
+            - dbaas_postgres
+            - ddos_profile
+            - faas_function
+            - faas_key
+            - faas_namespace
+            - file_shares
+            - floating_ip
+            - image
+            - inference_at_the_edge
+            - instance
+            - instance_isolation
+            - k8s_cluster
+            - k8s_cluster_template
+            - k8s_pool
+            - laas
+            - laas_topic
+            - lb_health_monitor
+            - lb_l7policy
+            - lb_l7rule
+            - lblistener
+            - lbpool
+            - lbpool_member
+            - lifecycle_policy
+            - lifecycle_policy_volume_member
+            - loadbalancer
+            - network
+            - port
+            - project
+            - quota_limit_request
+            - registry
+            - reservation
+            - reserved_fixed_ip
+            - role
+            - router
+            - rtbh
+            - secret
+            - securitygroup
+            - securitygrouprule
+            - servergroup
+            - shared_flavor
+            - shared_image
+            - shared_network
+            - slurm
+            - snapshot
+            - snapshot_schedule
+            - ssh_key
+            - subnet
+            - user
+            - vip_ip_addresses
+            - volume
+            type: string
+          title: Api Group
+          type: array
+      - in: query
+        name: from_timestamp
+        required: false
+        description: ISO formatted datetime string. Starting timestamp from which user actions are requested
+        schema:
+          description: ISO formatted datetime string. Starting timestamp from which user actions are requested
+          examples:
+          - '2019-11-14T10:30:32Z'
+          format: date-time
+          title: From Timestamp
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: order_by
+        required: false
+        description: Sorting by timestamp. Oldest first, or most recent first
+        schema:
+          $ref: '#/components/schemas/UserActionOrderByChoices'
+          default: desc
+          description: Sorting by timestamp. Oldest first, or most recent first
+          examples:
+          - asc
+      - in: query
+        name: project_id
+        required: false
+        description: Project ID. Several options can be specified.
+        schema:
+          description: Project ID. Several options can be specified.
+          examples:
+          - - 1
+            - 2
+            - 3
+          items:
+            format: int64
+            type: integer
+          title: Project Id
+          type: array
+      - in: query
+        name: region_id
+        required: false
+        description: Region ID. Several options can be specified.
+        schema:
+          description: Region ID. Several options can be specified.
+          examples:
+          - - 1
+            - 2
+            - 3
+          items:
+            format: int64
+            type: integer
+          title: Region Id
+          type: array
+      - in: query
+        name: resource_id
+        required: false
+        description: Resource ID. Several options can be specified.
+        schema:
+          description: Resource ID. Several options can be specified.
+          items:
+            type: string
+          title: Resource Id
+          type: array
+      - in: query
+        name: search_field
+        required: false
+        description: Extra search field for common object properties such as name, IP address, or other,                     depending on the resource_type
+        schema:
+          description: Extra search field for common object properties such as name, IP address, or other,                     depending on the resource_type
+          examples:
+          - default
+          title: Search Field
+          type: string
+      - in: query
+        name: sorting
+        required: false
+        description: (DEPRECATED Use 'order_by' instead) Sorting by timestamp. Oldest first, or most recent first
+        schema:
+          $ref: '#/components/schemas/UserActionOrderByChoices'
+          default: desc
+          deprecated: true
+          description: (DEPRECATED Use 'order_by' instead) Sorting by timestamp. Oldest first, or most recent first
+          examples:
+          - asc
+      - in: query
+        name: source_user_ips
+        required: false
+        description: Originating IP address of the client making the request. Several options can be specified.
+        schema:
+          description: Originating IP address of the client making the request. Several options can be specified.
+          examples:
+          - - 203.0.113.42
+            - 192.168.1.100
+          items:
+            type: string
+          title: Source User Ips
+          type: array
+      - in: query
+        name: to_timestamp
+        required: false
+        description: ISO formatted datetime string. Ending timestamp until which user actions are requested
+        schema:
+          description: ISO formatted datetime string. Ending timestamp until which user actions are requested
+          examples:
+          - '2019-11-14T10:30:32Z'
+          format: date-time
+          title: To Timestamp
+          type: string
+      - in: query
+        name: user_agents
+        required: false
+        description: User-Agent string identifying the client making the request. Several options can be specified.
+        schema:
+          description: User-Agent string identifying the client making the request. Several options can be specified.
+          examples:
+          - - Mozilla/5.0
+            - MyApp/1.0.0
+          items:
+            type: string
+          title: User Agents
+          type: array
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActionCollectionSerializer'
+      tags:
+      - User Actions
+  /v1/user_actions/amqp_subscriptions/{subscription_id}:
+    get:
+      operationId: UserActionLogAmqpSubscription.get
+      summary: Get ampq subscription
+      description: ''
+      parameters:
+      - in: path
+        name: subscription_id
+        required: true
+        description: Subscription ID
+        schema:
+          description: Subscription ID
+          examples:
+          - 17
+          title: Subscription Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActionSubscriptionMqResponseSerializer'
+      tags:
+      - User Actions
+    patch:
+      operationId: UserActionLogAmqpSubscription.patch
+      summary: Update amqp subscription
+      description: ''
+      parameters:
+      - in: path
+        name: subscription_id
+        required: true
+        description: Subscription ID
+        schema:
+          description: Subscription ID
+          examples:
+          - 17
+          title: Subscription Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActionSubscriptionMqResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserActionSubscriptionUpdateSerializer'
+      tags:
+      - User Actions
+  /v1/user_actions/amqp_subscriptions_list:
+    get:
+      operationId: UserActionLogAmqpSubscribtionListViewSet.get
+      summary: List amqp subscriptions
+      description: Retrieve all existing AMQP subscriptions for user action logs.
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActionsSubscriptionMqCollectionSerializer'
+      tags:
+      - User Actions
+  /v1/user_actions/subscribe:
+    post:
+      operationId: UserActionLogSubscribtionViewSet.post
+      summary: Create subscription
+      description: 'Subscribe to the user action log. Subscription is created for the client_id that is taken from the JWT token.
+
+        For details on how to obtain a token, refer to the "Account / Login" section of the documentation.'
+      parameters: []
+      responses:
+        '204':
+          description: No Content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserActionSubscriptionSerializer'
+      tags:
+      - User Actions
+  /v1/user_actions/subscribe_amqp:
+    post:
+      operationId: UserActionLogSubscribtionMqViewSet.post
+      summary: Create amqp subscription
+      description: 'Subscribe to the user action log over AMQP. Subscription is created for the client_id that is taken from the
+
+        JWT token. See how to get the token in the Account / Login section of this documentation'
+      parameters: []
+      responses:
+        '204':
+          description: No Content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserActionSubscriptionMqSerializer'
+      tags:
+      - User Actions
+  /v1/user_actions/subscribe_amqp_test:
+    post:
+      operationId: UserActionAmqpSubscriptionTest.post
+      summary: Send test message
+      description: Sending a test message to a specified message broker
+      parameters: []
+      responses:
+        '204':
+          description: No Content
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestMessageMQBodySerializer'
+      tags:
+      - User Actions
+  /v1/user_actions/subscriptions_list:
+    get:
+      operationId: UserActionLogSubscribtionListViewSet.get
+      summary: List subscriptions
+      description: Retrieve all existing HTTP webhook subscriptions for user action logs.
+      parameters:
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserActionsSubscriptionCollectionSerializer'
+      tags:
+      - User Actions
+  /v1/user_actions/unsubscribe:
+    post:
+      operationId: UserActionLogSubscribtionCancelViewSet.post
+      summary: Delete subscription
+      description: Unsubscribe from the user action log
+      parameters: []
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - User Actions
+  /v1/user_actions/unsubscribe_amqp:
+    post:
+      operationId: UserActionLogSubscribtionMqCancelViewSet.post
+      summary: Delete amqp subscription
+      description: Unsubscribe from the user action log over AMQP
+      parameters: []
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - User Actions
+components:
+  schemas:
+    UserActionSubscriptionUpdateSerializer:
+      properties:
+        connection_string:
+          description: Connection string of the following structure "scheme://username:password@host:port/virtual_host". The scheme must be amqp or amqps, the port must be a valid TCP port, and the host must resolve to a public address (private, loopback, link-local and metadata addresses are rejected with a 400).
+          examples:
+          - amqps://guest:guest@93.184.216.34:5671/user_action_events
+          - amqps://guest:guest@broker.example.com:5671/user_action_events
+          title: Connection String
+          type: string
+        exchange:
+          description: Exchange name
+          title: Exchange
+          type: string
+        receive_child_client_events:
+          description: Set to true if you would like to receive user action logs of all clients with the reseller_id matching the current client_id. Defaults to false
+          examples:
+          - false
+          title: Receive Child Client Events
+          type: boolean
+        routing_key:
+          description: Routing key
+          examples:
+          - foo
+          title: Routing Key
+          type: string
+      title: UserActionSubscriptionUpdateSerializer
+      type: object
+    UserActionResourceSerializer:
+      properties:
+        resource_body:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          default: null
+          description: Free-form object, resource body.
+          examples:
+          - key: value
+          title: Resource Body
+        resource_id:
+          description: Resource ID
+          examples:
+          - '1234'
+          title: Resource Id
+          type: string
+        resource_type:
+          description: Resource type
+          enum:
+          - baremetal_server
+          - basic_vm
+          - caas_container
+          - caas_key
+          - caas_pull_secret
+          - dbaas_postgres
+          - ddos_profile
+          - external_ip
+          - faas_function
+          - faas_key
+          - faas_namespace
+          - file_shares
+          - floating_ip
+          - gpu_baremetal_server
+          - gpu_virtual_server
+          - gpuai_cluster
+          - image
+          - inference_api_key
+          - inference_application
+          - inference_instance
+          - inference_registry_credentials
+          - inference_secret
+          - instance
+          - ipu_cluster
+          - k8s_cluster
+          - k8s_cluster_template
+          - k8s_pool
+          - laas
+          - laas_topic
+          - lb_health_monitor
+          - lb_l7policy
+          - lb_l7rule
+          - lblistener
+          - lbpool
+          - lbpool_member
+          - lifecycle_policy
+          - lifecycle_policy_volume_member
+          - loadbalancer
+          - network
+          - port
+          - project
+          - quota_limit_request
+          - registry
+          - registry_repository
+          - registry_repository_artifact
+          - registry_repository_tag
+          - registry_user
+          - registry_user_sercret
+          - reservation
+          - role
+          - router
+          - secret
+          - securitygroup
+          - securitygrouprule
+          - servergroup
+          - shared_flavor
+          - shared_image
+          - shared_network
+          - slurm_cluster
+          - slurm_node_set
+          - snapshot
+          - snapshot_schedule
+          - ssh_key
+          - subnet
+          - token
+          - user
+          - virtual_gpu_cluster
+          - volume
+          examples:
+          - project
+          type: string
+        search_field:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Often used property for filtering actions. It can be a name, IP address,             or other property, depending on the resource_type
+          examples:
+          - name
+          - 192.168.0.1
+          title: Search Field
+      required:
+      - resource_id
+      - resource_type
+      title: UserActionResource schema
+      type: object
+    UserActionsSubscriptionCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/UserActionSubscriptionSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: UserActionsSubscriptionCollectionSerializer
+      type: object
+    UserActionCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/UserActionSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: UserActionCollectionSerializer
+      type: object
+    UserActionsSubscriptionMqCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/UserActionSubscriptionMqSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: UserActionsSubscriptionMqCollectionSerializer
+      type: object
+    UserActionResourcePriceSerializer:
+      properties:
+        currency_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          examples:
+          - USD
+          title: Currency Code
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per hour
+          examples:
+          - 0.01
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month (30 days)
+          examples:
+          - 7.2
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_status
+      title: UserActionResourcePrice schema
+      type: object
+    CreateUserActionSubscriptionMqSerializer:
+      properties:
+        connection_string:
+          description: Connection string of the following structure "scheme://username:password@host:port/virtual_host". The scheme must be amqp or amqps, the port must be a valid TCP port, and the host must resolve to a public address (private, loopback, link-local and metadata addresses are rejected with a 400).
+          examples:
+          - amqps://guest:guest@93.184.216.34:5671/user_action_events
+          - amqps://guest:guest@broker.example.com:5671/user_action_events
+          title: Connection String
+          type: string
+        exchange:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Exchange name
+          examples:
+          - null
+          title: Exchange
+        receive_child_client_events:
+          default: false
+          description: Set to true if you would like to receive user action logs of all clients with the reseller_id matching the current client_id. Defaults to false
+          examples:
+          - false
+          title: Receive Child Client Events
+          type: boolean
+        routing_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Routing key
+          examples:
+          - foo
+          title: Routing Key
+      required:
+      - connection_string
+      title: Scheme for creating a subscription to user_action on RabbitMQ
+      type: object
+    CreateUserActionSubscriptionSerializer:
+      properties:
+        auth_header_name:
+          description: Authorization header name
+          examples:
+          - Authorization
+          title: Auth Header Name
+          type: string
+        auth_header_value:
+          description: Authorization header value
+          examples:
+          - Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc0OTU0MDY0LCJqdGkiOiJiYXIiLCJ1c2VyX2lkIjoxLCJ1c2VyX3R5cGUiOiJjb21tb24iLCJ1c2VyX2dyb3VwcyI6WyJVc2VycyJdLCJjbGllbnRfaWQiOjEsImVtYWlsIjoidGVzdEB0ZXN0LnRlc3QiLCJ1c2VybmFtZSI6InRlc3RAdGVzdC50ZXN0IiwiaXNfYWRtaW4iOmZhbHNlLCJjbGllbnRfbmFtZSI6Ik5hbWUiLCJleGNoYW5nZWFibGUiOnRydWUsImZha2VfdXNlcl9pZCI6MSwicmp0aSI6ImZvbyJ9.YTH_s67j7xyWlFLy093RxReT5PmitnawLr25Jh7Ix14
+          title: Auth Header Value
+          type: string
+        url:
+          description: URL to send user action logs for the specified client
+          examples:
+          - https://your-url.com/receive-user-action-messages
+          title: Url
+          type: string
+      required:
+      - url
+      - auth_header_name
+      - auth_header_value
+      title: Scheme for creating a subscription to user_action on webhook
+      type: object
+    UserActionSubscriptionMqResponseSerializer:
+      properties:
+        connection_string:
+          description: Connection string of the following structure "scheme://username:password@host:port/virtual_host"
+          examples:
+          - amqps://guest:guest@93.184.216.34:5671/user_action_events
+          - amqps://guest:guest@broker.example.com:5671/user_action_events
+          title: Connection String
+          type: string
+        exchange:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Exchange name
+          examples:
+          - null
+          title: Exchange
+        id:
+          description: Subscription ID
+          examples:
+          - 33
+          title: Id
+          type: integer
+        receive_child_client_events:
+          description: Set to true if you would like to receive user action logs of all clients with the reseller_id matching the current client_id. Defaults to false
+          examples:
+          - false
+          title: Receive Child Client Events
+          type: boolean
+        routing_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Routing key
+          examples:
+          - foo
+          title: Routing Key
+      required:
+      - id
+      - connection_string
+      - exchange
+      - routing_key
+      - receive_child_client_events
+      title: UserAction RabbitMQ subscription scheme
+      type: object
+    UserActionSubscriptionSerializer:
+      properties:
+        auth_header_name:
+          description: Authorization header name
+          examples:
+          - Authorization
+          title: Auth Header Name
+          type: string
+        auth_header_value:
+          description: Authorization header value
+          examples:
+          - Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTc0OTU0MDY0LCJqdGkiOiJiYXIiLCJ1c2VyX2lkIjoxLCJ1c2VyX3R5cGUiOiJjb21tb24iLCJ1c2VyX2dyb3VwcyI6WyJVc2VycyJdLCJjbGllbnRfaWQiOjEsImVtYWlsIjoidGVzdEB0ZXN0LnRlc3QiLCJ1c2VybmFtZSI6InRlc3RAdGVzdC50ZXN0IiwiaXNfYWRtaW4iOmZhbHNlLCJjbGllbnRfbmFtZSI6Ik5hbWUiLCJleGNoYW5nZWFibGUiOnRydWUsImZha2VfdXNlcl9pZCI6MSwicmp0aSI6ImZvbyJ9.YTH_s67j7xyWlFLy093RxReT5PmitnawLr25Jh7Ix14
+          title: Auth Header Value
+          type: string
+        id:
+          description: Subscription ID
+          examples:
+          - 17
+          title: Id
+          type: integer
+        url:
+          description: URL to send user action logs for the specified client
+          examples:
+          - https://your-url.com/receive-user-action-messages
+          title: Url
+          type: string
+      required:
+      - id
+      - url
+      - auth_header_name
+      - auth_header_value
+      title: UserAction subscription scheme on webhook
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    TestMessageMQBodySerializer:
+      properties:
+        connection_string:
+          description: Connection string of the following structure "scheme://username:password@host:port/virtual_host". The scheme must be amqp or amqps, the port must be a valid TCP port, and the host must resolve to a public address (private, loopback, link-local and metadata addresses are rejected with a 400).
+          examples:
+          - amqps://guest:guest@93.184.216.34:5671/user_action_events
+          - amqps://guest:guest@broker.example.com:5671/user_action_events
+          title: Connection String
+          type: string
+        exchange:
+          description: Exchange name
+          examples:
+          - exchange
+          title: Exchange
+          type: string
+        routing_key:
+          description: Routing key
+          examples:
+          - routing_key
+          title: Routing Key
+          type: string
+      required:
+      - connection_string
+      title: Scheme for sending a test message to MQ
+      type: object
+    ActionType:
+      enum:
+      - activate
+      - attach
+      - change_logging_resources
+      - create
+      - create_access_rule
+      - deactivate
+      - delete
+      - delete_access_rule
+      - delete_metadata
+      - detach
+      - disable_logging
+      - disable_portsecurity
+      - download
+      - enable_logging
+      - enable_portsecurity
+      - failover
+      - get_certificate
+      - get_console
+      - get_kubeconfig
+      - get_logs
+      - put_into_servergroup
+      - reboot
+      - reboot_hard
+      - rebuild
+      - regenerate_credentials
+      - remove_from_servergroup
+      - replace
+      - replace_metadata
+      - resize
+      - resume
+      - retype
+      - revert
+      - scale_down
+      - scale_up
+      - start
+      - stop
+      - suspend
+      - update
+      - update_metadata
+      - upgrade
+      title: ActionType
+      type: string
+    UserActionSerializer:
+      properties:
+        acknowledged:
+          description: User action log was successfully received by its subscriber in case there is one
+          examples:
+          - true
+          title: Acknowledged
+          type: boolean
+        action_data:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          description: Additional information about the action
+          examples:
+          - '{"name": "test_project_a"}'
+          title: Action Data
+        action_type:
+          $ref: '#/components/schemas/ActionType'
+          description: Action type
+          examples:
+          - create
+        api_group:
+          description: API group
+          enum:
+          - ai_cluster
+          - baremetal
+          - basic_vm
+          - caas_container
+          - caas_key
+          - caas_pull_secret
+          - dbaas_postgres
+          - ddos_profile
+          - faas_function
+          - faas_key
+          - faas_namespace
+          - file_shares
+          - floating_ip
+          - image
+          - inference_at_the_edge
+          - instance
+          - instance_isolation
+          - k8s_cluster
+          - k8s_cluster_template
+          - k8s_pool
+          - laas
+          - laas_topic
+          - lb_health_monitor
+          - lb_l7policy
+          - lb_l7rule
+          - lblistener
+          - lbpool
+          - lbpool_member
+          - lifecycle_policy
+          - lifecycle_policy_volume_member
+          - loadbalancer
+          - network
+          - port
+          - project
+          - quota_limit_request
+          - registry
+          - reservation
+          - reserved_fixed_ip
+          - role
+          - router
+          - rtbh
+          - secret
+          - securitygroup
+          - securitygrouprule
+          - servergroup
+          - shared_flavor
+          - shared_image
+          - shared_network
+          - slurm
+          - snapshot
+          - snapshot_schedule
+          - ssh_key
+          - subnet
+          - user
+          - vip_ip_addresses
+          - volume
+          examples:
+          - project
+          type: string
+        client_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Client ID of the user.
+          examples:
+          - 10
+          title: Client Id
+        email:
+          anyOf:
+          - format: email
+            type: string
+          - type: 'null'
+          description: User email address
+          examples:
+          - user@example.com
+          title: Email
+        id:
+          description: User action ID
+          examples:
+          - '123'
+          title: Id
+          type: string
+        is_complete:
+          description: User action was filled with all necessary information.             If false, then something went wrong during user action creation or update
+          examples:
+          - true
+          title: Is Complete
+          type: boolean
+        issued_by_user_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: User ID who issued the token that made the request
+          examples:
+          - 222324
+          title: Issued By User Id
+        project_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+        region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+        resources:
+          description: Resources
+          items:
+            $ref: '#/components/schemas/UserActionResourceSerializer'
+          title: Resources
+          type: array
+        source_user_ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: User IP that made the request
+          examples:
+          - 1.2.3.4
+          title: Source User Ip
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Task ID
+          examples:
+          - 1bdcc138-e716-41ff-ad8d-3477a7ac6d14
+          title: Task Id
+        timestamp:
+          description: Datetime. Action timestamp
+          examples:
+          - '2019-11-14T10:30:32+00:00'
+          format: date-time
+          title: Timestamp
+          type: string
+        token_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Token ID
+          examples:
+          - 192021
+          title: Token Id
+        total_price:
+          anyOf:
+          - $ref: '#/components/schemas/UserActionResourcePriceSerializer'
+          - type: 'null'
+          description: Total resource price VAT inclusive
+        user_agent:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: User-Agent that made the request
+          examples:
+          - Mozilla/5.0
+          title: User Agent
+        user_id:
+          description: User ID
+          examples:
+          - 789
+          title: User Id
+          type: integer
+      required:
+      - id
+      - timestamp
+      - client_id
+      - user_id
+      - email
+      - project_id
+      - region_id
+      - api_group
+      - action_type
+      - action_data
+      - task_id
+      - user_agent
+      - source_user_ip
+      - acknowledged
+      - is_complete
+      - total_price
+      - token_id
+      - issued_by_user_id
+      - resources
+      title: UserAction schema
+      type: object
+    UserActionOrderByChoices:
+      enum:
+      - asc
+      - desc
+      title: UserActionOrderByChoices
+      type: string
+    UserActionSubscriptionMqSerializer:
+      properties:
+        connection_string:
+          description: Connection string of the following structure "scheme://username:password@host:port/virtual_host"
+          examples:
+          - amqps://guest:guest@93.184.216.34:5671/user_action_events
+          - amqps://guest:guest@broker.example.com:5671/user_action_events
+          title: Connection String
+          type: string
+        exchange:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Exchange name
+          examples:
+          - null
+          title: Exchange
+        id:
+          description: Subscription ID
+          examples:
+          - 33
+          title: Id
+          type: integer
+        receive_child_client_events:
+          default: false
+          description: Set to true if you would like to receive user action logs of all clients with the reseller_id matching the current client_id. Defaults to false
+          examples:
+          - false
+          title: Receive Child Client Events
+          type: boolean
+        routing_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Routing key
+          examples:
+          - foo
+          title: Routing Key
+      required:
+      - id
+      - connection_string
+      title: UserAction subscription scheme on RabbitMQ
+      type: object

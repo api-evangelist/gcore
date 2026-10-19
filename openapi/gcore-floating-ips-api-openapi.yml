@@ -1,0 +1,2805 @@
+openapi: 3.2.0
+info:
+  title: Cloud Floating IPs API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Floating IPs
+paths:
+  /v1/floatingips/{project_id}/{region_id}:
+    post:
+      operationId: FloatingIPViewSet.post
+      summary: Create floating IP
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFloatingIPSerializer'
+      tags:
+      - Floating IPs
+    get:
+      operationId: FloatingIPViewSet.get
+      summary: List floating IPs
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: port_ids
+        required: false
+        description: Optional. Filter by the port ID the floating IP is attached to. Repeat the parameter to filter by multiple ports (`?port_ids=id1&port_ids=id2`).
+        schema:
+          description: Optional. Filter by the port ID the floating IP is attached to. Repeat the parameter to filter by multiple ports (`?port_ids=id1&port_ids=id2`).
+          examples:
+          - - ee2402d0-f0cd-4503-9b75-69be1d11c5f1
+          items:
+            format: uuid4
+            type: string
+          title: Port Ids
+          type: array
+      - in: query
+        name: status
+        required: false
+        description: Filter by floating IP status. DOWN - unassigned (available). ACTIVE - attached to a port (in use). ERROR - error state.
+        schema:
+          $ref: '#/components/schemas/FloatingIPStatus'
+          description: Filter by floating IP status. DOWN - unassigned (available). ACTIVE - attached to a port (in use). ERROR - error state.
+          examples:
+          - DOWN
+      - in: query
+        name: tag_key
+        required: false
+        description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+        schema:
+          description: Optional. Filter by tag keys. ?tag_key=key1&tag_key=key2
+          examples:
+          - - key1
+            - key2
+          items:
+            description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+            examples:
+            - my-tag
+            maxLength: 255
+            minLength: 1
+            pattern: ^[^\s=]+$
+            type: string
+          title: Tag Key
+          type: array
+      - in: query
+        name: tag_key_value
+        required: false
+        description: Optional. Filter by tag key-value pairs.
+        schema:
+          contentMediaType: application/json
+          contentSchema:
+            propertyNames:
+              description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^\s=]+$
+            type: object
+            additionalProperties:
+              description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+              examples:
+              - my-tag-value
+              maxLength: 255
+              minLength: 1
+              pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+              type: string
+          description: Optional. Filter by tag key-value pairs.
+          examples:
+          - key: value
+          title: Tag Key Value
+          type: string
+      responses:
+        '200':
+          description: Floating IPs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FloatingIPDetailedCollectionSerializer'
+      tags:
+      - Floating IPs
+  /v2/floatingips/{project_id}/{region_id}/{floating_ip_id}:
+    patch:
+      operationId: FloatingIPInstanceViewSetV2.patch
+      summary: Update floating IP
+      description: 'This endpoint updates the association and tags of an existing Floating IP. The behavior depends on
+
+        the current association state and the provided fields:
+
+
+        Parameters:
+
+
+        port_id: The unique identifier of the network interface (port) to which the Floating IP should be assigned.
+
+        This ID can be retrieved from the "Get instance" or "List network interfaces" endpoints.
+
+
+        fixed_ip_address: The private IP address assigned to the network interface.
+
+        This must be one of the IP addresses currently assigned to the specified port.
+
+        You can retrieve available fixed IP addresses from the "Get instance" or
+
+        "List network interfaces" endpoints.
+
+
+        When the Floating IP has no port associated (port_id is null):
+
+        - Patch with both port_id and fixed_ip_address:
+
+        Assign the Floating IP to the specified port and the provided fixed_ip_address, if that
+
+        fixed_ip_address exists on the port and is not yet used by another Floating IP.
+
+        - Patch with port_id only (fixed_ip_address omitted):
+
+        Assign the Floating IP to the specified port using the first available IPv4 fixed IP of that port.
+
+
+        When the Floating IP is already associated with a port:
+
+        - Patch with both port_id and fixed_ip_address:
+
+        Re-assign the Floating IP to the specified port and address if all validations pass.
+
+        - Patch with port_id only (fixed_ip_address omitted):
+
+        Re-assign the Floating IP to the specified port using the first available IPv4 fixed IP of that port.
+
+        - Patch with port_id = null:
+
+        Unassign the Floating IP from its current port.
+
+
+        Tags:
+
+        - You can update tags alongside association changes. Tags are provided as a list of key-value pairs.
+
+
+        Idempotency and task creation:
+
+        - No worker task is created if the requested state is already actual, i.e., the requested port_id
+
+        equals the current port_id and/or the requested fixed_ip_address equals the current fixed_ip_address,
+
+        and the tags already match the current tags. In such cases, the endpoint returns an empty tasks list.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchFloatingIPV2Serializer'
+      tags:
+      - Floating IPs
+  /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}:
+    get:
+      operationId: FloatingIPInstanceViewSet.get
+      summary: Get floating IP
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Floating IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FloatingIPSerializer'
+      tags:
+      - Floating IPs
+    delete:
+      operationId: FloatingIPInstanceViewSet.delete
+      summary: Delete floating IP
+      description: ''
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Floating IPs
+    patch:
+      operationId: FloatingIPInstanceViewSet.patch
+      summary: Update floating IP
+      description: '**Deprecated**: Use `PATCH /v2/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Floating IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FloatingIPSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchFloatingIPSerializer'
+      tags:
+      - Floating IPs
+  /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}/convert:
+    post:
+      operationId: FloatingIPConvertHandler.post
+      summary: Convert floating IP
+      description: 'Convert an unassigned floating IP to another resource type.
+
+        The floating IP must not be assigned to any port (port_id must be None).
+
+
+        Note: In rare cases, if the conversion fails due to concurrent network operations,
+
+        the original IP address may be lost and a new one will need to be created.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Task IDs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertFloatingIPSerializer'
+      tags:
+      - Floating IPs
+  /v1/pricing/{project_id}/{region_id}/floating_ips:
+    post:
+      operationId: FloatingIpPricingHandler.post
+      summary: Preview floating IP price
+      description: Preview the billing price for the floating IP addresses.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Item price
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FloatingIpPricingRequestSerializer'
+      tags:
+      - Floating IPs
+  /v1/availablefloatingips/{project_id}/{region_id}:
+    get:
+      operationId: AvailableFloatingIPViewSet.get
+      summary: List available floating IPs
+      description: '**Deprecated**: Use `GET /v1/floatingips/{project_id}/{region_id}?status=DOWN` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: Available floating IPs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FloatingIPCollectionSerializer'
+      deprecated: true
+      tags:
+      - Floating IPs
+  /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}/assign:
+    post:
+      operationId: FloatingIPAssignHandler.post
+      summary: Assign floating IP
+      description: 'Assign floating IP to instance or loadbalancer.
+
+
+        **Deprecated**: Use `PATCH /v2/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Floating IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FloatingIPSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignFloatingIPSerializer'
+      tags:
+      - Floating IPs
+  /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}/metadata:
+    post:
+      operationId: FloatingIPMetadataHandler.post
+      summary: Create or update floating IP tags
+      description: 'Create or update one or more tags for a floating IP.
+
+        If a tag does not exist, it gets created.
+
+        If a tag already exists, its value is overwritten.
+
+
+        **Deprecated**: Use `PATCH /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagsSerializer'
+      tags:
+      - Floating IPs
+    get:
+      operationId: FloatingIPMetadataHandler.get
+      summary: List floating IP tags
+      description: 'Lists all tags for a floating IP.
+
+
+        **Deprecated**: Use `GET /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Key-value tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagCollectionSerializer'
+      deprecated: true
+      tags:
+      - Floating IPs
+    put:
+      operationId: FloatingIPMetadataHandler.put
+      summary: Replace floating IP tags
+      description: 'All existing tags are deleted and replaced with the tags from the request.
+
+
+        **Deprecated**: Use `PATCH /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagsSerializer'
+      tags:
+      - Floating IPs
+  /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}/metadata_item:
+    get:
+      operationId: FloatingIPMetadataItemHandler.get
+      summary: Get floating IP tag
+      description: 'Get floating IP tag by key.
+
+
+        **Deprecated**: Use `GET /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key to filter by
+        schema:
+          description: Tag key to filter by
+          examples:
+          - cost-center
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^\s=]+$
+          title: Key
+          type: string
+      responses:
+        '200':
+          description: Floating IP tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagSerializer'
+      deprecated: true
+      tags:
+      - Floating IPs
+    delete:
+      operationId: FloatingIPMetadataItemHandler.delete
+      summary: Delete floating IP tag
+      description: 'Delete a tag from a floating IP.
+
+
+        **Deprecated**: Use `PATCH /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      - in: query
+        name: key
+        required: true
+        description: Tag key to filter by
+        schema:
+          description: Tag key to filter by
+          examples:
+          - cost-center
+          maxLength: 255
+          minLength: 1
+          pattern: ^[^\s=]+$
+          title: Key
+          type: string
+      responses:
+        '204':
+          description: No Content
+      deprecated: true
+      tags:
+      - Floating IPs
+  /v1/floatingips/{project_id}/{region_id}/{floating_ip_id}/unassign:
+    post:
+      operationId: FloatingIPUnassignHandler.post
+      summary: Unassign floating IP
+      description: '**Deprecated**: Use `PATCH /v2/floatingips/{project_id}/{region_id}/{floating_ip_id}` instead.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: floating_ip_id
+        required: true
+        description: Floating IP ID
+        schema:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Floating Ip Id
+          type: string
+      responses:
+        '200':
+          description: Floating IP
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FloatingIPSerializer'
+      deprecated: true
+      tags:
+      - Floating IPs
+components:
+  schemas:
+    CreateFloatingIPSerializer:
+      properties:
+        fixed_ip_address:
+          anyOf:
+          - format: ipv4
+            type: string
+          - type: 'null'
+          default: null
+          description: If the port has multiple IP addresses, a specific one can be selected using this field. If not specified, the first IP in the port's list will be used by default.
+          examples:
+          - 192.168.10.15
+          title: Fixed Ip Address
+        port_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          default: null
+          description: If provided, the floating IP will be immediately attached to the specified port.
+          examples:
+          - ee2402d0-f0cd-4503-9b75-69be1d11c5f1
+          title: Port Id
+        tags:
+          $ref: '#/components/schemas/CreateTagsSerializer'
+          description: Key-value tags to associate with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Both tag keys and values have a maximum length of 255 characters. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - my-tag: my-tag-value
+      title: CreateFloatingIPSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    InstanceInFloatingSerializer:
+      properties:
+        addresses:
+          additionalProperties:
+            items:
+              anyOf:
+              - $ref: '#/components/schemas/InstanceFloatingAddressSerializer'
+              - $ref: '#/components/schemas/InstanceFixedAddressShortSerializer'
+              - $ref: '#/components/schemas/InstanceFixedAddressSerializer'
+            type: array
+          description: Map of network_name to list of addresses in that network
+          title: Addresses
+          type: object
+        created_at:
+          description: Datetime when instance was created
+          examples:
+          - '2023-11-29T10:56:49Z'
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          description: Task that created this entity
+          examples:
+          - d1e1500b-e2be-40aa-9a4b-cc493fa1af30
+          title: Creator Task Id
+          type: string
+        flavor:
+          $ref: '#/components/schemas/BaseFlavorSerializer'
+          description: Flavor
+        id:
+          description: Instance ID
+          examples:
+          - 6c6aa80f-7836-4dc2-a2ae-125e248be476
+          format: uuid4
+          title: Id
+          type: string
+        instance_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Instance description
+          examples:
+          - Instance description
+          title: Instance Description
+        name:
+          description: Instance name
+          examples:
+          - my-instance-1
+          title: Name
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 111
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 4
+          title: Region Id
+          type: integer
+        security_groups:
+          description: Security groups
+          items:
+            $ref: '#/components/schemas/NameSerializerPydantic'
+          title: Security Groups
+          type: array
+        ssh_key_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: SSH key name assigned to instance
+          examples:
+          - my-ssh-key
+          title: Ssh Key Name
+        status:
+          $ref: '#/components/schemas/InstanceStatus'
+          description: Instance status
+          examples:
+          - ACTIVE
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        task_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Task state
+          examples:
+          - null
+          title: Task State
+        vm_state:
+          $ref: '#/components/schemas/InstanceVMState'
+          description: Virtual machine state (active)
+          examples:
+          - active
+        volumes:
+          description: List of volumes
+          items:
+            $ref: '#/components/schemas/InstanceVolumeSerializer'
+          title: Volumes
+          type: array
+      required:
+      - id
+      - name
+      - created_at
+      - status
+      - vm_state
+      - volumes
+      - flavor
+      - tags
+      - instance_description
+      - addresses
+      - security_groups
+      - ssh_key_name
+      - creator_task_id
+      - task_state
+      - task_id
+      - region
+      - region_id
+      - project_id
+      title: InstanceInFloatingSerializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    LaasIndexRetentionPolicyPydanticSerializer:
+      properties:
+        period:
+          anyOf:
+          - exclusiveMinimum: 0
+            maximum: 1825
+            type: integer
+          - type: 'null'
+          description: Duration of days for which logs must be kept.
+          examples:
+          - 45
+          title: Period
+      required:
+      - period
+      title: LaasIndexRetentionPolicyPydanticSerializer
+      type: object
+    GetClientProfileSerializer:
+      properties:
+        fields:
+          description: List of configured field values for the protection profile
+          items:
+            $ref: '#/components/schemas/ClientProfileFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection profile
+          examples:
+          - 0
+          title: Id
+          type: integer
+        options:
+          $ref: '#/components/schemas/ProfileOptionsSerializer'
+          description: Configuration options controlling profile activation and BGP routing
+          examples:
+          - active: true
+            bgp: true
+        profile_template:
+          anyOf:
+          - $ref: '#/components/schemas/ClientProfileTemplateSerializer'
+          - type: 'null'
+          description: Complete template configuration data used for this profile
+        profile_template_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description of the protection template used for this profile
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Profile Template Description
+        protocols:
+          description: List of network protocols and ports configured for protection
+          examples:
+          - - port: '80'
+              protocols:
+              - TCP
+              - HTTP
+            - port: '53'
+              protocols:
+              - UDP
+          items:
+            $ref: '#/components/schemas/ProtocolsOnPortSerializer'
+          title: Protocols
+          type: array
+        site:
+          description: Geographic site identifier where the protection is deployed
+          examples:
+          - ED
+          maxLength: 50
+          title: Site
+          type: string
+        status:
+          $ref: '#/components/schemas/DdosProfileStatusSerializer'
+          description: Current operational status and any error information for the profile
+          examples:
+          - error_description: ''
+            status: Updated
+      required:
+      - id
+      - options
+      - site
+      - protocols
+      - status
+      - profile_template_description
+      - profile_template
+      - fields
+      title: GetClientProfileSerializer
+      type: object
+    ClientProfileTemplateFieldSerializer:
+      properties:
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      title: ClientProfileTemplateFieldSerializer
+      type: object
+    VRRPIP:
+      properties:
+        ip_address:
+          description: IP address
+          examples:
+          - 127.0.0.1
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        role:
+          $ref: '#/components/schemas/LoadBalancerInstanceRoleEnum'
+          description: LoadBalancer instance role to which VRRP IP belong
+          examples:
+          - MASTER
+          - BACKUP
+          - STANDALONE
+        subnet_id:
+          description: Subnet UUID
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - ip_address
+      - subnet_id
+      - role
+      title: VRRPIP
+      type: object
+    FloatingIpPricingRequestSerializer:
+      examples:
+      - count: 2
+      properties:
+        count:
+          description: Number of floating IP addresses
+          examples:
+          - 2
+          title: Count
+          type: integer
+      required:
+      - count
+      title: FloatingIpPricingRequestSerializer
+      type: object
+    PatchFloatingIPV2Serializer:
+      properties:
+        fixed_ip_address:
+          anyOf:
+          - format: ipv4
+            type: string
+          - type: 'null'
+          description: Fixed IP address
+          examples:
+          - 192.168.10.15
+          title: Fixed Ip Address
+        port_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Port ID
+          examples:
+          - ee2402d0-f0cd-4503-9b75-69be1d11c5f1
+          title: Port Id
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: PatchFloatingIPV2Serializer
+      type: object
+    NameSerializerPydantic:
+      properties:
+        name:
+          description: Name.
+          examples:
+          - some_name
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+      required:
+      - name
+      title: NameSerializerPydantic
+      type: object
+    ConvertFloatingIPSerializer:
+      description: Serializer for floating IP conversion request.
+      properties:
+        target_type:
+          $ref: '#/components/schemas/FloatingIPConversionTargetType'
+          description: Target type for conversion
+          examples:
+          - reserved_fixed_ip
+      required:
+      - target_type
+      title: ConvertFloatingIPSerializer
+      type: object
+    CreateTagsSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: CreateTagsSerializer
+      type: object
+      additionalProperties:
+        description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag-value
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+        type: string
+    DdosProfileStatusSerializer:
+      properties:
+        error_description:
+          description: Detailed error message describing any issues with the profile operation
+          examples:
+          - An error occured while deleting profile
+          title: Error Description
+          type: string
+        status:
+          description: Current operational status of the DDoS protection profile
+          examples:
+          - Error Deleting
+          maxLength: 30
+          minLength: 3
+          title: Status
+          type: string
+      required:
+      - status
+      - error_description
+      title: DdosProfileStatusSerializer
+      type: object
+    MemberConnectivity:
+      enum:
+      - L2
+      - L3
+      title: MemberConnectivity
+      type: string
+    InstanceFixedAddressSerializer:
+      description: Schema for `fixed` addresses. This schema is used when fetching a single instance.
+      properties:
+        addr:
+          description: IP address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        interface_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Interface name. This field will be `null` if `with_interfaces_name=true` is not set in the request when listing instances. It will also be `null` if the `interface_name` was not specified during instance creation or when attaching the interface.
+          examples:
+          - my-interface
+          title: Interface Name
+        subnet_id:
+          description: The unique identifier of the subnet associated with this address. Included only in the response for a single-resource lookup (GET by ID). For the trunk subports, this field is always set.
+          examples:
+          - ba83aec4-7bc1-4979-b934-a11fc1d36cf3
+          title: Subnet Id
+          type: string
+        subnet_name:
+          description: The name of the subnet associated with this address. Included only in the response for a single-resource lookup (GET by ID). For the trunk subports, this field is always set.
+          examples:
+          - my-subnet
+          title: Subnet Name
+          type: string
+        type:
+          const: fixed
+          description: Type of the address
+          examples:
+          - fixed
+          title: Type
+          type: string
+      required:
+      - addr
+      - type
+      - interface_name
+      - subnet_name
+      - subnet_id
+      title: Fixed IP Address
+      type: object
+    UpdateTagsSerializer:
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: UpdateTagsSerializer
+      type: object
+      additionalProperties:
+        anyOf:
+        - maxLength: 255
+          minLength: 1
+          pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+          type: string
+        - type: 'null'
+        description: Tag value. Maximum 255 characters. Cannot contain tabs, newlines, empty string or start/end with whitespace. Trailing or leading whitespaces will be stripped. Set to `null` in order to delete this tag.
+        examples:
+        - my-tag-value
+    FloatingIPDetailedSerializer:
+      properties:
+        created_at:
+          description: Datetime when the floating IP was created
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity. Null when the floating IP wasn't created via a tracked task.
+          examples:
+          - d1e1500b-e2be-40aa-9a4b-cc493fa1af30
+          title: Creator Task Id
+        fixed_ip_address:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - type: 'null'
+          description: IP address of the port the floating IP is attached to. Null when the floating IP is not attached to a port.
+          examples:
+          - 192.168.10.15
+          title: Fixed Ip Address
+        floating_ip_address:
+          description: IP Address of the floating IP
+          examples:
+          - 172.24.4.34
+          format: ipvanyaddress
+          title: Floating Ip Address
+          type: string
+        id:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Id
+          type: string
+        instance:
+          anyOf:
+          - $ref: '#/components/schemas/InstanceInFloatingSerializer'
+          - type: 'null'
+          description: Instance the floating IP is attached to
+        loadbalancer:
+          anyOf:
+          - $ref: '#/components/schemas/LoadbalancerSerializer'
+          - type: 'null'
+          description: Load balancer the floating IP is attached to
+        port_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Port ID
+          examples:
+          - ee2402d0-f0cd-4503-9b75-69be1d11c5f1
+          title: Port Id
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        router_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Router ID. Null when the floating IP is not attached to a port.
+          examples:
+          - 11005a33-c5ac-4c96-ab6f-8f2827cc7da6
+          title: Router Id
+        status:
+          $ref: '#/components/schemas/FloatingIPStatus'
+          description: Floating IP status. DOWN - unassigned (available). ACTIVE - attached to a port (in use). ERROR - error state.
+          examples:
+          - ACTIVE
+          - DOWN
+          - ERROR
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - a4eb4b29-048e-42f6-a5e1-2c18bc001c45
+          title: Task Id
+        updated_at:
+          description: Datetime when the floating IP was last updated
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - creator_task_id
+      - fixed_ip_address
+      - floating_ip_address
+      - id
+      - tags
+      - port_id
+      - router_id
+      - status
+      - task_id
+      - created_at
+      - updated_at
+      - instance
+      - loadbalancer
+      title: FloatingIPDetailedSerializer
+      type: object
+    LoggingOutSerializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: ID of the region in which the logs will be stored
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          description: Indicates if log streaming is enabled or disabled
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: Logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The topic name to stream logs to
+          examples:
+          - my-log-name
+          title: Topic Name
+      required:
+      - enabled
+      - destination_region_id
+      - topic_name
+      title: LoggingOutSerializer
+      type: object
+    FloatingIPCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/FloatingIPSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: FloatingIPCollectionSerializer
+      type: object
+    NetworkPortFixedIp:
+      properties:
+        ip_address:
+          description: IP address
+          examples:
+          - 127.0.0.1
+          format: ipvanyaddress
+          title: Ip Address
+          type: string
+        subnet_id:
+          description: Subnet UUID
+          examples:
+          - 00000000-0000-4000-8000-000000000000
+          format: uuid4
+          title: Subnet Id
+          type: string
+      required:
+      - ip_address
+      - subnet_id
+      title: NetworkPortFixedIp
+      type: object
+    ListenerSerializer:
+      properties:
+        id:
+          description: Listener ID
+          examples:
+          - 43658ea9-54bd-4807-90b1-925921c9a0d1
+          format: uuid4
+          title: Id
+          type: string
+      required:
+      - id
+      title: ListenerSerializer
+      type: object
+    BaseFlavorSerializer:
+      properties:
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      title: BaseFlavorSerializer
+      type: object
+    PatchFloatingIPSerializer:
+      properties:
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: PatchFloatingIPSerializer
+      type: object
+    TagCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: TagCollectionSerializer
+      type: object
+    InstanceStatus:
+      enum:
+      - ACTIVE
+      - BUILD
+      - DELETED
+      - ERROR
+      - HARD_REBOOT
+      - MIGRATING
+      - PASSWORD
+      - PAUSED
+      - REBOOT
+      - REBUILD
+      - RESCUE
+      - RESIZE
+      - REVERT_RESIZE
+      - SHELVED
+      - SHELVED_OFFLOADED
+      - SHUTOFF
+      - SOFT_DELETED
+      - SUSPENDED
+      - UNKNOWN
+      - VERIFY_RESIZE
+      title: InstanceStatus
+      type: string
+    InstanceVMState:
+      enum:
+      - active
+      - building
+      - deleted
+      - error
+      - paused
+      - rescued
+      - resized
+      - shelved
+      - shelved_offloaded
+      - soft-deleted
+      - stopped
+      - suspended
+      title: InstanceVMState
+      type: string
+    ClientProfileTemplateSerializer:
+      properties:
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Detailed description explaining the template's purpose and use cases
+          examples:
+          - description
+          title: Description
+        fields:
+          description: List of configurable fields that define the template's protection parameters
+          items:
+            $ref: '#/components/schemas/ClientProfileTemplateFieldSerializer'
+          title: Fields
+          type: array
+        id:
+          description: Unique identifier for the DDoS protection template
+          examples:
+          - 123
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection template
+          examples:
+          - ICMP port
+          maxLength: 100
+          title: Name
+          type: string
+      required:
+      - id
+      - name
+      - description
+      - fields
+      title: ClientProfileTemplateSerializer
+      type: object
+    ProtocolsOnPortSerializer:
+      properties:
+        port:
+          description: Network port number for which protocols are configured
+          examples:
+          - '80'
+          title: Port
+          type: string
+        protocols:
+          description: List of network protocols enabled on the specified port
+          examples:
+          - - TCP
+            - HTTP
+          items:
+            type: string
+          title: Protocols
+          type: array
+      required:
+      - port
+      - protocols
+      title: ProtocolsOnPortSerializer
+      type: object
+    FloatingIPConversionTargetType:
+      enum:
+      - reserved_fixed_ip
+      title: FloatingIPConversionTargetType
+      type: string
+    LoadbalancerSerializer:
+      properties:
+        additional_vips:
+          description: List of additional IP addresses
+          items:
+            $ref: '#/components/schemas/NetworkPortFixedIp'
+          title: Additional Vips
+          type: array
+        admin_state_up:
+          description: Administrative state of the resource. When set to true, the resource is enabled and operational. When set to false, the resource is disabled and will not process traffic. Defaults to true.
+          examples:
+          - true
+          - false
+          title: Admin State Up
+          type: boolean
+        created_at:
+          description: Datetime when the load balancer was created
+          examples:
+          - 2019-06-18T11:56:16+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity. Null when the load balancer wasn't created via a tracked task.
+          examples:
+          - 9f3ec11e-bcd4-4fe6-924a-a4439a56ad22
+          title: Creator Task Id
+        ddos_profile:
+          anyOf:
+          - $ref: '#/components/schemas/GetClientProfileSerializer'
+          - type: 'null'
+          description: Loadbalancer advanced DDoS protection profile. Null unless requested via `with_ddos`, or when no profile is attached.
+          examples:
+          - fields:
+            - base_field: 10
+              default: null
+              description: ARK server ports. Valid port values are in range 1000-65535
+              field_type: null
+              field_value:
+              - 45046
+              - 45047
+              id: 11
+              name: ARK Ports
+              required: true
+              validation_schema:
+                items:
+                  maximum: 65535
+                  minimum: 1000
+                  type: integer
+                minItems: 1
+                type: array
+              value: null
+            id: 0
+            options:
+              active: true
+              bgp: true
+            profile_template:
+              description: test client profile template
+              fields:
+              - default: null
+                description: ARK server ports. Valid port values are in range 1000-65535
+                field_type: null
+                id: 11
+                name: ARK Ports
+                required: true
+                validation_schema:
+                  items:
+                    maximum: 65535
+                    minimum: 1000
+                    type: integer
+                  minItems: 1
+                  type: array
+              id: 0
+              name: test_client_profile_template
+            profile_template_description: ARK server ports. Valid port values are in range 1000-65535
+            protocols:
+            - additionalProp1: string
+              additionalProp2: string
+              additionalProp3: string
+            site: ED
+            status:
+              error_description: ''
+              status: Updated
+        flavor:
+          anyOf:
+          - $ref: '#/components/schemas/LbFlavorSerializer'
+          - type: 'null'
+          description: Load balancer flavor. Null when using the default flavor.
+          examples:
+          - flavor_id: 1d276f53-2834-4855-9859-aa922f073055
+            flavor_name: lb1-1-2
+            ram: 2048
+            vcpus: 1
+        floating_ips:
+          description: List of assigned floating IPs
+          items:
+            $ref: '#/components/schemas/FloatingIPSerializer'
+          title: Floating Ips
+          type: array
+        id:
+          description: Load balancer ID
+          examples:
+          - e8ab1be4-1521-4266-be69-28dad4148a30
+          format: uuid4
+          title: Id
+          type: string
+        listeners:
+          description: Load balancer listeners
+          items:
+            $ref: '#/components/schemas/ListenerSerializer'
+          title: Listeners
+          type: array
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingOutSerializer'
+          - type: 'null'
+          description: Logging configuration. Null when logging isn't configured.
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+        name:
+          description: Load balancer name
+          examples:
+          - my_load_balancer
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        operating_status:
+          $ref: '#/components/schemas/OperatingStatusEnum'
+          description: Load balancer operating status
+        preferred_connectivity:
+          $ref: '#/components/schemas/MemberConnectivity'
+          description: Preferred option to establish connectivity between load balancer and its pools members
+          examples:
+          - L2
+          - L3
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        provisioning_status:
+          $ref: '#/components/schemas/ProvisioningStatusEnum'
+          description: Load balancer lifecycle status
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/LoadbalancerStatsSerializer'
+          - type: 'null'
+          description: Statistics of load balancer. Null unless requested via `show_stats`.
+          examples:
+          - active_connections: 0
+            bytes_in: 34942398609
+            bytes_out: 304777113641
+            request_errors: 4
+            total_connections: 21095970
+        tags_v2:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags V2
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          title: Task Id
+        updated_at:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Datetime when the load balancer was last updated. Null until the first update.
+          examples:
+          - 2019-06-18T11:57:00+0000
+          title: Updated At
+        vip_address:
+          description: Load balancer IP address
+          examples:
+          - 5.5.5.5
+          format: ipvanyaddress
+          title: Vip Address
+          type: string
+        vip_fqdn:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Fully qualified domain name for the load balancer VIP. Null when no FQDN is assigned.
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000.lb.cloud.example.com
+          title: Vip Fqdn
+        vip_ip_family:
+          anyOf:
+          - $ref: '#/components/schemas/InterfaceIPFamily'
+          - type: 'null'
+          description: Load balancer IP family
+          examples:
+          - ipv4
+        vip_port_id:
+          description: The ID of the Virtual IP (VIP) port.
+          examples:
+          - 4177d1ef-f1c2-4e45-a531-3e05dfa6d848
+          format: uuid4
+          title: Vip Port Id
+          type: string
+        vrrp_ips:
+          description: List of VRRP IP addresses
+          items:
+            $ref: '#/components/schemas/VRRPIP'
+          title: Vrrp Ips
+          type: array
+      required:
+      - project_id
+      - region_id
+      - region
+      - id
+      - name
+      - flavor
+      - vip_address
+      - vip_port_id
+      - vip_ip_family
+      - vrrp_ips
+      - floating_ips
+      - operating_status
+      - provisioning_status
+      - listeners
+      - created_at
+      - updated_at
+      - creator_task_id
+      - task_id
+      - stats
+      - tags_v2
+      - logging
+      - ddos_profile
+      - additional_vips
+      - preferred_connectivity
+      - admin_state_up
+      - vip_fqdn
+      title: LoadbalancerSerializer
+      type: object
+    OperatingStatusEnum:
+      enum:
+      - DEGRADED
+      - DRAINING
+      - ERROR
+      - NO_MONITOR
+      - OFFLINE
+      - ONLINE
+      title: OperatingStatusEnum
+      type: string
+    InterfaceIPFamily:
+      enum:
+      - dual
+      - ipv4
+      - ipv6
+      title: InterfaceIPFamily
+      type: string
+    ProfileOptionsSerializer:
+      properties:
+        active:
+          description: Controls whether the DDoS protection profile is enabled and actively protecting the resource
+          examples:
+          - true
+          title: Active
+          type: boolean
+        bgp:
+          description: Enables Border Gateway Protocol (BGP) routing for DDoS protection traffic
+          examples:
+          - true
+          title: Bgp
+          type: boolean
+      required:
+      - active
+      - bgp
+      title: ProfileOptionsSerializer
+      type: object
+    InstanceVolumeSerializer:
+      properties:
+        delete_on_termination:
+          description: Whether the volume is deleted together with the VM
+          title: Delete On Termination
+          type: boolean
+        id:
+          description: Volume ID
+          title: Id
+          type: string
+      required:
+      - id
+      - delete_on_termination
+      title: InstanceVolumeSerializer
+      type: object
+    AssignFloatingIPSerializer:
+      properties:
+        fixed_ip_address:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - type: 'null'
+          default: null
+          description: Fixed IP address
+          examples:
+          - 192.168.10.15
+          title: Fixed Ip Address
+        port_id:
+          description: Port ID
+          examples:
+          - ee2402d0-f0cd-4503-9b75-69be1d11c5f1
+          format: uuid4
+          title: Port Id
+          type: string
+      required:
+      - port_id
+      title: AssignFloatingIPSerializer
+      type: object
+    ProvisioningStatusEnum:
+      enum:
+      - ACTIVE
+      - DELETED
+      - ERROR
+      - PENDING_CREATE
+      - PENDING_DELETE
+      - PENDING_UPDATE
+      title: ProvisioningStatusEnum
+      type: string
+    LoadBalancerInstanceRoleEnum:
+      enum:
+      - BACKUP
+      - MASTER
+      - STANDALONE
+      title: LoadBalancerInstanceRoleEnum
+      type: string
+    FloatingIPDetailedCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/FloatingIPDetailedSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: FloatingIPDetailedCollectionSerializer
+      type: object
+    InstanceFloatingAddressSerializer:
+      description: Schema for `floating` addresses.
+      properties:
+        addr:
+          description: Address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        type:
+          const: floating
+          description: Type of the address
+          examples:
+          - fixed
+          title: Type
+          type: string
+      required:
+      - addr
+      - type
+      title: Floating IP Address
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    ClientProfileFieldSerializer:
+      properties:
+        base_field:
+          description: ID of DDoS profile field
+          examples:
+          - 10
+          title: Base Field
+          type: integer
+        default:
+          anyOf:
+          - maxLength: 100
+            type: string
+          - type: 'null'
+          description: Predefined default value for the field if not specified
+          examples:
+          - null
+          title: Default
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          description: Detailed description explaining the field's purpose and usage guidelines
+          examples:
+          - ARK server ports. Valid port values are in range 1000-65535
+          title: Description
+        field_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Data type classification of the field (e.g., string, integer, array)
+          examples:
+          - null
+          title: Field Type
+        field_value:
+          description: Complex value for the DDoS profile field
+          examples:
+          - 45046
+          - 45047
+          title: Field Value
+        id:
+          description: Unique identifier for the DDoS protection field
+          examples:
+          - 11
+          title: Id
+          type: integer
+        name:
+          description: Human-readable name of the protection field
+          examples:
+          - ARK Ports
+          maxLength: 30
+          title: Name
+          type: string
+        required:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          description: Indicates whether this field must be provided when creating a protection profile
+          examples:
+          - true
+          title: Required
+        validation_schema:
+          description: JSON schema defining validation rules and constraints for the field value
+          examples:
+          - items:
+              maximum: 65535
+              minimum: 1000
+              type: integer
+            minItems: 1
+            type: array
+          title: Validation Schema
+      required:
+      - id
+      - name
+      - description
+      - field_type
+      - required
+      - default
+      - validation_schema
+      - field_value
+      - base_field
+      title: ClientProfileFieldSerializer
+      type: object
+    TagSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      properties:
+        key:
+          description: Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag
+          title: Key
+          type: string
+        read_only:
+          description: If true, the tag is read-only and cannot be modified by the user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        value:
+          description: Tag value. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag-value
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      - read_only
+      title: TagSerializer
+      type: object
+    LoadbalancerStatsSerializer:
+      properties:
+        active_connections:
+          description: Currently active connections
+          examples:
+          - 0
+          title: Active Connections
+          type: integer
+        bytes_in:
+          description: Total bytes received
+          examples:
+          - 34942398609
+          title: Bytes In
+          type: integer
+        bytes_out:
+          description: Total bytes sent
+          examples:
+          - 304777113641
+          title: Bytes Out
+          type: integer
+        request_errors:
+          description: Total requests that were unable to be fulfilled
+          examples:
+          - 4
+          title: Request Errors
+          type: integer
+        total_connections:
+          description: Total connections handled
+          examples:
+          - 21095970
+          title: Total Connections
+          type: integer
+      required:
+      - active_connections
+      - bytes_in
+      - bytes_out
+      - request_errors
+      - total_connections
+      title: LoadbalancerStatsSerializer
+      type: object
+    InstanceFixedAddressShortSerializer:
+      description: 'Schema for `fixed` addresses. This schema is used when listing instances.
+
+        It omits the `subnet_name` and `subnet_id` fields.'
+      properties:
+        addr:
+          description: IP address
+          examples:
+          - 10.0.0.17
+          title: Addr
+          type: string
+        interface_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Interface name. This field will be `null` if `with_interfaces_name=true` is not set in the request when listing instances. It will also be `null` if the `interface_name` was not specified during instance creation or when attaching the interface.
+          examples:
+          - my-interface
+          title: Interface Name
+        type:
+          const: fixed
+          description: Type of the address
+          examples:
+          - fixed
+          title: Type
+          type: string
+      required:
+      - addr
+      - type
+      - interface_name
+      title: Fixed IP Address (short)
+      type: object
+    LbFlavorSerializer:
+      properties:
+        flavor_id:
+          description: Flavor ID is the same as name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Id
+          type: string
+        flavor_name:
+          description: Flavor name
+          examples:
+          - g2-standard-32-64
+          title: Flavor Name
+          type: string
+        ram:
+          description: RAM size in MiB
+          examples:
+          - 2048
+          title: Ram
+          type: integer
+        vcpus:
+          description: Virtual CPU count. For bare metal flavors, it's a physical CPU count
+          examples:
+          - 1
+          title: Vcpus
+          type: integer
+      required:
+      - flavor_id
+      - flavor_name
+      - vcpus
+      - ram
+      title: LbFlavorSerializer
+      type: object
+    FloatingIPStatus:
+      enum:
+      - ACTIVE
+      - DOWN
+      - ERROR
+      title: FloatingIPStatus
+      type: string
+    FloatingIPSerializer:
+      properties:
+        created_at:
+          description: Datetime when the floating IP was created
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Task that created this entity. Null when the floating IP wasn't created via a tracked task.
+          examples:
+          - d1e1500b-e2be-40aa-9a4b-cc493fa1af30
+          title: Creator Task Id
+        fixed_ip_address:
+          anyOf:
+          - format: ipvanyaddress
+            type: string
+          - type: 'null'
+          description: IP address of the port the floating IP is attached to. Null when the floating IP is not attached to a port.
+          examples:
+          - 192.168.10.15
+          title: Fixed Ip Address
+        floating_ip_address:
+          description: IP Address of the floating IP
+          examples:
+          - 172.24.4.34
+          format: ipvanyaddress
+          title: Floating Ip Address
+          type: string
+        id:
+          description: Floating IP ID
+          examples:
+          - c64e5db1-5f1f-43ec-a8d9-5090df85b82d
+          format: uuid4
+          title: Id
+          type: string
+        port_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Port ID the floating IP is attached to. The `fixed_ip_address` is the IP address of the port. Null when the floating IP is not attached to a port.
+          examples:
+          - ee2402d0-f0cd-4503-9b75-69be1d11c5f1
+          title: Port Id
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        router_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: Router ID. Null when the floating IP is not attached to a port.
+          examples:
+          - 11005a33-c5ac-4c96-ab6f-8f2827cc7da6
+          title: Router Id
+        status:
+          $ref: '#/components/schemas/FloatingIPStatus'
+          description: Floating IP status. DOWN - unassigned (available). ACTIVE - attached to a port (in use). ERROR - error state.
+          examples:
+          - ACTIVE
+          - DOWN
+          - ERROR
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - a4eb4b29-048e-42f6-a5e1-2c18bc001c45
+          title: Task Id
+        updated_at:
+          description: Datetime when the floating IP was last updated
+          examples:
+          - 2019-06-13T13:58:12+0000
+          format: date-time
+          title: Updated At
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - creator_task_id
+      - fixed_ip_address
+      - floating_ip_address
+      - id
+      - tags
+      - port_id
+      - router_id
+      - status
+      - task_id
+      - created_at
+      - updated_at
+      title: FloatingIPSerializer
+      type: object

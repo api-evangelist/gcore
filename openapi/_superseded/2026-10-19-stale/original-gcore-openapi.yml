@@ -1,0 +1,1158 @@
+openapi: 3.0.1
+info:
+  title: Gcore API
+  description: >-
+    Partial OpenAPI description of the Gcore edge cloud platform REST API,
+    covering representative documented endpoints across CDN, Cloud (compute),
+    Object Storage, DNS, Streaming, Everywhere Inference (edge AI), WAAP
+    security, and FastEdge. All services share a single host,
+    https://api.gcore.com, and authenticate with a permanent API token sent as
+    "Authorization: APIKey <token>".
+  termsOfService: https://gcore.com/legal/lsa
+  contact:
+    name: Gcore Support
+    url: https://gcore.com/support
+    email: support@gcore.com
+  version: '1.0'
+servers:
+  - url: https://api.gcore.com
+    description: Gcore unified API host
+security:
+  - APIKey: []
+tags:
+  - name: CDN
+    description: Content delivery network resources, rules, origin groups, and purge.
+  - name: Cloud
+    description: Virtual machine instances, networks, and volumes.
+  - name: Storage
+    description: S3-compatible and SFTP object storage.
+  - name: DNS
+    description: Managed authoritative DNS zones and RRSets.
+  - name: Streaming
+    description: Video hosting (VOD) and live streaming.
+  - name: Inference
+    description: Everywhere Inference edge AI model deployments.
+  - name: WAAP
+    description: Web Application and API Protection domains.
+  - name: FastEdge
+    description: Serverless edge functions and applications.
+paths:
+  /cdn/resources:
+    get:
+      operationId: listCdnResources
+      tags:
+        - CDN
+      summary: List CDN resources
+      description: Returns the list of CDN resources for the account.
+      parameters:
+        - name: deleted
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Filter by deletion status.
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [active, suspended, processed]
+      responses:
+        '200':
+          description: A list of CDN resources.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CdnResource'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createCdnResource
+      tags:
+        - CDN
+      summary: Create CDN resource
+      description: Creates a new CDN resource bound to a primary delivery domain (cname).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CdnResourceCreate'
+      responses:
+        '201':
+          description: The created CDN resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CdnResource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /cdn/resources/{resource_id}:
+    get:
+      operationId: getCdnResource
+      tags:
+        - CDN
+      summary: Get CDN resource details
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      responses:
+        '200':
+          description: CDN resource details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CdnResource'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateCdnResource
+      tags:
+        - CDN
+      summary: Update CDN resource
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CdnResourceCreate'
+      responses:
+        '200':
+          description: The updated CDN resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CdnResource'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteCdnResource
+      tags:
+        - CDN
+      summary: Delete CDN resource
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      responses:
+        '204':
+          description: CDN resource deleted.
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /cdn/resources/{resource_id}/rules:
+    get:
+      operationId: listCdnRules
+      tags:
+        - CDN
+      summary: List CDN resource rules
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      responses:
+        '200':
+          description: A list of rules for the resource.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CdnRule'
+    post:
+      operationId: createCdnRule
+      tags:
+        - CDN
+      summary: Create CDN resource rule
+      description: >-
+        Creates a rule that applies custom caching, delivery, and security
+        options to a path pattern within the CDN resource.
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CdnRuleCreate'
+      responses:
+        '201':
+          description: The created rule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CdnRule'
+  /cdn/resources/{resource_id}/purge:
+    post:
+      operationId: purgeCdnResource
+      tags:
+        - CDN
+      summary: Purge CDN cache
+      description: >-
+        Purges content from CDN edge caches for the resource. Supply specific
+        URLs, path patterns, or omit both to purge all cache.
+      parameters:
+        - $ref: '#/components/parameters/ResourceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurgeRequest'
+      responses:
+        '201':
+          description: Purge request accepted.
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /cdn/public-ip-list:
+    get:
+      operationId: getCdnPublicIpList
+      tags:
+        - CDN
+      summary: Get CDN edge server IP list
+      description: Returns IP addresses of CDN servers used to pull content from origins.
+      responses:
+        '200':
+          description: List of edge server IP ranges.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addresses:
+                    type: array
+                    items:
+                      type: string
+                  addresses_v6:
+                    type: array
+                    items:
+                      type: string
+  /cloud/v1/instances/{project_id}/{region_id}:
+    get:
+      operationId: listInstances
+      tags:
+        - Cloud
+      summary: List instances
+      description: Returns all virtual machine instances in a project and region.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: A paginated list of instances.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstanceList'
+    post:
+      operationId: createInstance
+      tags:
+        - Cloud
+      summary: Create instance
+      description: Creates a new virtual machine instance from a flavor and image or volume.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RegionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstanceCreate'
+      responses:
+        '200':
+          description: Task created to provision the instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+  /cloud/v1/instances/{project_id}/{region_id}/{instance_id}:
+    get:
+      operationId: getInstance
+      tags:
+        - Cloud
+      summary: Get instance
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RegionId'
+        - $ref: '#/components/parameters/InstanceId'
+      responses:
+        '200':
+          description: Instance details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Instance'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteInstance
+      tags:
+        - Cloud
+      summary: Delete instance
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RegionId'
+        - $ref: '#/components/parameters/InstanceId'
+      responses:
+        '200':
+          description: Task created to delete the instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+  /cloud/v1/volumes/{project_id}/{region_id}:
+    get:
+      operationId: listVolumes
+      tags:
+        - Cloud
+      summary: List volumes
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: A list of block storage volumes.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Volume'
+    post:
+      operationId: createVolume
+      tags:
+        - Cloud
+      summary: Create volume
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RegionId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VolumeCreate'
+      responses:
+        '200':
+          description: Task created to provision the volume.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskResponse'
+  /cloud/v1/networks/{project_id}/{region_id}:
+    get:
+      operationId: listNetworks
+      tags:
+        - Cloud
+      summary: List networks
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+        - $ref: '#/components/parameters/RegionId'
+      responses:
+        '200':
+          description: A list of virtual networks.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Network'
+  /cloud/v3/inference/{project_id}/deployments:
+    get:
+      operationId: listInferenceDeployments
+      tags:
+        - Inference
+      summary: List inference deployments
+      description: Returns Everywhere Inference deployments for the project.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      responses:
+        '200':
+          description: A list of inference deployments.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/InferenceDeployment'
+    post:
+      operationId: createInferenceDeployment
+      tags:
+        - Inference
+      summary: Create inference deployment
+      description: >-
+        Deploys a containerized AI model to edge inference nodes. Set
+        auth_enabled to true to generate an API key required as X-API-Key on
+        the deployment endpoint.
+      parameters:
+        - $ref: '#/components/parameters/ProjectId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceDeploymentCreate'
+      responses:
+        '200':
+          description: The created inference deployment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InferenceDeployment'
+  /storage/provisioning/v1/storage:
+    get:
+      operationId: listStorages
+      tags:
+        - Storage
+      summary: List storages
+      description: Returns S3 and SFTP object storage buckets for the account.
+      parameters:
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by storage location.
+      responses:
+        '200':
+          description: A list of object storages.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Storage'
+    post:
+      operationId: createStorage
+      tags:
+        - Storage
+      summary: Create storage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StorageCreate'
+      responses:
+        '200':
+          description: The created storage.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Storage'
+  /dns/v2/zones:
+    get:
+      operationId: listZones
+      tags:
+        - DNS
+      summary: List DNS zones
+      responses:
+        '200':
+          description: A list of DNS zones.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  zones:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Zone'
+    post:
+      operationId: createZone
+      tags:
+        - DNS
+      summary: Create DNS zone
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ZoneCreate'
+      responses:
+        '200':
+          description: The created zone identifier.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+  /dns/v2/zones/{zoneName}/{rrsetName}/{rrsetType}:
+    post:
+      operationId: createRRset
+      tags:
+        - DNS
+      summary: Create RRSet
+      description: >-
+        Adds an RRSet (resource record set) to the named zone. RRSets can be
+        static or dynamic (GeoDNS, failover, weighted).
+      parameters:
+        - name: zoneName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: rrsetName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: rrsetType
+          in: path
+          required: true
+          schema:
+            type: string
+            enum: [A, AAAA, CNAME, MX, NS, TXT, SRV, CAA]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RRSetCreate'
+      responses:
+        '200':
+          description: The created RRSet.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RRSet'
+  /streaming/videos:
+    get:
+      operationId: listVideos
+      tags:
+        - Streaming
+      summary: List videos
+      description: Returns the list of VOD videos.
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of videos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Video'
+    post:
+      operationId: createVideo
+      tags:
+        - Streaming
+      summary: Create video
+      description: >-
+        Creates a video entry; the response includes an upload server for
+        direct VOD upload.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VideoCreate'
+      responses:
+        '201':
+          description: The created video.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+  /streaming/videos/{video_id}:
+    get:
+      operationId: getVideo
+      tags:
+        - Streaming
+      summary: Get video
+      parameters:
+        - name: video_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Video details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
+  /streaming/streams:
+    get:
+      operationId: listStreams
+      tags:
+        - Streaming
+      summary: List live streams
+      responses:
+        '200':
+          description: A list of live streams.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stream'
+    post:
+      operationId: createStream
+      tags:
+        - Streaming
+      summary: Create live stream
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StreamCreate'
+      responses:
+        '201':
+          description: The created live stream, with push and play URLs.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Stream'
+  /waap/v1/domains:
+    get:
+      operationId: listWaapDomains
+      tags:
+        - WAAP
+      summary: List WAAP domains
+      description: Returns domains protected by Web Application and API Protection.
+      responses:
+        '200':
+          description: A list of WAAP domains.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/WaapDomain'
+  /fastedge/v1/apps:
+    get:
+      operationId: listFastEdgeApps
+      tags:
+        - FastEdge
+      summary: List FastEdge apps
+      description: Returns the WebAssembly edge applications for the account.
+      responses:
+        '200':
+          description: A list of FastEdge apps.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apps:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FastEdgeApp'
+    post:
+      operationId: createFastEdgeApp
+      tags:
+        - FastEdge
+      summary: Create FastEdge app
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FastEdgeAppCreate'
+      responses:
+        '200':
+          description: The created FastEdge app.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FastEdgeApp'
+components:
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: >-
+        Permanent API token sent as "Authorization: APIKey <token>". The header
+        name is case-insensitive.
+  parameters:
+    ResourceId:
+      name: resource_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: CDN resource identifier.
+    ProjectId:
+      name: project_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud project identifier.
+    RegionId:
+      name: region_id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: Cloud region identifier.
+    InstanceId:
+      name: instance_id
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Instance identifier (UUID).
+  responses:
+    BadRequest:
+      description: The request was malformed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API token.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Rate limit exceeded for this operation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    TaskResponse:
+      type: object
+      description: Asynchronous task acknowledgement returned by Cloud operations.
+      properties:
+        tasks:
+          type: array
+          items:
+            type: string
+    CdnResource:
+      type: object
+      properties:
+        id:
+          type: integer
+        cname:
+          type: string
+          description: Primary delivery domain for the resource.
+        active:
+          type: boolean
+        status:
+          type: string
+        origin:
+          type: string
+        originGroup:
+          type: integer
+        sslData:
+          type: integer
+          nullable: true
+          description: SSL certificate identifier.
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/CdnRule'
+    CdnResourceCreate:
+      type: object
+      required:
+        - cname
+      properties:
+        cname:
+          type: string
+        origin:
+          type: string
+          description: Origin server hostname or IP.
+        originGroup:
+          type: integer
+        sslData:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
+    CdnRule:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        rule:
+          type: string
+          description: Path pattern the rule applies to (regular expression).
+        ruleType:
+          type: integer
+        originGroup:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
+    CdnRuleCreate:
+      type: object
+      required:
+        - rule
+        - ruleType
+      properties:
+        name:
+          type: string
+        rule:
+          type: string
+        ruleType:
+          type: integer
+        originGroup:
+          type: integer
+        options:
+          type: object
+          additionalProperties: true
+    PurgeRequest:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+          description: Up to 100 absolute URLs to purge.
+        paths:
+          type: array
+          items:
+            type: string
+          description: Up to 10 path patterns to purge.
+    InstanceList:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Instance'
+    Instance:
+      type: object
+      properties:
+        instance_id:
+          type: string
+        instance_name:
+          type: string
+        status:
+          type: string
+        flavor:
+          type: object
+          additionalProperties: true
+        region:
+          type: string
+        addresses:
+          type: object
+          additionalProperties: true
+    InstanceCreate:
+      type: object
+      required:
+        - flavor
+        - names
+      properties:
+        names:
+          type: array
+          items:
+            type: string
+        flavor:
+          type: string
+          description: Flavor (compute shape) identifier, e.g. g1-standard-2-4.
+        volumes:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        interfaces:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        keypair_name:
+          type: string
+    Volume:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+          description: Size in GiB.
+        volume_type:
+          type: string
+        status:
+          type: string
+    VolumeCreate:
+      type: object
+      required:
+        - size
+        - source
+      properties:
+        name:
+          type: string
+        size:
+          type: integer
+        source:
+          type: string
+          enum: [new-volume, image, snapshot]
+        type_name:
+          type: string
+          enum: [standard, ssd_hiiops, cold, ultra]
+    Network:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        mtu:
+          type: integer
+        external:
+          type: boolean
+    InferenceDeployment:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+        image:
+          type: string
+        listening_port:
+          type: integer
+        auth_enabled:
+          type: boolean
+        containers:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    InferenceDeploymentCreate:
+      type: object
+      required:
+        - name
+        - image
+        - listening_port
+      properties:
+        name:
+          type: string
+        image:
+          type: string
+          description: Container image reference for the model.
+        listening_port:
+          type: integer
+        flavor_name:
+          type: string
+          description: Compute flavor (e.g. GPU flavor) for the deployment.
+        auth_enabled:
+          type: boolean
+          description: When true, generates an API key required as X-API-Key.
+        containers:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+    Storage:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          enum: [s3, sftp]
+        location:
+          type: string
+        address:
+          type: string
+    StorageCreate:
+      type: object
+      required:
+        - name
+        - type
+        - location
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [s3, sftp]
+        location:
+          type: string
+    Zone:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: integer
+        status:
+          type: string
+        records_count:
+          type: integer
+    ZoneCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    RRSet:
+      type: object
+      properties:
+        ttl:
+          type: integer
+        resource_records:
+          type: array
+          items:
+            type: object
+            properties:
+              content:
+                type: array
+                items:
+                  type: string
+    RRSetCreate:
+      type: object
+      required:
+        - resource_records
+      properties:
+        ttl:
+          type: integer
+        resource_records:
+          type: array
+          items:
+            type: object
+            properties:
+              content:
+                type: array
+                items:
+                  type: string
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        duration:
+          type: integer
+        hls_url:
+          type: string
+        screenshot:
+          type: string
+    VideoCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        origin_url:
+          type: string
+          description: Source URL to pull the video from, if fetching.
+    Stream:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        live:
+          type: boolean
+        push_url:
+          type: string
+        backup_push_url:
+          type: string
+        hls_playlist_url:
+          type: string
+    StreamCreate:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+        record:
+          type: boolean
+        pull:
+          type: boolean
+        uri:
+          type: string
+    WaapDomain:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          type: string
+        enabled:
+          type: boolean
+    FastEdgeApp:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        status:
+          type: integer
+        binary:
+          type: integer
+        url:
+          type: string
+    FastEdgeAppCreate:
+      type: object
+      required:
+        - binary
+      properties:
+        name:
+          type: string
+        binary:
+          type: integer
+          description: Identifier of the compiled WASM binary to run.
+        env:
+          type: object
+          additionalProperties:
+            type: string

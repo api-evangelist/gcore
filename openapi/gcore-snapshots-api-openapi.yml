@@ -1,0 +1,829 @@
+openapi: 3.2.0
+info:
+  title: Cloud Snapshots API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Snapshots
+paths:
+  /v1/pricing/{project_id}/{region_id}/snapshots:
+    post:
+      operationId: SnapshotPricingHandler.post
+      summary: Preview snapshot price
+      description: Preview the billing price for snapshots.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnapshotPricingRequestSerializer'
+      tags:
+      - Snapshots
+  /v1/snapshots/{project_id}/{region_id}:
+    post:
+      operationId: SnapshotViewSet.post
+      summary: Create snapshot
+      description: Create a new snapshot from a volume.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSnapshotSerializer'
+      tags:
+      - Snapshots
+    get:
+      operationId: SnapshotViewSet.get
+      summary: List snapshots
+      description: 'List all volume snapshots in the specified project and region.
+
+        Results can be filtered by volume, instance, schedule, or lifecycle policy.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: instance_id
+        required: false
+        description: Optional. Filter snapshots by the instance whose volumes were snapshotted
+        schema:
+          description: Optional. Filter snapshots by the instance whose volumes were snapshotted
+          examples:
+          - 550e8400-e29b-41d4-a716-446655440000
+          title: Instance Id
+          type: string
+      - in: query
+        name: lifecycle_policy_id
+        required: false
+        description: Optional. Filter by lifecycle policy ID
+        schema:
+          description: Optional. Filter by lifecycle policy ID
+          examples:
+          - 1
+          title: Lifecycle Policy Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Limit of items on a single page
+        schema:
+          default: 1000
+          description: Limit of items on a single page
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Offset in results list
+        schema:
+          default: 0
+          description: Offset in results list
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      - in: query
+        name: schedule_id
+        required: false
+        description: Optional. Filter by schedule ID
+        schema:
+          description: Optional. Filter by schedule ID
+          examples:
+          - 67baa7d1-08ea-4fc5-bef2-6b2465b7d227
+          title: Schedule Id
+          type: string
+      - in: query
+        name: volume_id
+        required: false
+        description: Optional. Filter by volume ID
+        schema:
+          description: Optional. Filter by volume ID
+          examples:
+          - 3ed9e2ce-f906-47fb-ba32-c25a3f63df4f
+          title: Volume Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapshotCollectionSerializer'
+      tags:
+      - Snapshots
+  /v1/snapshots/{project_id}/{region_id}/{snapshot_id}:
+    get:
+      operationId: SnapshotInstanceViewSet.get
+      summary: Get snapshot
+      description: Get detailed information about a specific snapshot.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: snapshot_id
+        required: true
+        description: Unique identifier of the snapshot
+        schema:
+          description: Unique identifier of the snapshot
+          examples:
+          - 726ecfcc-7fd0-4e30-a86e-7892524aa483
+          format: uuid4
+          title: Snapshot Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapshotSerializer'
+      tags:
+      - Snapshots
+    patch:
+      operationId: SnapshotInstanceViewSet.patch
+      summary: Update snapshot
+      description: Rename snapshot or update tags.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: snapshot_id
+        required: true
+        description: Unique identifier of the snapshot
+        schema:
+          description: Unique identifier of the snapshot
+          examples:
+          - 726ecfcc-7fd0-4e30-a86e-7892524aa483
+          format: uuid4
+          title: Snapshot Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapshotSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSnapshotSerializer'
+      tags:
+      - Snapshots
+    delete:
+      operationId: SnapshotInstanceViewSet.delete
+      summary: Delete snapshot
+      description: Delete a specific snapshot.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: snapshot_id
+        required: true
+        description: Unique identifier of the snapshot
+        schema:
+          description: Unique identifier of the snapshot
+          examples:
+          - 726ecfcc-7fd0-4e30-a86e-7892524aa483
+          format: uuid4
+          title: Snapshot Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Snapshots
+  /v1/snapshots/{project_id}/{region_id}/{snapshot_id}/metadata:
+    put:
+      operationId: SnapshotInstanceMetadataViewSet.put
+      summary: Replace snapshot tags
+      description: 'Replace all tags for a snapshot.
+
+        Existing tags are deleted and replaced with the tags from the request.
+
+
+        Use PATCH /v1/snapshots/{project_id}/{region_id}/{snapshot_id} instead
+
+
+        Deprecated'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: snapshot_id
+        required: true
+        description: Unique identifier of the snapshot
+        schema:
+          description: Unique identifier of the snapshot
+          examples:
+          - 726ecfcc-7fd0-4e30-a86e-7892524aa483
+          format: uuid4
+          title: Snapshot Id
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapshotSerializer'
+      deprecated: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTagsSerializer'
+      tags:
+      - Snapshots
+components:
+  schemas:
+    SnapshotStatusChoices:
+      enum:
+      - available
+      - backing-up
+      - creating
+      - deleted
+      - deleting
+      - error
+      - error_deleting
+      - restoring
+      - unmanaging
+      title: SnapshotStatusChoices
+      type: string
+    CreateTagsSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: CreateTagsSerializer
+      type: object
+      additionalProperties:
+        description: 'Tag value. Maximum 255 characters. Cannot contain tabs, newlines, or empty strings. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag-value
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+        type: string
+    CreateSnapshotSerializer:
+      properties:
+        description:
+          description: Snapshot description
+          examples:
+          - Snapshot description
+          title: Description
+          type: string
+        name:
+          description: Snapshot name
+          examples:
+          - my-snapshot
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        tags:
+          $ref: '#/components/schemas/CreateTagsSerializer'
+          description: Key-value tags to associate with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Both tag keys and values have a maximum length of 255 characters. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - my-tag: my-tag-value
+        volume_id:
+          description: Volume ID to make snapshot of
+          examples:
+          - 67baa7d1-08ea-4fc5-bef2-6b2465b7d227
+          format: uuid4
+          title: Volume Id
+          type: string
+      required:
+      - volume_id
+      - name
+      title: CreateSnapshotSerializer
+      type: object
+    SnapshotPricingRequestSerializer:
+      examples:
+      - volume_id: c23fb11d-4748-489e-a659-e888e121e825
+      properties:
+        volume_id:
+          description: Volume ID
+          examples:
+          - c23fb11d-4748-489e-a659-e888e121e825
+          title: Volume Id
+          type: string
+      required:
+      - volume_id
+      title: SnapshotPricingRequestSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    UpdateSnapshotSerializer:
+      properties:
+        name:
+          description: Display name for the snapshot (3-63 chars). Used in customer portal and API. Does not affect snapshot data.
+          examples:
+          - my-backup-snapshot
+          pattern: ^[a-zA-Z0-9][a-zA-Z 0-9._\-]{1,61}[a-zA-Z0-9._]$
+          title: Name
+          type: string
+        tags:
+          anyOf:
+          - $ref: '#/components/schemas/UpdateTagsSerializer'
+          - type: 'null'
+          description: 'Update key-value tags using JSON Merge Patch semantics (RFC 7386). Provide key-value pairs to add or update tags. Set tag values to `null` to remove tags. Unspecified tags remain unchanged. Read-only tags are always preserved and cannot be modified.
+
+
+            **Examples:**
+
+
+            * **Add/update tags:** `{''tags'': {''environment'': ''production'', ''team'': ''backend''}}` adds new tags or updates existing ones.
+
+
+            * **Delete tags:** `{''tags'': {''old_tag'': null}}` removes specific tags.
+
+
+            * **Remove all tags:** `{''tags'': null}` removes all user-managed tags (read-only tags are preserved).
+
+
+            * **Partial update:** `{''tags'': {''environment'': ''staging''}}` only updates specified tags.
+
+
+            * **Mixed operations:** `{''tags'': {''environment'': ''production'', ''cost_center'': ''engineering'', ''deprecated_tag'': null}}` adds/updates ''environment'' and ''cost_center'' while removing ''deprecated_tag'', preserving other existing tags.
+
+
+            * **Replace all:** first delete existing tags with null values, then add new ones in the same request.'
+          examples:
+          - my-tag: my-tag-value
+            my-tag-to-remove: null
+      title: UpdateSnapshotSerializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    UpdateTagsSerializer:
+      propertyNames:
+        description: 'Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or ''='' character. Trailing or leading whitespaces will be stripped. '
+        examples:
+        - my-tag
+        maxLength: 255
+        minLength: 1
+        pattern: ^[^\s=]+$
+      title: UpdateTagsSerializer
+      type: object
+      additionalProperties:
+        anyOf:
+        - maxLength: 255
+          minLength: 1
+          pattern: ^[^ \t\n\r\f\v]([^\t\n\r\f\v]*[^ \t\n\r\f\v])?$
+          type: string
+        - type: 'null'
+        description: Tag value. Maximum 255 characters. Cannot contain tabs, newlines, empty string or start/end with whitespace. Trailing or leading whitespaces will be stripped. Set to `null` in order to delete this tag.
+        examples:
+        - my-tag-value
+    TagSerializer:
+      description: 'A tag is a key-value pair that can be associated with a resource,
+
+        enabling efficient filtering and grouping for better organization and management.
+
+        Some tags are read-only and cannot be modified by the user.
+
+        Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.'
+      properties:
+        key:
+          description: Tag key. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag
+          title: Key
+          type: string
+        read_only:
+          description: If true, the tag is read-only and cannot be modified by the user
+          examples:
+          - false
+          title: Read Only
+          type: boolean
+        value:
+          description: Tag value. Maximum 255 characters. Cannot contain spaces, tabs, newlines, empty string or '=' character.
+          examples:
+          - my-tag-value
+          title: Value
+          type: string
+      required:
+      - key
+      - value
+      - read_only
+      title: TagSerializer
+      type: object
+    SnapshotSerializer:
+      properties:
+        created_at:
+          description: Datetime when the snapshot was created
+          examples:
+          - 2019-05-29T05:32:41+0000
+          format: date-time
+          title: Created At
+          type: string
+        creator_task_id:
+          description: Task that created this entity
+          examples:
+          - 2358e3b1-5c42-4705-8950-6ddcfc19c3bd
+          format: uuid4
+          title: Creator Task Id
+          type: string
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Snapshot description
+          examples:
+          - Snapshot description
+          title: Description
+        id:
+          description: Snapshot ID
+          examples:
+          - 726ecfcc-7fd0-4e30-a86e-7892524aa483
+          format: uuid4
+          title: Id
+          type: string
+        name:
+          description: Snapshot name
+          examples:
+          - my-snapshot
+          title: Name
+          type: string
+        project_id:
+          description: Project ID
+          examples:
+          - 1337
+          title: Project Id
+          type: integer
+        region:
+          description: Region name
+          examples:
+          - Luxembourg 1
+          title: Region
+          type: string
+        region_id:
+          description: Region ID
+          examples:
+          - 7
+          title: Region Id
+          type: integer
+        size:
+          description: Snapshot size, GiB
+          examples:
+          - 20
+          title: Size
+          type: integer
+        status:
+          $ref: '#/components/schemas/SnapshotStatusChoices'
+          description: Snapshot status
+          examples:
+          - available
+        tags:
+          description: List of key-value tags associated with the resource. A tag is a key-value pair that can be associated with a resource, enabling efficient filtering and grouping for better organization and management. Some tags are read-only and cannot be modified by the user. Tags are also integrated with cost reports, allowing cost data to be filtered based on tag keys or values.
+          examples:
+          - - key: my-tag
+              read_only: false
+              value: my-tag-value
+          items:
+            $ref: '#/components/schemas/TagSerializer'
+          title: Tags
+          type: array
+        task_id:
+          anyOf:
+          - format: uuid4
+            type: string
+          - type: 'null'
+          description: The UUID of the active task that currently holds a lock on the resource. This lock prevents concurrent modifications to ensure consistency. If `null`, the resource is not locked.
+          examples:
+          - null
+          title: Task Id
+        updated_at:
+          description: Datetime when the snapshot was last updated
+          examples:
+          - 2019-05-29T05:39:20+0000
+          format: date-time
+          title: Updated At
+          type: string
+        volume_id:
+          description: ID of the volume this snapshot was made from
+          examples:
+          - 67baa7d1-08ea-4fc5-bef2-6b2465b7d227
+          format: uuid4
+          title: Volume Id
+          type: string
+      required:
+      - project_id
+      - region_id
+      - region
+      - id
+      - name
+      - description
+      - status
+      - size
+      - volume_id
+      - created_at
+      - updated_at
+      - tags
+      - creator_task_id
+      - task_id
+      title: SnapshotSerializer
+      type: object
+    SnapshotCollectionSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/SnapshotSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: SnapshotCollectionSerializer
+      type: object

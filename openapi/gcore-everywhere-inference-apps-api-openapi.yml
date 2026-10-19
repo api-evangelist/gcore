@@ -1,0 +1,1084 @@
+openapi: 3.2.0
+info:
+  title: Cloud Everywhere Inference Apps API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Everywhere Inference Apps
+paths:
+  /v3/inference/applications/{project_id}/deployments:
+    post:
+      operationId: InferenceApplicationDeploymentsCollection.post
+      summary: Create inference application deployment
+      description: 'Creates a new application deployment based on a selected catalog application.
+
+        Specify the desired deployment name, target regions, and configuration for each component.
+
+        The platform will provision the necessary resources and initialize the application accordingly.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppDeploymentCreateRequest'
+      tags:
+      - Everywhere Inference Apps
+    get:
+      operationId: InferenceApplicationDeploymentsCollection.get
+      summary: List inference application deployments
+      description: 'Returns a list of your application deployments, including deployment names,
+
+        associated catalog applications, regions, component configurations, and current status.
+
+        Useful for monitoring and managing all active AI application instances.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppDeploymentList'
+      tags:
+      - Everywhere Inference Apps
+  /v3/inference/applications/{project_id}/deployments/{deployment_name}:
+    get:
+      operationId: InferenceApplicationDeployment.get
+      summary: Get inference application deployment
+      description: 'Retrieves detailed information about a specific application deployment.
+
+        The response includes the catalog application it was created from, deployment name,
+
+        active regions, configuration of each component, and the current status of the deployment.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Name of deployment
+        schema:
+          description: Name of deployment
+          title: Deployment Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppDeployment'
+      tags:
+      - Everywhere Inference Apps
+    patch:
+      operationId: InferenceApplicationDeployment.patch
+      summary: Update inference application deployment
+      description: 'Updates an existing application deployment.
+
+        You can modify the target regions and update configurations for individual components.
+
+        To disable a component, set its value to null. Only the provided fields will be updated;
+
+        all others remain unchanged.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Name of deployment
+        schema:
+          description: Name of deployment
+          title: Deployment Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppDeploymentPatchRequest'
+      tags:
+      - Everywhere Inference Apps
+    delete:
+      operationId: InferenceApplicationDeployment.delete
+      summary: Delete inference application deployment
+      description: 'Deletes an existing application deployment along with all associated resources.
+
+        This action will permanently remove the deployment and **terminate
+
+        all related inference instances** that are part of the application.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: deployment_name
+        required: true
+        description: Name of deployment
+        schema:
+          description: Name of deployment
+          title: Deployment Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Everywhere Inference Apps
+  /v3/inference/applications/catalog:
+    get:
+      operationId: InferenceApplicationTemplatesCollection.get
+      summary: List inference application templates
+      description: 'Returns a list of available machine learning application templates from the catalog.
+
+        Each template includes metadata such as name, description, cover image, documentation, tags,
+
+        and a set of configurable components (e.g., `model`, `ui`).
+
+        Components define parameters, supported deployment flavors,
+
+        and other attributes required to create a fully functional application deployment.'
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIAppCatalogList'
+      tags:
+      - Everywhere Inference Apps
+  /v3/inference/applications/catalog/{application_name}:
+    get:
+      operationId: InferenceApplicationTemplate.get
+      summary: Get inference application template
+      description: 'Retrieves detailed information about a specific machine learning application template from the catalog.
+
+        The response includes the application''s metadata, documentation, tags,
+
+        and a complete set of components with configuration options, compatible flavors,
+
+        and deployment capabilities — all necessary for building and customizing an AI application.'
+      parameters:
+      - in: path
+        name: application_name
+        required: true
+        description: Name of application in catalog
+        schema:
+          description: Name of application in catalog
+          pattern: ^[a-z0-9-.]{1,63}$
+          title: Application Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AIAppCatalog'
+      tags:
+      - Everywhere Inference Apps
+  /v2/pricing/inference/applications:
+    post:
+      operationId: InferenceApplicationPricingHandlerV2.post
+      summary: Preview inference application deployment price
+      description: 'Preview billing price for an entire ML application deployment.
+
+        This endpoint calculates the total cost for all components across all regions,
+
+        providing a comprehensive pricing estimate for the complete application.'
+      parameters: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InferenceApplicationPricingRequestSerializer'
+      tags:
+      - Everywhere Inference Apps
+components:
+  schemas:
+    ExposeAddress:
+      properties:
+        address:
+          description: Global access endpoint for the component
+          title: Address
+          type: string
+      required:
+      - address
+      title: ExposeAddress
+      type: object
+    AppDeploymentCreateRequest:
+      properties:
+        api_keys:
+          description: List of API keys for the application
+          examples:
+          - - key1
+            - key2
+          items:
+            type: string
+          title: Api Keys
+          type: array
+        application_name:
+          description: Identifier of the application from the catalog
+          examples:
+          - demo-app
+          title: Application Name
+          type: string
+        components_configuration:
+          additionalProperties:
+            $ref: '#/components/schemas/CreateComponentConfiguration'
+          description: 'Mapping of component names to their configuration (e.g., `"model": {...}`)'
+          examples:
+          - model:
+              exposed: true
+              flavor: inference-16vcpu-232gib-1xh100-80gb
+              scale:
+                max: 1
+                min: 1
+          title: Components Configuration
+          type: object
+        name:
+          description: Desired name for the new deployment
+          examples:
+          - my-app-deployment
+          maxLength: 15
+          title: Name
+          type: string
+        regions:
+          description: Geographical regions where the deployment should be created
+          examples:
+          - - 1
+            - 2
+          items:
+            type: integer
+          title: Regions
+          type: array
+      required:
+      - application_name
+      - name
+      - regions
+      - components_configuration
+      title: AppDeploymentCreateRequest
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    ParameterOverride:
+      properties:
+        value:
+          description: New value assigned to the overridden parameter
+          title: Value
+          type: string
+      required:
+      - value
+      title: ParameterOverride
+      type: object
+    AIAppShortFlavor:
+      properties:
+        name:
+          description: Name of the flavor
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Name
+          type: string
+      required:
+      - name
+      title: AIAppShortFlavor
+      type: object
+    ConsolidatedStatusEnum:
+      enum:
+      - Active
+      - Failed
+      - PartiallyDeployed
+      - Unknown
+      title: ConsolidatedStatusEnum
+      type: string
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    AIAppCatalogList:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/AIAppCatalog'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: AIAppCatalogList
+      type: object
+    ApplicationContainerScalePricingSerializer:
+      properties:
+        max:
+          description: Maximum number of containers
+          examples:
+          - 3
+          maximum: 10000
+          minimum: 1
+          title: Max
+          type: integer
+      required:
+      - max
+      title: ApplicationContainerScalePricingSerializer
+      type: object
+    AIAppCatalogComponent:
+      properties:
+        description:
+          description: Summary of the component's functionality
+          examples:
+          - Llama 3.2 1B is a multilingual large language model developed by Meta.
+          title: Description
+          type: string
+        display_name:
+          description: Human-readable name of the component
+          examples:
+          - meta-llama/Llama-3.2-3B-Instruct
+          title: Display Name
+          type: string
+        exposable:
+          description: Indicates whether this component can expose a public-facing endpoint (e.g., for inference or API access).
+          examples:
+          - true
+          title: Exposable
+          type: boolean
+        license_url:
+          description: URL to the component's license information
+          examples:
+          - https://example.com/license
+          title: License Url
+          type: string
+        parameters:
+          additionalProperties:
+            $ref: '#/components/schemas/AIAppCatalogParameter'
+          description: Configurable parameters for the component
+          examples:
+          - prefix_cache:
+              default_value: '1'
+              description: Controls automatic prefix caching; set to 1 to speed up inference for repetitive prompts, or 0 to disable for diverse inputs.
+              display_name: prefix_cache
+              examples:
+              - '0'
+              - '1'
+          title: Parameters
+          type: object
+        readme:
+          description: Detailed documentation or usage instructions
+          examples:
+          - Detailed documentation
+          title: Readme
+          type: string
+        required:
+          description: Specifies if the component is required for the application
+          examples:
+          - true
+          title: Required
+          type: boolean
+        suitable_flavors:
+          description: List of compatible flavors or configurations
+          items:
+            $ref: '#/components/schemas/AIAppShortFlavor'
+          title: Suitable Flavors
+          type: array
+      required:
+      - display_name
+      - license_url
+      - description
+      - readme
+      - suitable_flavors
+      - parameters
+      - required
+      - exposable
+      title: AIAppCatalogComponent
+      type: object
+    AIAppCatalog:
+      properties:
+        components:
+          additionalProperties:
+            $ref: '#/components/schemas/AIAppCatalogComponent'
+          description: Configurable components of the application
+          examples:
+          - model:
+              description: Llama 3.2 1B is a multilingual large language model developed by Meta.
+              display_name: Llama 3.2 1B
+              exposable: true
+              license_url: https://example.com/license
+              parameters:
+                prefix_cache:
+                  default_value: '1'
+                  description: Controls automatic prefix caching; set to 1 to speed up inference for repetitive prompts, or 0 to disable for diverse inputs.
+                  display_name: prefix_cache
+                  examples:
+                  - '0'
+                  - '1'
+              readme: Detailed documentation
+              required: true
+              suitable_flavors:
+              - name: inference-16vcpu-232gib-1xh100-80gb
+          title: Components
+          type: object
+        cover_url:
+          description: URL to the application's cover image
+          examples:
+          - https://cdn.example.com
+          title: Cover Url
+          type: string
+        description:
+          description: Brief overview of the application
+          examples:
+          - This is a demo application
+          title: Description
+          type: string
+        display_name:
+          description: Human-readable name of the application
+          examples:
+          - Llama-3.2-1B-Instruct
+          title: Display Name
+          type: string
+        name:
+          description: Unique application identifier in the catalog
+          examples:
+          - demo-app
+          title: Name
+          type: string
+        readme:
+          description: Detailed documentation or instructions
+          examples:
+          - Detailed documentation
+          title: Readme
+          type: string
+        tags:
+          additionalProperties:
+            type: string
+          description: Categorization key-value pairs
+          examples:
+          - category: Model
+            model_docs_endpoint: /docs
+            model_inference_engine: vllm
+            model_owner: Meta
+            model_type: Text Generation
+          title: Tags
+          type: object
+      required:
+      - name
+      - display_name
+      - cover_url
+      - description
+      - readme
+      - tags
+      - components
+      title: AIAppCatalog
+      type: object
+    AppDeployment:
+      properties:
+        api_keys:
+          description: List of API keys for the application
+          examples:
+          - - key1
+            - key2
+          items:
+            type: string
+          title: Api Keys
+          type: array
+        application_name:
+          description: Identifier of the application template from the catalog
+          title: Application Name
+          type: string
+        components_configuration:
+          additionalProperties:
+            $ref: '#/components/schemas/ComponentConfiguration'
+          description: 'Mapping of component names to their configuration (e.g., `"model": {...}`)'
+          title: Components Configuration
+          type: object
+        name:
+          description: Unique identifier of the deployment
+          title: Name
+          type: string
+        regions:
+          description: Geographical regions where the deployment is active
+          examples:
+          - - 1
+            - 2
+          items:
+            type: integer
+          title: Regions
+          type: array
+        status:
+          $ref: '#/components/schemas/Status'
+          description: Current state of the deployment across regions
+      required:
+      - application_name
+      - name
+      - api_keys
+      - regions
+      - components_configuration
+      - status
+      title: AppDeployment
+      type: object
+    Status:
+      properties:
+        component_inferences:
+          additionalProperties:
+            $ref: '#/components/schemas/AppInference'
+          description: Map of components and their inferences
+          title: Component Inferences
+          type: object
+        consolidated_status:
+          $ref: '#/components/schemas/ConsolidatedStatusEnum'
+          description: High-level summary of the deployment status across all regions
+        expose_addresses:
+          additionalProperties:
+            $ref: '#/components/schemas/ExposeAddress'
+          description: Map of component keys to their global access endpoints
+          title: Expose Addresses
+          type: object
+        regions:
+          description: Status details for each deployment region
+          items:
+            $ref: '#/components/schemas/RegionStatus'
+          title: Regions
+          type: array
+      required:
+      - regions
+      - consolidated_status
+      - expose_addresses
+      - component_inferences
+      title: Status
+      type: object
+    ScalePatch:
+      properties:
+        max:
+          description: Maximum number of replicas the container can be scaled up to
+          title: Max
+          type: integer
+        min:
+          description: Minimum number of replicas the component can be scaled down to
+          title: Min
+          type: integer
+      title: ScalePatch
+      type: object
+    CreateComponentConfiguration:
+      properties:
+        exposed:
+          description: Whether the component should be exposed via a public endpoint (e.g., for external inference/API access).
+          title: Exposed
+          type: boolean
+        flavor:
+          description: Specifies the compute configuration (e.g., CPU/GPU size) to be used for the component.
+          title: Flavor
+          type: string
+        parameter_overrides:
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterOverride'
+          description: Map of parameter overrides for customization
+          title: Parameter Overrides
+          type: object
+        scale:
+          $ref: '#/components/schemas/Scale'
+          description: Scaling parameters of the component
+      required:
+      - flavor
+      - exposed
+      - scale
+      title: CreateComponentConfiguration
+      type: object
+    RegionComponentStatus:
+      properties:
+        error:
+          description: Error message if the component is in an error state
+          title: Error
+          type: string
+        status:
+          description: Current state of the component in a specific region
+          title: Status
+          type: string
+      required:
+      - status
+      - error
+      title: RegionComponentStatus
+      type: object
+    InferenceApplicationPricingRequestSerializer:
+      properties:
+        components:
+          additionalProperties:
+            $ref: '#/components/schemas/ApplicationComponentPricingSerializer'
+          description: Dictionary of components configuration for pricing calculation.
+          minProperties: 1
+          title: Components
+          type: object
+        regions:
+          description: List of region IDs where the application will be deployed
+          examples:
+          - - 1
+            - 2
+            - 7
+          items:
+            type: integer
+          minItems: 1
+          title: Regions
+          type: array
+      required:
+      - regions
+      - components
+      title: InferenceApplicationPricingRequestSerializer
+      type: object
+    ApplicationComponentPricingSerializer:
+      properties:
+        containers:
+          description: List of containers for the component.
+          items:
+            $ref: '#/components/schemas/ApplicationContainerPricingSerializer'
+          minItems: 1
+          title: Containers
+          type: array
+      required:
+      - containers
+      title: ApplicationComponentPricingSerializer
+      type: object
+    AppDeploymentPatchRequest:
+      properties:
+        api_keys:
+          description: List of API keys for the application
+          examples:
+          - - key1
+            - key2
+          items:
+            type: string
+          title: Api Keys
+          type: array
+        components_configuration:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/ComponentConfigurationPatch'
+            - type: 'null'
+          description: 'Mapping of component names to their configuration (e.g., `"model": {...}`)'
+          examples:
+          - model:
+              scale:
+                max: 2
+          - model:
+              flavor: inference-16vcpu-232gib-1xh100-80gb
+          title: Components Configuration
+          type: object
+        regions:
+          description: Geographical regions to be updated for the deployment
+          examples:
+          - - 1
+            - 2
+          items:
+            type: integer
+          title: Regions
+          type: array
+      title: AppDeploymentPatchRequest
+      type: object
+    ComponentConfigurationPatch:
+      properties:
+        exposed:
+          description: Whether the component should be exposed via a public endpoint (e.g., for external inference/API access).
+          title: Exposed
+          type: boolean
+        flavor:
+          description: Specifies the compute configuration (e.g., CPU/GPU size) to be used for the component.
+          title: Flavor
+          type: string
+        parameter_overrides:
+          additionalProperties:
+            anyOf:
+            - $ref: '#/components/schemas/ParameterOverride'
+            - type: 'null'
+          description: Map of parameter overrides for customization
+          title: Parameter Overrides
+          type: object
+        scale:
+          $ref: '#/components/schemas/ScalePatch'
+          description: Scaling parameters of the component
+      title: ComponentConfigurationPatch
+      type: object
+    AppInference:
+      properties:
+        flavor:
+          description: Flavor of the inference
+          title: Flavor
+          type: string
+        name:
+          description: Name of the inference
+          title: Name
+          type: string
+      required:
+      - name
+      - flavor
+      title: AppInference
+      type: object
+    ComponentConfiguration:
+      properties:
+        exposed:
+          description: Indicates if the component will obtain a public address
+          title: Exposed
+          type: boolean
+        flavor:
+          description: Chosen flavor or variant of the component
+          title: Flavor
+          type: string
+        parameter_overrides:
+          additionalProperties:
+            $ref: '#/components/schemas/ParameterOverride'
+          description: Map of parameter overrides for customization
+          title: Parameter Overrides
+          type: object
+        scale:
+          $ref: '#/components/schemas/Scale'
+          description: Scaling parameters of the component
+      required:
+      - flavor
+      - parameter_overrides
+      - exposed
+      - scale
+      title: ComponentConfiguration
+      type: object
+    AIAppCatalogParameter:
+      properties:
+        default_value:
+          description: Default value assigned if not provided
+          title: Default Value
+          type: string
+        description:
+          description: Description of the parameter's purpose
+          title: Description
+          type: string
+        display_name:
+          description: User-friendly name of the parameter
+          title: Display Name
+          type: string
+        enum_values:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          description: Allowed values when type is "enum"
+          examples:
+          - 'true'
+          - 'false'
+          title: Enum Values
+        max_value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Maximum value (applies to integer and float types)
+          examples:
+          - '100'
+          - '111.1'
+          title: Max Value
+        min_value:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Minimum value (applies to integer and float types)
+          examples:
+          - '0'
+          - '1.1'
+          title: Min Value
+        pattern:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Regexp pattern when type is "string"
+          examples:
+          - ^[a-zA-Z]+$
+          title: Pattern
+        required:
+          description: Indicates is parameter mandatory
+          title: Required
+          type: boolean
+        type:
+          description: Determines the type of the parameter
+          enum:
+          - enum
+          - float
+          - integer
+          - string
+          examples:
+          - string
+          title: Type
+          type: string
+      required:
+      - display_name
+      - description
+      - default_value
+      - required
+      - type
+      - min_value
+      - max_value
+      - enum_values
+      - pattern
+      title: AIAppCatalogParameter
+      type: object
+    Scale:
+      properties:
+        max:
+          description: Maximum number of replicas the container can be scaled up to
+          title: Max
+          type: integer
+        min:
+          description: Minimum number of replicas the component can be scaled down to
+          title: Min
+          type: integer
+      required:
+      - min
+      - max
+      title: Scale
+      type: object
+    AppDeploymentList:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/AppDeployment'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: AppDeploymentList
+      type: object
+    RegionStatus:
+      properties:
+        components:
+          additionalProperties:
+            $ref: '#/components/schemas/RegionComponentStatus'
+          description: Mapping of component names to their status in the region
+          examples:
+          - model:
+              error: ''
+              status: Active
+          title: Components
+          type: object
+        region_id:
+          description: Region ID
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+        status:
+          description: Current state of the deployment in a specific region
+          title: Status
+          type: string
+      required:
+      - region_id
+      - status
+      - components
+      title: RegionStatus
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    ApplicationContainerPricingSerializer:
+      properties:
+        flavor_name:
+          description: Flavor name for this specific container
+          examples:
+          - inference-16vcpu-232gib-1xh100-80gb
+          title: Flavor Name
+          type: string
+        scale:
+          $ref: '#/components/schemas/ApplicationContainerScalePricingSerializer'
+          description: Scale for the container
+      required:
+      - scale
+      - flavor_name
+      title: ApplicationContainerPricingSerializer
+      type: object

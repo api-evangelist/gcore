@@ -1,0 +1,2267 @@
+openapi: 3.2.0
+info:
+  title: Cloud Container as a Service API
+  description: '___brandName___ Cloud API provides an API to manage Cloud resources and services.
+
+    API address is: https://api.___serverHost___/cloud
+
+
+    # Authentication
+
+    You can find the available authorization methods in this section:
+
+    Authorization methods
+
+
+    Project ID & Region ID
+
+
+    Most endpoints require project_id and region_id path parameters.
+
+    List Regions
+
+    and
+
+    List Projects
+
+    to see available projects and regions.'
+  version: 14.491.0
+servers:
+- url: https://api.___serverHost___/cloud
+tags:
+- name: Container as a Service
+paths:
+  /v1/caas/{project_id}/{region_id}/check_limits:
+    post:
+      operationId: ContainerCheckLimitsHandler.post
+      summary: Check container quota
+      description: 'Check if regional quota is exceeded, if yes the number of additional
+
+        quotas needed to create the specified cluster will be calculated.'
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerQuotaCheckSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckQuotaBeforeContainerCreation'
+      tags:
+      - Container as a Service
+  /v1/caas/{project_id}/{region_id}/containers:
+    post:
+      operationId: ContainersHandler.post
+      summary: Create container
+      description: Create a new container with the specified configuration.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContainerCreateSerializer'
+      tags:
+      - Container as a Service
+    get:
+      operationId: ContainersHandler.get
+      summary: List containers
+      description: List all containers in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerListSerializer'
+      tags:
+      - Container as a Service
+  /v1/caas/{project_id}/{region_id}/containers/{container_name}:
+    get:
+      operationId: ContainerHandler.get
+      summary: Get container
+      description: Get detailed information about a specific container.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: container_name
+        required: true
+        description: Container name
+        schema:
+          description: Container name
+          examples:
+          - my-container
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Container Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContainerSerializer'
+      tags:
+      - Container as a Service
+    patch:
+      operationId: ContainerHandler.patch
+      summary: Update container
+      description: Update the configuration of an existing container.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: container_name
+        required: true
+        description: Container name
+        schema:
+          description: Container name
+          examples:
+          - my-container
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Container Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContainerPatchSerializer'
+      tags:
+      - Container as a Service
+    delete:
+      operationId: ContainerHandler.delete
+      summary: Delete container
+      description: Delete a container and all its associated resources.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: container_name
+        required: true
+        description: Container name
+        schema:
+          description: Container name
+          examples:
+          - my-container
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Container Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskIDsSerializer'
+      tags:
+      - Container as a Service
+  /v1/caas/{project_id}/{region_id}/containers/{container_name}/logs:
+    get:
+      operationId: LogsContainerHandler.get
+      summary: Get container logs
+      description: Get the logs for a specific container.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: container_name
+        required: true
+        description: Container name
+        schema:
+          description: Container name
+          examples:
+          - my-container
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Container Name
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Limit the number of logs lines
+        schema:
+          default: 1000
+          description: Limit the number of logs lines
+          examples:
+          - 10
+          maximum: 100000
+          minimum: 1
+          title: Limit
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaasLogsSerializer'
+      tags:
+      - Container as a Service
+  /v1/caas/flavors/{project_id}/{region_id}:
+    get:
+      operationId: CaaSFlavorsHandler.get
+      summary: List container flavors
+      description: List all available container flavors in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: name
+        required: false
+        description: Flavor name
+        schema:
+          anyOf:
+          - pattern: ^[0-9]{0,12}mCPU-[0-9]{0,12}M[i]?B$
+            type: string
+          - type: 'null'
+          default: null
+          description: Flavor name
+          examples:
+          - 128mCPU-128MiB
+          title: Name
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaasFlavorListSerializer'
+      tags:
+      - Container as a Service
+  /v1/caas/keys/{project_id}/{region_id}:
+    post:
+      operationId: CaaSAuthKeysHandler.post
+      summary: Create API key
+      description: Create a new API key for container authentication.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaasApiKeyCreateResultSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaasApiKeyCreateSerializer'
+      tags:
+      - Container as a Service
+    get:
+      operationId: CaaSAuthKeysHandler.get
+      summary: List API keys
+      description: List all API keys in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaasApiKeyListSerializer'
+      tags:
+      - Container as a Service
+  /v1/caas/keys/{project_id}/{region_id}/{key_name}:
+    get:
+      operationId: CaaSAuthKeyHandler.get
+      summary: Get API key
+      description: Get detailed information about a specific API key.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: key_name
+        required: true
+        description: Key name
+        schema:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Key Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaasApiKeySerializer'
+      tags:
+      - Container as a Service
+    patch:
+      operationId: CaaSAuthKeyHandler.patch
+      summary: Update API key
+      description: Update the configuration of an existing API key.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: key_name
+        required: true
+        description: Key name
+        schema:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Key Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CaasApiKeySerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaasApiKeyUpdateSerializer'
+      tags:
+      - Container as a Service
+    delete:
+      operationId: CaaSAuthKeyHandler.delete
+      summary: Delete API key
+      description: Delete an API key and revoke its access.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: key_name
+        required: true
+        description: Key name
+        schema:
+          description: Key name
+          examples:
+          - key-name
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Key Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Container as a Service
+  /v1/caas/secrets/{project_id}/{region_id}:
+    post:
+      operationId: CaaSPullSecretsHandler.post
+      summary: Create pull secret
+      description: Create a new pull secret for container image registry authentication.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullSecretSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PullSecretCreateSerializer'
+      tags:
+      - Container as a Service
+    get:
+      operationId: CaaSPullSecretsHandler.get
+      summary: List pull secrets
+      description: List all pull secrets in the specified project and region.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: query
+        name: limit
+        required: false
+        description: Optional. Limit the number of returned items
+        schema:
+          default: 1000
+          description: Optional. Limit the number of returned items
+          examples:
+          - 1000
+          exclusiveMinimum: 0
+          maximum: 1000
+          title: Limit
+          type: integer
+      - in: query
+        name: offset
+        required: false
+        description: Optional. Offset value is used to exclude the first set of records from the result
+        schema:
+          default: 0
+          description: Optional. Offset value is used to exclude the first set of records from the result
+          examples:
+          - 0
+          minimum: 0
+          title: Offset
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullSecretListSerializer'
+      tags:
+      - Container as a Service
+  /v1/caas/secrets/{project_id}/{region_id}/{secret_name}:
+    get:
+      operationId: PullSecretHandler.get
+      summary: Get pull secret
+      description: Get detailed information about a specific pull secret.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: secret_name
+        required: true
+        description: Pull secret name
+        schema:
+          description: Pull secret name
+          examples:
+          - secret-name
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Secret Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullSecretSerializer'
+      tags:
+      - Container as a Service
+    patch:
+      operationId: PullSecretHandler.patch
+      summary: Update pull secret
+      description: Update the configuration of an existing pull secret.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: secret_name
+        required: true
+        description: Pull secret name
+        schema:
+          description: Pull secret name
+          examples:
+          - secret-name
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Secret Name
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PullSecretSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PullSecretUpdateSerializer'
+      tags:
+      - Container as a Service
+    delete:
+      operationId: PullSecretHandler.delete
+      summary: Delete pull secret
+      description: Delete a pull secret.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project id
+        schema:
+          description: Project id
+          examples:
+          - 1
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region id
+        schema:
+          description: Region id
+          examples:
+          - 1
+          title: Region Id
+          type: integer
+      - in: path
+        name: secret_name
+        required: true
+        description: Pull secret name
+        schema:
+          description: Pull secret name
+          examples:
+          - secret-name
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Secret Name
+          type: string
+      responses:
+        '204':
+          description: No Content
+      tags:
+      - Container as a Service
+  /v1/pricing/{project_id}/{region_id}/caas:
+    post:
+      operationId: CaasPricingHandler.post
+      summary: Preview container price
+      description: Preview the billing price for a container based on the provided specifications.
+      parameters:
+      - in: path
+        name: project_id
+        required: true
+        description: Project ID
+        schema:
+          description: Project ID
+          examples:
+          - 1
+          format: int64
+          title: Project Id
+          type: integer
+      - in: path
+        name: region_id
+        required: true
+        description: Region ID
+        schema:
+          description: Region ID
+          examples:
+          - 1
+          format: int64
+          title: Region Id
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ItemPriceResponseSerializer'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContainerPriceRequestSerializer'
+      tags:
+      - Container as a Service
+components:
+  schemas:
+    ScaleTriggersSerializer:
+      properties:
+        cpu:
+          anyOf:
+          - $ref: '#/components/schemas/CpuTriggerSerializer'
+          - type: 'null'
+          default: null
+          description: CPU trigger configuration
+        http:
+          anyOf:
+          - $ref: '#/components/schemas/HttpTriggerSerializer'
+          - type: 'null'
+          default: null
+          description: HTTP trigger configuration
+        memory:
+          anyOf:
+          - $ref: '#/components/schemas/MemoryTriggerSerializer'
+          - type: 'null'
+          default: null
+          description: Memory trigger configuration
+      title: ScaleTriggersSerializer
+      type: object
+    PullSecretCreateSerializer:
+      properties:
+        login:
+          description: Pull secret login
+          examples:
+          - login
+          maxLength: 100
+          minLength: 1
+          title: Login
+          type: string
+        name:
+          description: Pull secret name
+          examples:
+          - my-secret
+          maxLength: 250
+          minLength: 1
+          pattern: ^[a-z][-a-z0-9]{0,24}[a-z0-9]$
+          title: Name
+          type: string
+        password:
+          description: Pull secret password
+          examples:
+          - password
+          format: password
+          maxLength: 5000
+          minLength: 1
+          title: Password
+          type: string
+          writeOnly: true
+        registry:
+          description: Pull secret registry
+          examples:
+          - some.registry.com
+          maxLength: 400
+          minLength: 1
+          title: Registry
+          type: string
+      required:
+      - name
+      - registry
+      - login
+      - password
+      title: PullSecretCreateSerializer
+      type: object
+    ContainerSerializer:
+      properties:
+        address:
+          description: Container address
+          examples:
+          - some.example.com
+          title: Address
+          type: string
+        commands:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Container's commands
+          examples:
+          - python3 app.py -m test
+          title: Commands
+        created_at:
+          description: Container creation date
+          examples:
+          - '2021-01-01T00:00:00Z'
+          format: date-time
+          title: Created At
+          type: string
+        deploy_status:
+          $ref: '#/components/schemas/DeployStatusSerializer'
+          description: Container deploy status
+        description:
+          description: Container description
+          examples:
+          - My first container
+          title: Description
+          type: string
+        envs:
+          description: Container environment variables
+          examples:
+          - ENVIRONMENT_VARIABLE: value 2
+            ENV_VAR: value 1
+          propertyNames:
+            maxLength: 255
+            pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+          title: Envs
+          type: object
+          additionalProperties:
+            maxLength: 255
+            type: string
+        flavor:
+          description: Container flavor
+          examples:
+          - 250mCPU-512MiB
+          title: Flavor
+          type: string
+        image:
+          description: Container image
+          examples:
+          - nginx:latest
+          title: Image
+          type: string
+        is_api_key_auth:
+          description: Enable/Disable api key authentication
+          examples:
+          - false
+          title: Is Api Key Auth
+          type: boolean
+        is_disabled:
+          description: Set to true if container is disabled
+          examples:
+          - false
+          title: Is Disabled
+          type: boolean
+        listening_port:
+          description: Container listening port
+          examples:
+          - 80
+          title: Listening Port
+          type: integer
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingOutSerializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+        name:
+          description: Container name
+          examples:
+          - nginx
+          title: Name
+          type: string
+        namespace:
+          description: Container namespace
+          examples:
+          - default
+          title: Namespace
+          type: string
+        pull_secret:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Image pull secret
+          examples:
+          - my-secret
+          title: Pull Secret
+        scale:
+          $ref: '#/components/schemas/ScaleSerializer'
+          description: Container autoscaling
+          examples:
+          - max: 2
+            min: 1
+        source:
+          description: Source of the container, can be 'cloud' or 'iate'
+          examples:
+          - cloud
+          title: Source
+          type: string
+        status:
+          description: Container status
+          examples:
+          - RUNNING
+          title: Status
+          type: string
+        status_message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Container status message
+          examples:
+          - Some container status
+          title: Status Message
+        timeout:
+          description: Container timeout in seconds
+          examples:
+          - 5
+          title: Timeout
+          type: integer
+      required:
+      - name
+      - image
+      - listening_port
+      - description
+      - envs
+      - timeout
+      - flavor
+      - source
+      - scale
+      - is_disabled
+      - is_api_key_auth
+      - pull_secret
+      - status
+      - status_message
+      - namespace
+      - address
+      - created_at
+      - deploy_status
+      title: ContainerSerializer
+      type: object
+    PullSecretUpdateSerializer:
+      properties:
+        login:
+          anyOf:
+          - maxLength: 100
+            minLength: 1
+            type: string
+          - type: 'null'
+          default: null
+          description: Pull secret login
+          examples:
+          - login
+          title: Login
+        password:
+          anyOf:
+          - format: password
+            maxLength: 5000
+            minLength: 1
+            type: string
+            writeOnly: true
+          - type: 'null'
+          default: null
+          description: Pull secret password
+          examples:
+          - password
+          title: Password
+        registry:
+          anyOf:
+          - maxLength: 400
+            minLength: 1
+            type: string
+          - type: 'null'
+          default: null
+          description: Pull secret registry
+          examples:
+          - some.registry.com
+          title: Registry
+      title: PullSecretUpdateSerializer
+      type: object
+    TaskIDsSerializer:
+      properties:
+        tasks:
+          description: "List of task IDs representing asynchronous operations. Use these IDs to monitor operation progress:\n  * `GET /v1/tasks/{task_id}` - Check individual task status and details\n  Poll task status until completion (`FINISHED`/`ERROR`) before proceeding with dependent operations."
+          examples:
+          - - d478ae29-dedc-4869-82f0-96104425f565
+          items:
+            type: string
+          title: Tasks
+          type: array
+      required:
+      - tasks
+      title: TaskIDsSerializer
+      type: object
+    PriceDisplayStatus:
+      enum:
+      - error
+      - hide
+      - show
+      title: PriceDisplayStatus
+      type: string
+    LaasIndexRetentionPolicyPydanticSerializer:
+      properties:
+        period:
+          anyOf:
+          - exclusiveMinimum: 0
+            maximum: 1825
+            type: integer
+          - type: 'null'
+          description: Duration of days for which logs must be kept.
+          examples:
+          - 45
+          title: Period
+      required:
+      - period
+      title: LaasIndexRetentionPolicyPydanticSerializer
+      type: object
+    CaasLogsSerializer:
+      properties:
+        logs:
+          description: Container logs
+          items:
+            additionalProperties: true
+            type: object
+          title: Logs
+          type: array
+      required:
+      - logs
+      title: CaasLogsSerializer
+      type: object
+    CaasApiKeySerializer:
+      properties:
+        containers:
+          description: List of containers using key
+          examples:
+          - - name: my-container
+              namespace: space
+          items:
+            $ref: '#/components/schemas/CaasNamespacedName'
+          title: Containers
+          type: array
+        created_at:
+          description: Key starts to work
+          examples:
+          - '2023-08-22T11:21:00Z'
+          format: date-time
+          title: Created At
+          type: string
+        description:
+          description: Key description
+          examples:
+          - my first key
+          title: Description
+          type: string
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Key expires at
+          examples:
+          - '2023-07-31T00:00:00Z'
+          title: Expire
+        is_disabled:
+          description: Set to true if key is disabled
+          examples:
+          - false
+          title: Is Disabled
+          type: boolean
+        name:
+          description: Key name
+          examples:
+          - my-key
+          title: Name
+          type: string
+        source:
+          description: Source of the apikey, can be 'cloud' or 'iate'
+          examples:
+          - cloud
+          title: Source
+          type: string
+        status:
+          description: Key status
+          examples:
+          - Expired
+          title: Status
+          type: string
+      required:
+      - name
+      - description
+      - created_at
+      - status
+      - source
+      - expire
+      - is_disabled
+      - containers
+      title: CaasApiKeySerializer
+      type: object
+    PullSecretListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/PullSecretSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: PullSecretListSerializer
+      type: object
+    DeployStatusSerializer:
+      properties:
+        ready:
+          description: Number of ready instances
+          examples:
+          - 1
+          title: Ready
+          type: integer
+        total:
+          description: Total number of instances
+          examples:
+          - 2
+          title: Total
+          type: integer
+      required:
+      - total
+      - ready
+      title: DeployStatusSerializer
+      type: object
+    CaasNamespacedName:
+      properties:
+        name:
+          description: Container name
+          examples:
+          - my-container
+          pattern: ^[a-z][-a-z0-9]{0,62}[a-z0-9]$
+          title: Name
+          type: string
+        namespace:
+          description: Namespace name
+          examples:
+          - space
+          title: Namespace
+          type: string
+      required:
+      - name
+      - namespace
+      title: CaasNamespacedName
+      type: object
+    CaasApiKeyCreateSerializer:
+      properties:
+        containers:
+          description: List of containers using key
+          examples:
+          - - name: my-container
+              namespace: space
+          items:
+            $ref: '#/components/schemas/CaasNamespacedName'
+          title: Containers
+          type: array
+        description:
+          default: ''
+          description: Key description
+          examples:
+          - my first key
+          title: Description
+          type: string
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Key expires at
+          examples:
+          - '2023-07-31T00:00:00Z'
+          title: Expire
+        is_disabled:
+          default: false
+          description: Set to true if key is disabled
+          examples:
+          - false
+          title: Is Disabled
+          type: boolean
+        name:
+          description: Key name
+          examples:
+          - my-key
+          pattern: ^[a-z][-a-z0-9]{0,62}[a-z0-9]$
+          title: Name
+          type: string
+      required:
+      - name
+      - containers
+      title: CaasApiKeyCreateSerializer
+      type: object
+    LoggingSerializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          default: null
+          description: Destination region id to which the logs will be written
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          default: false
+          description: Enable/disable forwarding logs to LaaS
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: The logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - maxLength: 223
+            minLength: 1
+            pattern: ^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?(?:\.[a-z0-9](?:[-a-z0-9]*[a-z0-9])*)*$
+            type: string
+          - type: 'null'
+          default: null
+          description: The topic name to which the logs will be written
+          examples:
+          - my-log-name
+          title: Topic Name
+      title: LoggingSerializer
+      type: object
+    LoggingOutSerializer:
+      properties:
+        destination_region_id:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: ID of the region in which the logs will be stored
+          examples:
+          - 1
+          title: Destination Region Id
+        enabled:
+          description: Indicates if log streaming is enabled or disabled
+          examples:
+          - true
+          - false
+          title: Enabled
+          type: boolean
+        retention_policy:
+          anyOf:
+          - $ref: '#/components/schemas/LaasIndexRetentionPolicyPydanticSerializer'
+          - type: 'null'
+          default: null
+          description: Logs retention policy
+          examples:
+          - period: 45
+        topic_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The topic name to stream logs to
+          examples:
+          - my-log-name
+          title: Topic Name
+      required:
+      - enabled
+      - destination_region_id
+      - topic_name
+      title: LoggingOutSerializer
+      type: object
+    CaasFlavorSerializer:
+      properties:
+        cpu:
+          description: Number of millicpu
+          examples:
+          - 128
+          title: Cpu
+          type: integer
+        name:
+          description: Flavor name
+          examples:
+          - 128mCPU-128MiB
+          title: Name
+          type: string
+        ram:
+          description: Megabytes of RAM
+          examples:
+          - 128
+          title: Ram
+          type: integer
+      required:
+      - name
+      - cpu
+      - ram
+      title: CaasFlavorSerializer
+      type: object
+    CpuTriggerSerializer:
+      properties:
+        threshold:
+          description: CPU usage percentage
+          maximum: 99
+          minimum: 1
+          title: Threshold
+          type: integer
+      required:
+      - threshold
+      title: CpuTriggerSerializer
+      type: object
+    CheckQuotaBeforeContainerCreation:
+      properties:
+        flavor:
+          description: Container flavor
+          examples:
+          - 250mCPU-512MiB
+          pattern: ^[0-9]{0,12}mCPU-[0-9]{0,12}M[i]?B$
+          title: Flavor
+          type: string
+        max_replicas:
+          description: Maximum number of instances
+          maximum: 25
+          minimum: 1
+          title: Max Replicas
+          type: integer
+      required:
+      - flavor
+      - max_replicas
+      title: CheckQuotaBeforeContainerCreation
+      type: object
+    CaasApiKeyCreateResultSerializer:
+      properties:
+        containers:
+          description: List of containers using key
+          examples:
+          - - name: my-container
+              namespace: space
+          items:
+            $ref: '#/components/schemas/CaasNamespacedName'
+          title: Containers
+          type: array
+        created_at:
+          description: Key starts to work
+          examples:
+          - '2023-08-22T11:21:00Z'
+          format: date-time
+          title: Created At
+          type: string
+        description:
+          description: Key description
+          examples:
+          - my first key
+          title: Description
+          type: string
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          description: Key expires at
+          examples:
+          - '2023-07-31T00:00:00Z'
+          title: Expire
+        is_disabled:
+          description: Set to true if key is disabled
+          examples:
+          - false
+          title: Is Disabled
+          type: boolean
+        name:
+          description: Key name
+          examples:
+          - my-key
+          title: Name
+          type: string
+        secret:
+          description: Secret api key
+          examples:
+          - my-secret
+          title: Secret
+          type: string
+        source:
+          description: Source of the apikey, can be 'cloud' or 'iate'
+          examples:
+          - cloud
+          title: Source
+          type: string
+        status:
+          description: Key status
+          examples:
+          - Expired
+          title: Status
+          type: string
+      required:
+      - name
+      - description
+      - secret
+      - created_at
+      - status
+      - source
+      - expire
+      - is_disabled
+      - containers
+      title: CaasApiKeyCreateResultSerializer
+      type: object
+    ContainerListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/ContainerSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: ContainerListSerializer
+      type: object
+    CaasFlavorListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/CaasFlavorSerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: CaasFlavorListSerializer
+      type: object
+    ContainerCreateSerializer:
+      properties:
+        commands:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Container's commands
+          examples:
+          - python3 app.py -m test
+          title: Commands
+        description:
+          default: ''
+          description: Container description
+          examples:
+          - My first container
+          maxLength: 255
+          title: Description
+          type: string
+        envs:
+          description: Container environment variables
+          examples:
+          - ENVIRONMENT_VARIABLE: value 2
+            ENV_VAR: value 1
+          propertyNames:
+            maxLength: 255
+            pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+          title: Envs
+          type: object
+          additionalProperties:
+            maxLength: 255
+            type: string
+        flavor:
+          description: Container flavor
+          examples:
+          - 250mCPU-512MiB
+          pattern: ^[0-9]{0,12}mCPU-[0-9]{0,12}M[i]?B$
+          title: Flavor
+          type: string
+        image:
+          description: Container image
+          examples:
+          - nginx:latest
+          maxLength: 230
+          title: Image
+          type: string
+        is_api_key_auth:
+          default: false
+          description: Enable/Disable api key authentication. Enable api key is temporarily disabled. As a result, using CaaS with authorization is currently not supported.
+          examples:
+          - false
+          title: Is Api Key Auth
+          type: boolean
+        is_disabled:
+          default: false
+          description: Set to true if container is disabled
+          examples:
+          - false
+          title: Is Disabled
+          type: boolean
+        listening_port:
+          description: Container listening port
+          examples:
+          - 80
+          maximum: 65535
+          minimum: 1
+          title: Listening Port
+          type: integer
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingSerializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+          - enabled: false
+        name:
+          description: Container name
+          examples:
+          - nginx
+          maxLength: 43
+          pattern: ^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$
+          title: Name
+          type: string
+        pull_secret:
+          anyOf:
+          - maxLength: 400
+            type: string
+          - type: 'null'
+          default: null
+          description: Image pull secret
+          examples:
+          - my-secret
+          title: Pull Secret
+        scale:
+          $ref: '#/components/schemas/ScaleSerializer'
+          description: Container autoscaling
+          examples:
+          - max: 2
+            min: 1
+        timeout:
+          anyOf:
+          - maximum: 180
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: Container timeout in seconds
+          examples:
+          - 5
+          title: Timeout
+      required:
+      - name
+      - image
+      - listening_port
+      - flavor
+      - scale
+      title: ContainerCreateSerializer
+      type: object
+    ContainerPatchSerializer:
+      properties:
+        commands:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Container's commands
+          examples:
+          - python3 app.py -m test
+          title: Commands
+        description:
+          anyOf:
+          - maxLength: 255
+            type: string
+          - type: 'null'
+          default: null
+          description: Container description
+          examples:
+          - My first container
+          title: Description
+        envs:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          default: null
+          description: Container environment variables
+          examples:
+          - ENVIRONMENT_VARIABLE: value 2
+            ENV_VAR: value 1
+          title: Envs
+        flavor:
+          anyOf:
+          - pattern: ^[0-9]{0,12}mCPU-[0-9]{0,12}M[i]?B$
+            type: string
+          - type: 'null'
+          default: null
+          description: Container flavor
+          examples:
+          - 250mCPU-512MiB
+          title: Flavor
+        image:
+          anyOf:
+          - maxLength: 230
+            type: string
+          - type: 'null'
+          default: null
+          description: Container image
+          examples:
+          - nginx:latest
+          title: Image
+        is_api_key_auth:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Enable/Disable api key authentication. Enable api key is temporarily disabled. As a result, using CaaS with authorization is currently not supported.
+          examples:
+          - false
+          title: Is Api Key Auth
+        is_disabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Set to true if container is disabled
+          examples:
+          - false
+          title: Is Disabled
+        listening_port:
+          anyOf:
+          - maximum: 65535
+            minimum: 1
+            type: integer
+          - type: 'null'
+          default: null
+          description: Container listening port
+          examples:
+          - 80
+          title: Listening Port
+        logging:
+          anyOf:
+          - $ref: '#/components/schemas/LoggingSerializer'
+          - type: 'null'
+          default: null
+          description: Logging configuration
+          examples:
+          - destination_region_id: 1
+            enabled: true
+            retention_policy:
+              period: 45
+            topic_name: my-log-name
+          - enabled: false
+        pull_secret:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Image pull secret
+          examples:
+          - my-secret
+          title: Pull Secret
+        scale:
+          anyOf:
+          - $ref: '#/components/schemas/ScaleSerializer'
+          - type: 'null'
+          default: null
+          description: Container autoscaling
+          examples:
+          - max: 2
+            min: 1
+        timeout:
+          anyOf:
+          - maximum: 180
+            minimum: 0
+            type: integer
+          - type: 'null'
+          default: null
+          description: Container timeout in seconds
+          examples:
+          - 5
+          title: Timeout
+      title: ContainerPatchSerializer
+      type: object
+    ContainerPriceRequestSerializer:
+      properties:
+        flavor:
+          description: Container flavor
+          examples:
+          - 250mCPU-512MiB
+          pattern: ^[0-9]{0,12}mCPU-[0-9]{0,12}M[i]?B$
+          title: Flavor
+          type: string
+        scale:
+          $ref: '#/components/schemas/ScaleSerializer'
+          description: Container autoscaling
+          examples:
+          - max: 2
+            min: 1
+      required:
+      - flavor
+      - scale
+      title: ContainerPriceRequestSerializer
+      type: object
+    PullSecretSerializer:
+      properties:
+        login:
+          description: Pull secret login
+          examples:
+          - login
+          title: Login
+          type: string
+        name:
+          description: Pull secret name
+          examples:
+          - my-secret
+          title: Name
+          type: string
+        registry:
+          description: Pull secret registry
+          examples:
+          - some.registry.com
+          title: Registry
+          type: string
+        updated_at:
+          description: Pull secret updated at
+          examples:
+          - '2021-01-01T00:00:00Z'
+          title: Updated At
+          type: string
+      required:
+      - name
+      - registry
+      - login
+      - updated_at
+      title: PullSecretSerializer
+      type: object
+    ScaleSerializer:
+      properties:
+        cooldown_period:
+          default: 60
+          description: Cooldown period in seconds
+          maximum: 3600
+          minimum: 1
+          title: Cooldown Period
+          type: integer
+        max:
+          description: Maximum number of instances
+          maximum: 25
+          minimum: 1
+          title: Max
+          type: integer
+        min:
+          description: Minimum number of instances
+          maximum: 25
+          minimum: 0
+          title: Min
+          type: integer
+        triggers:
+          anyOf:
+          - $ref: '#/components/schemas/ScaleTriggersSerializer'
+          - type: 'null'
+          default: null
+          description: Scale triggers configuration
+      required:
+      - min
+      - max
+      title: ScaleSerializer
+      type: object
+    CaasApiKeyListSerializer:
+      properties:
+        count:
+          description: Number of objects
+          examples:
+          - 1
+          minimum: 0
+          title: Count
+          type: integer
+        results:
+          description: Objects
+          items:
+            $ref: '#/components/schemas/CaasApiKeySerializer'
+          title: Results
+          type: array
+      required:
+      - count
+      - results
+      title: CaasApiKeyListSerializer
+      type: object
+    ItemPriceResponseSerializer:
+      description: Response with prices per hour and per month
+      examples:
+      - currency_code: USD
+        discount_percent: 0.16
+        price_per_hour: 1
+        price_per_month: 720
+        price_status: show
+        price_without_discount_per_month: 604.8
+        tax_percent: 17.0
+      properties:
+        currency_code:
+          anyOf:
+          - enum:
+            - AZN
+            - EUR
+            - USD
+            type: string
+          - type: 'null'
+          description: Currency code (3 letter code per ISO 4217)
+          title: Currency Code
+        discount_percent:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Actual discount relative value
+          examples:
+          - 0.16
+          title: Discount Percent
+        price_per_hour:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per hour
+          examples:
+          - 1.0
+          title: Price Per Hour
+        price_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Price of the item charged per month
+          examples:
+          - 720.0
+          title: Price Per Month
+        price_status:
+          $ref: '#/components/schemas/PriceDisplayStatus'
+          description: Price status for the UI
+          examples:
+          - show
+        price_without_discount_per_month:
+          anyOf:
+          - type: number
+          - type: 'null'
+          description: Total price VAT inclusive per month without discount
+          examples:
+          - 604.8
+          title: Price Without Discount Per Month
+        tax_percent:
+          description: Tax rate applied to the subtotal, represented as a percentage
+          examples:
+          - 0
+          - 17.0
+          - 12.0
+          title: Tax Percent
+          type: number
+      required:
+      - currency_code
+      - price_per_hour
+      - price_per_month
+      - price_without_discount_per_month
+      - discount_percent
+      - price_status
+      - tax_percent
+      title: ItemPriceResponseSerializer
+      type: object
+    HttpTriggerSerializer:
+      properties:
+        rate:
+          description: HTTP requests rate
+          maximum: 1000
+          minimum: 1
+          title: Rate
+          type: integer
+        window:
+          description: Time window in seconds
+          maximum: 3600
+          minimum: 1
+          title: Window
+          type: integer
+      required:
+      - rate
+      - window
+      title: HttpTriggerSerializer
+      type: object
+    ContainerQuotaCheckSerializer:
+      description: 'Exceeded quota fields, present only when regional limits would be violated.
+
+
+        An empty response means no quotas are exceeded.'
+      properties:
+        caas_container_count_limit:
+          description: Containers count limit
+          examples:
+          - 5
+          title: Caas Container Count Limit
+          type: integer
+        caas_container_count_requested:
+          description: Containers count requested
+          examples:
+          - 1
+          title: Caas Container Count Requested
+          type: integer
+        caas_container_count_usage:
+          description: Containers count usage
+          examples:
+          - 5
+          title: Caas Container Count Usage
+          type: integer
+        caas_cpu_count_limit:
+          description: Containers CPU count limit, mCPU
+          examples:
+          - 10
+          title: Caas Cpu Count Limit
+          type: integer
+        caas_cpu_count_requested:
+          description: Containers CPU count requested, mCPU
+          examples:
+          - 20
+          title: Caas Cpu Count Requested
+          type: integer
+        caas_cpu_count_usage:
+          description: Containers CPU count usage, mCPU
+          examples:
+          - 5
+          title: Caas Cpu Count Usage
+          type: integer
+        caas_gpu_count_limit:
+          description: Containers GPU count limit
+          examples:
+          - 4
+          title: Caas Gpu Count Limit
+          type: integer
+        caas_gpu_count_requested:
+          description: Containers GPU count requested
+          examples:
+          - 8
+          title: Caas Gpu Count Requested
+          type: integer
+        caas_gpu_count_usage:
+          description: Containers GPU count usage
+          examples:
+          - 2
+          title: Caas Gpu Count Usage
+          type: integer
+        caas_ram_size_limit:
+          description: Containers RAM size limit, MiB
+          examples:
+          - 2048
+          title: Caas Ram Size Limit
+          type: integer
+        caas_ram_size_requested:
+          description: Containers RAM size requested, MiB
+          examples:
+          - 4096
+          title: Caas Ram Size Requested
+          type: integer
+        caas_ram_size_usage:
+          description: Containers RAM size usage, MiB
+          examples:
+          - 1024
+          title: Caas Ram Size Usage
+          type: integer
+      title: ContainerQuotaCheckSerializer
+      type: object
+    CaasApiKeyUpdateSerializer:
+      properties:
+        containers:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/CaasNamespacedName'
+            type: array
+          - type: 'null'
+          default: null
+          description: List of containers using key
+          examples:
+          - - name: my-container
+              namespace: space
+          title: Containers
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          default: null
+          description: Key description
+          examples:
+          - my first key
+          title: Description
+        expire:
+          anyOf:
+          - format: date-time
+            type: string
+          - type: 'null'
+          default: null
+          description: Key expires at
+          examples:
+          - '2023-07-31T00:00:00Z'
+          title: Expire
+        is_disabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          default: null
+          description: Set to true if key is disabled
+          examples:
+          - false
+          title: Is Disabled
+      title: CaasApiKeyUpdateSerializer
+      type: object
+    MemoryTriggerSerializer:
+      properties:
+        threshold:
+          description: Memory usage percentage
+          maximum: 99
+          minimum: 1
+          title: Threshold
+          type: integer
+      required:
+      - threshold
+      title: MemoryTriggerSerializer
+      type: object
