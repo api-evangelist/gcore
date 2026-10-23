@@ -3950,3 +3950,9 @@ components:
       - AppDeployment
       title: InferenceKind
       type: string
+x-provenance:
+  method: harvested
+  publisher: Gcore
+  source: https://api.gcore.com/cloud/docs/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
