@@ -1,4 +1,4 @@
-# Gcore (gcore)
+# Gcore
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,207 +66,132 @@
 
 Gcore is a global edge cloud, CDN, streaming, and AI infrastructure provider operating 210+ points of presence. A single REST platform at https://api.gcore.com (APIKey auth) spans content delivery, GPU cloud and bare-metal compute, S3-compatible object storage, managed DNS, video streaming and live, Everywhere Inference (edge AI), WAAP/DDoS security, and FastEdge serverless functions.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/gcore/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/gcore/refs/heads/main/apis.yml)
+**Areas:** Edge Cloud · CDN · Streaming · Edge AI · Infrastructure
 
-## Tags
+## Gcore on APIs.io
 
-- Edge Cloud
-- CDN
-- Streaming
-- Edge AI
-- Infrastructure
+Everything profiled for Gcore is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/gcore/](https://apis.io/providers/gcore/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (8)
 
-- **Created:** 2026-06-20
-- **Modified:** 2026-06-20
+- [Gcore CDN API](https://apis.io/apis/gcore/gcore-cdn-api/) — Content delivery network resources, rules, origin groups, and purge.
+- [Gcore Cloud API](https://apis.io/apis/gcore/gcore-cloud-api/) — Virtual machine instances, networks, and volumes.
+- [Gcore DNS API](https://apis.io/apis/gcore/gcore-dns-api/) — Managed authoritative DNS zones and RRSets.
+- [Gcore FastEdge API](https://apis.io/apis/gcore/gcore-fastedge-api/) — Serverless edge functions and applications.
+- [Gcore Inference API](https://apis.io/apis/gcore/gcore-inference-api/) — Everywhere Inference edge AI model deployments.
+- [Gcore Storage API](https://apis.io/apis/gcore/gcore-storage-api/) — S3-compatible and SFTP object storage.
+- [Gcore Streaming API](https://apis.io/apis/gcore/gcore-streaming-api/) — Video hosting (VOD) and live streaming.
+- [Gcore WAAP API](https://apis.io/apis/gcore/gcore-waap-api/) — Web Application and API Protection domains.
 
-## APIs
+### Published properties
 
-### Gcore CDN API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Manage CDN resources, origin groups, caching and delivery rules, SSL certificates, and cache purge across 210+ points of presence.
+#### Agentic access (1)
 
-- **Human URL:** [https://gcore.com/docs/api-reference/cdn](https://gcore.com/docs/api-reference/cdn)
-- **Base URL:** `https://api.gcore.com/cdn`
+Which operations an agent can call, which act, and which need a human in the loop.
 
-#### Tags
+- [Gcore Agentic Access](https://apis.io/agentic-access/gcore/gcore-agentic-access/)
 
-- CDN
-- Content Delivery
-- Caching
-- Purge
+#### Collections (9)
 
-#### Properties
+Postman and Open Collection request collections.
 
-- [Documentation](https://gcore.com/docs/cdn)
-- [API Reference](https://gcore.com/docs/api-reference/cdn)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Gcore API](https://apis.io/collections/gcore/open-gcore/)
+- [Gcore CDN API](https://apis.io/collections/gcore/open-gcore-cdn-api/)
+- [Gcore CDN Cloud API](https://apis.io/collections/gcore/open-gcore-cloud-api/)
+- [Gcore CDN DNS API](https://apis.io/collections/gcore/open-gcore-dns-api/)
+- [Gcore CDN FastEdge API](https://apis.io/collections/gcore/open-gcore-fastedge-api/)
+- [Gcore CDN Inference API](https://apis.io/collections/gcore/open-gcore-inference-api/)
+- [Gcore CDN Storage API](https://apis.io/collections/gcore/open-gcore-storage-api/)
+- [Gcore CDN Streaming API](https://apis.io/collections/gcore/open-gcore-streaming-api/)
+- [Gcore CDN WAAP API](https://apis.io/collections/gcore/open-gcore-waap-api/)
 
-### Gcore Cloud API
+#### Security (2)
 
-Provision and manage virtual machine instances, GPU and bare-metal compute, networks, volumes, floating IPs, and SSH keys scoped by project and region under /cloud/v1.
+Authentication, trust centre, and vulnerability disclosure.
 
-- **Human URL:** [https://gcore.com/docs/api-reference/cloud](https://gcore.com/docs/api-reference/cloud)
-- **Base URL:** `https://api.gcore.com/cloud`
+- [Gcore Authentication](https://apis.io/security/gcore/gcore-authentication/)
+- [Gcore Domain Security](https://apis.io/security/gcore/gcore-domain-security/)
 
-#### Tags
+#### Plans and pricing (2)
 
-- Cloud
-- Compute
-- GPU
-- Instances
+Published plans, tiers and prices.
 
-#### Properties
+- [Gcore Plans Pricing](https://apis.io/plans/gcore/gcore-plans-pricing/)
+- [Gcore Price Estimates](https://apis.io/plans/gcore/gcore-price-estimates/)
 
-- [Documentation](https://gcore.com/docs/cloud)
-- [API Reference](https://gcore.com/docs/api-reference/cloud)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Rate limits (1)
 
-### Gcore Object Storage API
+Published request limits.
 
-Provision and manage S3-compatible and SFTP object storage buckets, locations, and access credentials; billed per GB-hour of stored data.
+- [Gcore Rate Limits](https://apis.io/rate-limits/gcore/gcore-rate-limits/)
 
-- **Human URL:** [https://gcore.com/docs/api-reference/storage](https://gcore.com/docs/api-reference/storage)
-- **Base URL:** `https://api.gcore.com/storage`
+#### FinOps (1)
 
-#### Tags
+What the API costs to run, by operation.
 
-- Storage
-- Object Storage
-- S3
+- [Gcore Finops](https://apis.io/finops/gcore/gcore-finops/)
 
-#### Properties
+## Where to find this API
 
-- [Documentation](https://gcore.com/docs/storage)
-- [API Reference](https://gcore.com/docs/api-reference/storage)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-### Gcore DNS API
-
-Managed authoritative DNS - create and manage zones and RRSets (A, AAAA, CNAME, MX, TXT and more), including dynamic GeoDNS and failover records under /dns/v2.
-
-- **Human URL:** [https://gcore.com/docs/api-reference/dns](https://gcore.com/docs/api-reference/dns)
-- **Base URL:** `https://api.gcore.com/dns/v2`
-
-#### Tags
-
-- DNS
-- Zones
-- RRSets
-
-#### Properties
-
-- [Documentation](https://gcore.com/docs/dns)
-- [API Reference](https://gcore.com/docs/api-reference/dns)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Gcore Streaming API
-
-Video hosting (VOD) and low-latency live streaming - upload and manage videos, create live streams, restreams, and recordings with adaptive multi-bitrate transcoding.
-
-- **Human URL:** [https://gcore.com/docs/api-reference/streaming](https://gcore.com/docs/api-reference/streaming)
-- **Base URL:** `https://api.gcore.com/streaming`
-
-#### Tags
-
-- Streaming
-- Video
-- Live
-- VOD
-
-#### Properties
-
-- [Documentation](https://gcore.com/docs/streaming-platform)
-- [API Reference](https://gcore.com/docs/api-reference/streaming)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Gcore Everywhere Inference API
-
-Everywhere Inference (Inference at the Edge) - deploy trained AI models to edge nodes across 180+ locations with smart routing, container registries, and optional per-deployment API-key auth (X-API-Key).
-
-- **Human URL:** [https://gcore.com/docs/edge-ai/everywhere-inference](https://gcore.com/docs/edge-ai/everywhere-inference)
-- **Base URL:** `https://api.gcore.com/cloud`
-
-#### Tags
-
-- Edge AI
-- Inference
-- AI Models
-
-#### Properties
-
-- [Documentation](https://gcore.com/docs/edge-ai/everywhere-inference)
-- [API Reference](https://gcore.com/docs/api-reference/cloud)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Gcore Security & WAAP API
-
-Web Application and API Protection (WAAP), API discovery, custom and policy rules, plus DDoS Protection for infrastructure under /waap and /security/iaas.
-
-- **Human URL:** [https://gcore.com/docs/api-reference/waap](https://gcore.com/docs/api-reference/waap)
-- **Base URL:** `https://api.gcore.com/waap`
-
-#### Tags
-
-- Security
-- WAAP
-- WAF
-- DDoS
-
-#### Properties
-
-- [Documentation](https://gcore.com/docs/waap)
-- [API Reference](https://gcore.com/docs/api-reference/waap)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Gcore FastEdge API
-
-FastEdge serverless edge computing - deploy WebAssembly apps and functions that run on Gcore CDN edge nodes close to end users.
-
-- **Human URL:** [https://gcore.com/docs/api-reference/fastedge](https://gcore.com/docs/api-reference/fastedge)
-- **Base URL:** `https://api.gcore.com/fastedge`
-
-#### Tags
-
-- FastEdge
-- Edge Functions
-- Serverless
-- WASM
-
-#### Properties
-
-- [Documentation](https://gcore.com/docs/fastedge)
-- [API Reference](https://gcore.com/docs/api-reference/fastedge)
-- [OpenAPI](openapi/gcore-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/gcore.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/gcore.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/G-Core)
-- [LinkedIn](https://www.linkedin.com/company/gcore)
 - [Website](https://gcore.com/)
 - [Documentation](https://gcore.com/docs/api-reference/overview)
-- [Plans](plans/gcore-plans-pricing.yml)
-- [Rate Limits](rate-limits/gcore-rate-limits.yml)
-- [Fin Ops](finops/gcore-finops.yml)
+- [Pricing](https://gcore.com/pricing/edge-network)
+- [Blog](https://gcore.com/blog)
+- [GitHub](https://github.com/G-Core)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 32.5** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 47.5 |
+| Contract governance | 0.0 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 32.1 |
+| Access clarity | 42.1 |
+
+**Agent readiness 19.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/gcore/](https://apis.io/providers/gcore/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Gcore: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/gcore/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
